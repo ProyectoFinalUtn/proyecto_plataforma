@@ -1,2 +1,2 @@
-# proyecto_app
-En esta carpeta van todo el codigo fuente de la aplicacion mobile de ionic
+# proyecto_plataforma
+En esta carpeta van todo el codigo fuente de nuestra plataforma web.
