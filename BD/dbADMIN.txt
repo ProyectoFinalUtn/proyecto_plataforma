@@ -68,13 +68,13 @@ GRANT ALL ON TABLE public.menus TO admin WITH GRANT OPTION;
 
 INSERT INTO menus (id, parent, name, icon, slug, number) VALUES
 (1, NULL, 'Normativa', '', 'normativas', 1),
-(2, NULL, 'Usuarios VANT', '', 'usuarios-vant', 2),
-(3, NULL, 'Solicitudes de Excepcion', '', 'solicitudes-excepcion', 3),
-(4, 1, 'Zonas de Influencia', '', 'zonas-influencia', 1),
-(5, 1, 'Cargar Zonas', '', 'cargar-zonas', 2),
-(6, 1, 'Zonas Temporales', '', 'zonas-temporales', 1),
-(7, 2, 'Listar Usuarios', '', 'listar-usuarios', 2),
-(8, 3, 'Listar Solicitudes', '', 'listar-solicitudes', 2);
+(2, NULL, 'Usuarios VANT', '', 'usuarios_vant', 2),
+(3, NULL, 'Solicitudes de Excepcion', '', 'solicitudes_excepcion', 3),
+(4, 1, 'Zonas de Influencia', '', 'zonas_influencia', 1),
+(5, 1, 'Cargar Zonas', '', 'cargar_zonas', 2),
+(6, 1, 'Zonas Temporales', '', 'zonas_temporales', 1),
+(7, 2, 'Listar Usuarios', '', 'listar_usuarios', 2),
+(8, 3, 'Listar Solicitudes', '', 'listar_solicitudes', 2);
 
 
 
