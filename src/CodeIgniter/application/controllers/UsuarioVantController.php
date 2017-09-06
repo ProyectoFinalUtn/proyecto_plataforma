@@ -13,7 +13,7 @@ class UsuarioVantController extends REST_Controller
         // Ensure you have created the 'limits' table and enabled 'limits' within application/config/rest.php
         $this->methods['users_get']['limit'] = 500; // 500 requests per hour per user/key
         $this->methods['user_by_id_get']['limit'] = 500; // 500 requests per hour per user/key
-        $this->methods['users_post']['limit'] = 100; // 100 requests per hour per user/key
+        $this->methods['crear_perfil_post']['limit'] = 100; // 100 requests per hour per user/key
     }
 
     public function user_by_id_get()
@@ -107,6 +107,26 @@ class UsuarioVantController extends REST_Controller
         ];
 
         $this->set_response($message, REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+    }
+    
+    //crear un nuevo usuario
+    //http://localhost/apiRestCodeigniter/api/new_user/X-API-KEY/miapikey
+    public function crear_perfil_post()
+    {
+        $this->load->model('Persona_model');
+        if($this->post("nombre") && $this->post("apellido") && 
+           $this->post("email") && $this->post("edad")){
+            $idPersona = $this->Persona_model->guardar_persona(['nombre' => $this->post("nombre"), 'apellido' => $this->post("apellido"), 
+                                                   'email' => $this->post("email"), 'edad' => $this->post("edad")]);
+            $message = [
+                'id' => $idPersona,
+                'message' => 'Usuario creado exitosamente'
+            ];
+            $this->set_response($message, REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+        }else{
+            //$this->response(array("status" => "failed"));
+            set_response("Fallo", REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }
 ?>
