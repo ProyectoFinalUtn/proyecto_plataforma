@@ -1,132 +1,146 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
-require_once(APPPATH.'/libraries/REST_Controller.php');
- 
-class UsuarioVantController extends REST_Controller
-{
-    function __construct()
-    {
-        // Construct the parent class
-        parent::__construct();
+    defined('BASEPATH') OR exit('No direct script access allowed');
+    require_once(APPPATH.'/libraries/REST_Controller.php');
+    
+    class UsuarioVantController extends REST_Controller
+    {    
+        public $responseOk;
+        public $responseError;
+        function __construct()
+        {
+            // Construct the parent class
+            parent::__construct();
 
-        // Configure limits on our controller methods
-        // Ensure you have created the 'limits' table and enabled 'limits' within application/config/rest.php
-        $this->methods['users_get']['limit'] = 500; // 500 requests per hour per user/key
-        $this->methods['user_by_id_get']['limit'] = 500; // 500 requests per hour per user/key
-        $this->methods['crear_perfil_post']['limit'] = 100; // 100 requests per hour per user/key
-    }
-
-    public function user_by_id_get()
-    {
-        // Ejemplo de como llamarlo http://localhost/proyecto_plataforma_web/UsuarioVantController/user_by_id/id/1
-        $users = [
-            ['id' => 1, 'name' => 'John', 'email' => 'john@example.com', 'fact' => 'Loves coding'],
-            ['id' => 2, 'name' => 'Jim', 'email' => 'jim@example.com', 'fact' => 'Developed on CodeIgniter'],
-            ['id' => 3, 'name' => 'Jane', 'email' => 'jane@example.com', 'fact' => 'Lives in the USA', ['hobbies' => ['guitar', 'cycling']]],
-        ];
-
-        $id = $this->get('id');
-        if ($id === NULL)
-        {   
-            $this->response([
-                'status' => FALSE,
-                'message' => 'El id no puede ser nulo'
-            ], REST_Controller::HTTP_NOT_FOUND); // NOT_FOUND (404) being the HTTP response code
-            
+            // Configure limits on our controller methods
+            // Ensure you have created the 'limits' table and enabled 'limits' within application/config/rest.php
+            $this->methods['users_get']['limit'] = 500; // 500 requests per hour per user/key
+            $this->methods['user_by_id_get']['limit'] = 500; // 500 requests per hour per user/key
+            $this->methods['crear_perfil_post']['limit'] = 100; // 100 requests per hour per user/key
+            $this->responseError = ['status' => FALSE, 'message' => ''];
+            $this->responseOk = ['status' => TRUE, 'response' => NULL, 'message' => ''];
         }
 
-        // Find and return a single record for a particular user.
-        $id = (int) $id;        
-        // Validate the id.
-        if ($id <= 0)
+        public function user_by_id_get()
         {
-            // Invalid id, set the response and exit.
-            $this->response([
-                'status' => FALSE,
-                'message' => 'El id es invalido'
-            ], REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
-        }
+            // Ejemplo de como llamarlo http://localhost/proyecto_plataforma_web/UsuarioVantController/user_by_id/id/1
+            $users = [
+                ['id' => 1, 'name' => 'John', 'email' => 'john@example.com', 'fact' => 'Loves coding'],
+                ['id' => 2, 'name' => 'Jim', 'email' => 'jim@example.com', 'fact' => 'Developed on CodeIgniter'],
+                ['id' => 3, 'name' => 'Jane', 'email' => 'jane@example.com', 'fact' => 'Lives in the USA', ['hobbies' => ['guitar', 'cycling']]],
+            ];
 
-        $user = NULL;
+            $id = $this->get('id');
+            if ($id === NULL)
+            {   
+                $this->setMensajeError('El id no puede ser nulo');
+                $this->response($this->responseError, REST_Controller::HTTP_BAD_REQUEST); 
 
-        if (!empty($users))
-        {
-            foreach ($users as $key => $value)
+            }
+
+            $id = (int) $id;        
+            // Validate the id.
+            if ($id <= 0)
             {
-                if (isset($value['id']) && $value['id'] === $id)
+                $this->setMensajeError('El id es invalido');
+                $this->response($this->responseError, REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
+            }
+
+            $user = NULL;
+
+            if (!empty($users))
+            {
+                foreach ($users as $key => $value)
                 {
-                    $user = $value;
+                    if (isset($value['id']) && $value['id'] === $id)
+                    {
+                        $user = $value;
+                    }
                 }
+            }
+
+            if (!empty($user))
+            {
+                $this->setRespuesta($user);
+                $this->set_response($this->responseOk, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+            }
+            else
+            {
+                $this->setMensajeError('No se encontró el usuario');
+                $this->response($this->responseError, REST_Controller::HTTP_NOT_FOUND); // NOT_FOUND (404) being the HTTP response code
             }
         }
 
-        if (!empty($user))
+        public function users_get()
         {
-            $this->set_response($user, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
-        }
-        else
-        {
-            $this->set_response([
-                'status' => FALSE,
-                'message' => 'No se encontro el usuario'
-            ], REST_Controller::HTTP_NOT_FOUND); // NOT_FOUND (404) being the HTTP response code
-        }
-    }
-    
-    public function users_get()
-    {
-        // Ejemplo de como llamarlo http://localhost/proyecto_plataforma_web/UsuarioVantController/users
-        $users = [
-            ['id' => 1, 'name' => 'John', 'email' => 'john@example.com', 'fact' => 'Loves coding'],
-            ['id' => 2, 'name' => 'Jim', 'email' => 'jim@example.com', 'fact' => 'Developed on CodeIgniter'],
-            ['id' => 3, 'name' => 'Jane', 'email' => 'jane@example.com', 'fact' => 'Lives in the USA', ['hobbies' => ['guitar', 'cycling']]],
-        ];
-        
-        if ($users)
-        {
-            // Set the response and exit
-            $this->response($users, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
-        }
-        else
-        {
-            $this->response([
-                'status' => FALSE,
-                'message' => 'No users were found'
-            ], REST_Controller::HTTP_NOT_FOUND); // NOT_FOUND (404) being the HTTP response code
-        }
-    }
-
-    public function users_post()
-    {
-        // $this->some_model->update_user( ... );
-        $message = [
-            'id' => 100, // Automatically generated by the model
-            'name' => $this->post('name'),
-            'email' => $this->post('email'),
-            'message' => 'Added a resource'
-        ];
-
-        $this->set_response($message, REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
-    }
-    
-    //crear un nuevo usuario
-    //http://localhost/apiRestCodeigniter/api/new_user/X-API-KEY/miapikey
-    public function crear_perfil_post()
-    {
-        $this->load->model('Persona_model');
-        if($this->post("nombre") && $this->post("apellido") && 
-           $this->post("email") && $this->post("edad")){
-            $idPersona = $this->Persona_model->guardar_persona(['nombre' => $this->post("nombre"), 'apellido' => $this->post("apellido"), 
-                                                   'email' => $this->post("email"), 'edad' => $this->post("edad")]);
-            $message = [
-                'id' => $idPersona,
-                'message' => 'Usuario creado exitosamente'
+            // Ejemplo de como llamarlo http://localhost/proyecto_plataforma_web/UsuarioVantController/users
+            $users = [
+                ['id' => 1, 'name' => 'John', 'email' => 'john@example.com', 'fact' => 'Loves coding'],
+                ['id' => 2, 'name' => 'Jim', 'email' => 'jim@example.com', 'fact' => 'Developed on CodeIgniter'],
+                ['id' => 3, 'name' => 'Jane', 'email' => 'jane@example.com', 'fact' => 'Lives in the USA', ['hobbies' => ['guitar', 'cycling']]],
             ];
-            $this->set_response($message, REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
-        }else{
-            //$this->response(array("status" => "failed"));
-            set_response("Fallo", REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
+
+            if ($users)
+            {
+                $this->setRespuesta($users);
+                $this->set_response($this->responseOk, REST_Controller::HTTP_OK);
+            }
+            else
+            {
+                $this->setMensajeError('No se encontraron el usuarios');
+                $this->response($this->responseError, REST_Controller::HTTP_NOT_FOUND);
+            }
+        }
+
+        public function users_post()
+        {
+            // $this->some_model->update_user( ... );
+            $message = [
+                'id' => 100, // Automatically generated by the model
+                'name' => $this->post('name'),
+                'email' => $this->post('email'),
+                'message' => 'Added a resource'
+            ];
+
+            $this->set_response($message, REST_Controller::HTTP_CREATED);
+        }
+
+        //crear un nuevo usuario
+        //http://localhost/apiRestCodeigniter/api/new_user/X-API-KEY/miapikey
+        public function crear_perfil_post()
+        {
+            try{
+                $this->load->model('Usuariovant_model');
+                if($this->post("nombre") && $this->post("apellido") && 
+                   $this->post("email") && $this->post("edad") && 
+                   $this->post("nombreDePerfil") && $this->post("fotoPerfil")){
+                    $perfil = ['nombre' => $this->post("nombre"), 'apellido' => $this->post("apellido"), 
+                               'email' => $this->post("email"), 'edad' => $this->post("edad"),
+                               'nombreDePerfil' => $this->post("nombreDePerfil"), 'logueadoEnCad' => false, 
+                               'fotoPerfil' => $this->post("fotoPerfil"), 'tipoDoc' => $this->post("tipoDoc"),
+                               'nroDoc' => $this->post("nroDoc")];
+                    $idUsuarioVant = $this->Usuariovant_model->crear_perfil($perfil);
+                    $perfil['idUsuarioVant'] = $idUsuarioVant;
+                    $this->setRespuesta($perfil);
+                    $this->set_response($this->responseOk, REST_Controller::HTTP_CREATED);
+                }else{
+                    $this->setMensajeError('Verifique los campos enviados');
+                    $this->response($this->responseError, REST_Controller::HTTP_BAD_REQUEST);
+                }
+            }
+            catch(Exception $exception){
+                $this->setMensajeError($exception->getMessage());
+                $this->response($this->responseError, REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }   
+
+        private function setMensajeError($mensaje)
+        {
+            $this->responseError['message']= $mensaje;
+        }
+
+        private function setRespuesta($respuesta)
+        {
+            $this->responseOk['response']= $respuesta;
         }
     }
-}
 ?>

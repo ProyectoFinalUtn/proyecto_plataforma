@@ -1,46 +1,49 @@
 <?php
-class Persona_model extends CI_Model {
+    class Persona_model extends CI_Model {
 
-    public function __construct()
-    {
-            parent::__construct();
-            $this->load->database();                
-    }
+        public function __construct()
+        {
+                parent::__construct();
+                $this->load->database();                
+        }
 
-    public function get_password($nombre)
-    {
-            $this->db->select('password');
-            $query = $this->db->get_where('administrador', array('nombre =' => $nombre))->row();
-            if (count($query) > 0) {
-               return $query->password;
-            }else {
-                return NULL;
+        public function guardar_persona($persona)
+        {
+            $this->valida_persona($persona);
+            $result =$this->db
+            ->insert('persona', [
+                'nombre' => $persona["nombre"],
+                'apellido' => $persona["apellido"] != NULL ? $persona["apellido"] : NULL,
+                'idTipoDocumento' =>  array_key_exists("idTipoDocumento", $persona) ? $persona["idTipoDocumento"] > 0 ? $persona["idTipoDocumento"] : NULL : NULL,
+                'nroDocumento' => array_key_exists("nroDocumento", $persona) ? $persona["nroDocumento"] > 0 ? $persona["nroDocumento"] : NULL : NULL,
+                'edad' => $persona["edad"],
+                'email' => $persona["email"],
+                'sexo' => array_key_exists("sexo", $persona) ? $persona["sexo"] : NULL,
+                'calle' => array_key_exists("calle", $persona) ? $persona["calle"] : NULL,
+                'numero' => array_key_exists("numero", $persona) ? $persona["numero"] : NULL,
+                'piso' => array_key_exists("piso", $persona) ? $persona["piso"] : NULL,    
+                'dpto' => array_key_exists("dpto", $persona) ? $persona["dpto"] : NULL,
+                'provincia' => array_key_exists("provincia", $persona) ? $persona["provincia"] : NULL,
+                'localidad' => array_key_exists("localidad", $persona) ? $persona["localidad"] : NULL,
+                'telefono' => array_key_exists("telefono", $persona) ? $persona["telefono"] : NULL
+            ]);
+            
+            /*$result = $this->db->query($sql);
+            echo $sql;
+            $result = $this->db->query($sql);*/
+            if(!$result){
+                $db_error = $this->db->error();
+                throw new Exception($db_error);
             }
+            return $this->db->insert_id();  
+        }
+        
+        public function valida_persona($persona){
+            $this->db->select('email');
+            $query = $this->db->get_where('persona', array('email =' => $persona["email"]))->row();
+            if (count($query) > 0) {
+               throw new Exception("El correo electronico ya se encuentra registrado");
+            }
+        }
     }
-    
-    public function guardar_persona($persona)
-    {
-        $this->db
-        ->insert('persona', [
-            'nombre' => $persona["nombre"],
-            'apellido' => $persona["apellido"] != NULL ? $persona["apellido"] : NULL,
-            //'idTipoDocumento' => $persona["idTipoDocumento"] != NULL ? $persona["idTipoDocumento"] : NULL,
-            //'nroDocumento' => $persona["nroDocumento"] != NULL ? $persona["nroDocumento"] : NULL,            
-            'edad' => $persona["edad"] != NULL ? $persona["edad"] : NULL,
-            'email' => $persona["email"] != NULL ? $persona["email"] : NULL/*,
-            'sexo' => $persona["sexo"] != NULL ? $persona["sexo"] : NULL,
-            'calle' => $persona["calle"] != NULL ? $persona["calle"] : NULL,
-            'numero' => $persona["numero"] != NULL ? $persona["numero"] : NULL,
-            'piso' => $persona["piso"] != NULL ? $persona["piso"] : NULL,    
-            'dpto' => $persona["dpto"] != NULL ? $persona["dpto"] : NULL,
-            'provincia' => $persona["provincia"] != NULL ? $persona["provincia"] : NULL,
-            'localidad' => $persona["localidad"] != NULL ? $persona["localidad"] : NULL,
-            'telefono' => $persona["telefono"] != NULL ? $persona["telefono"] : NULL*/
-        ]);
-        return $this->db->insert_id();  
-    }
-}
-
-
-
 ?>
