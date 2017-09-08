@@ -16,6 +16,7 @@
             $this->methods['users_get']['limit'] = 500; // 500 requests per hour per user/key
             $this->methods['user_by_id_get']['limit'] = 500; // 500 requests per hour per user/key
             $this->methods['crear_perfil_post']['limit'] = 100; // 100 requests per hour per user/key
+            $this->methods['login_get']['limit'] = 100; // 100 requests per hour per user/key
             $this->responseError = ['status' => FALSE, 'message' => ''];
             $this->responseOk = ['status' => TRUE, 'response' => NULL, 'message' => ''];
         }
@@ -67,6 +68,29 @@
             {
                 $this->set_mensaje_error('No se encontró el usuario');
                 $this->response($this->responseError, REST_Controller::HTTP_NOT_FOUND); // NOT_FOUND (404) being the HTTP response code
+            }
+        }
+        
+        public function login_get()
+        {
+            $usuario = $this->get('usuario');
+            $pass = $this->get('pass');
+            if (($usuario === NULL) || ($pass === NULL))
+            {   
+                $this->set_mensaje_error('El usuario o contraseña no pueden ser nulos');
+                $this->response($this->responseError, REST_Controller::HTTP_BAD_REQUEST); 
+
+            }
+            
+            try{
+                $this->load->model('Usuariovant_model');
+                $usuario = $this->login_user->crear_perfil($usuario, $pass);
+                $this->set_respuesta($usuario);
+                $this->set_response($this->responseOk, REST_Controller::HTTP_OK);
+            }
+            catch(Exception $exception){
+                $this->set_mensaje_error($exception->getMessage());
+                $this->response($this->responseError, REST_Controller::HTTP_BAD_REQUEST);
             }
         }
 
@@ -132,6 +156,38 @@
                 $this->response($this->responseError, REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
             }
         }   
+        
+        
+        public function cambiar_perfil_post()
+        {
+            try{
+                $this->load->model('Usuariovant_model');
+                if($this->post("nombre") && $this->post("apellido") && 
+                   $this->post("email") && $this->post("edad") && $this->post("pass") && 
+                   $this->post("nombreDePerfil") && $this->post("fotoPerfil")&& 
+                   $this->post("idUsuarioVant") && $this->post("idPersona")&& 
+                   $this->post("idPerfil")){
+                    $perfil = ['nombre' => $this->post("nombre"), 'apellido' => $this->post("apellido"), 
+                               'email' => $this->post("email"), 'edad' => $this->post("edad"),
+                               'nombreDePerfil' => $this->post("nombreDePerfil"), 'logueadoEnCad' => false, 
+                               'fotoPerfil' => $this->post("fotoPerfil"), 'tipoDoc' => $this->post("tipoDoc"),
+                               'nroDoc' => $this->post("nroDoc"), 'idUsuarioVant' => $this->post("idUsuarioVant"), 
+                               'idPersona' => $this->post("idPersona"),'idPerfil' => $this->post("idPersona"), 
+                               'passCad' => $this->post("pass")];
+                    $idUsuarioVant = $this->Usuariovant_model->cambiar_perfil($perfil);
+                    $perfil['idUsuarioVant'] = $idUsuarioVant;
+                    $this->set_respuesta($perfil);
+                    $this->set_response($this->responseOk, REST_Controller::HTTP_CREATED);
+                }else{
+                    $this->set_mensaje_error('Verifique los campos enviados');
+                    $this->response($this->responseError, REST_Controller::HTTP_BAD_REQUEST);
+                }
+            }
+            catch(Exception $exception){
+                $this->set_mensaje_error($exception->getMessage());
+                $this->response($this->responseError, REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
 
         private function set_mensaje_error($mensaje)
         {
