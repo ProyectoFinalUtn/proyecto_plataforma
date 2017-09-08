@@ -196,8 +196,8 @@ INSERT INTO menus (id, parent, name, icono, slug, orden) VALUES
 CREATE OR REPLACE FUNCTION encripta_pass()
     RETURNS trigger AS '
     BEGIN
-        UPDATE usuario_vant set passCAD = MD5(NEW.passCAD) where 
-        idUsuario = NEW.idUsuario;
+        UPDATE usuario_vant set pass = MD5(NEW.pass) where 
+        id_usuario = NEW.id_usuario;
     END' LANGUAGE 'plpgsql';
 	
 CREATE TRIGGER trigger_encripta_pass
