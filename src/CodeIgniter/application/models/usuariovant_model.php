@@ -33,6 +33,7 @@
             $this->db->trans_complete();
             if ($this->db->trans_status() === FALSE)
             {
+                
                 throw new Exception("Se producto un error al guardar los datos del perfil");
             }
             else
