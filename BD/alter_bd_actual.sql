@@ -1,77 +1,8 @@
-CREATE DATABASE goguide ;
---connect goguide ;
-
-CREATE EXTENSION postgis;
-
-CREATE USER admin WITH PASSWORD 'proyecto2017';
-
-GRANT ALL PRIVILEGES ON DATABASE goguide to admin;
-
--- Table: public.administrador
-
--- DROP TABLE public.administrador;
-
-CREATE SEQUENCE public.admin_seq
-    INCREMENT 1
-    START 1
-    MINVALUE 1
-    MAXVALUE 9223372036854775807
-    CACHE 1;
-
-ALTER SEQUENCE public.admin_seq
-    OWNER TO postgres;
-
-CREATE TABLE public.administrador
-(
-    id bigint NOT NULL DEFAULT nextval('admin_seq'::regclass),
-    nombre text COLLATE pg_catalog."default" NOT NULL,
-    password text COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT administrador_pkey PRIMARY KEY (id),
-    CONSTRAINT administrador_nombre_key UNIQUE (nombre)
-)
-WITH (
-    OIDS = FALSE
-)
-TABLESPACE pg_default;
-
-ALTER TABLE public.administrador
-    OWNER to postgres;
-
-GRANT ALL ON TABLE public.administrador TO admin WITH GRANT OPTION;
-
-GRANT ALL ON TABLE public.administrador TO postgres;
-
-
--- Table: public.menus
-
--- DROP TABLE public.menus;
-
-CREATE TABLE public.menus
-(
-    id integer NOT NULL,
-    name text COLLATE pg_catalog."default" NOT NULL,
-    slug text COLLATE pg_catalog."default" NOT NULL,
-    parent integer,
-    orden integer NOT NULL,
-    icono text COLLATE pg_catalog."default"
-)
-WITH (
-    OIDS = FALSE
-)
-TABLESPACE pg_default;
+ALTER TABLE public.menus
+    RENAME icon TO icono;
 
 ALTER TABLE public.menus
-    OWNER to postgres;
-
-GRANT ALL ON TABLE public.menus TO admin WITH GRANT OPTION;
-
-GRANT ALL ON TABLE public.menus TO postgres;
-
--- Table: public.perfil
-
--- DROP TABLE public.perfil;
-
-
+    RENAME "number" TO orden;
 
 -- Table: public.perfil
 
@@ -172,11 +103,53 @@ WITH (
 TABLESPACE pg_default;
 
 ALTER TABLE public.usuario_vant
+    OWNER to postgres;	
+	
+CREATE TABLE public.usuario_admin
+(
+    id_usuario integer NOT NULL DEFAULT nextval('usuario_admin_id_usuario_seq'::regclass),
+    id_persona bigint,
+    id_rol smallint,
+    usuario text COLLATE pg_catalog."default",
+    password text COLLATE pg_catalog."default",
+    CONSTRAINT usuario_admin_pkey PRIMARY KEY (id_usuario)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.usuario_admin
     OWNER to postgres;
+
+
+CREATE SEQUENCE public.usuario_admin_id_usuario_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    CACHE 1;
+	
+CREATE TABLE public.usuario_admin
+(
+    id_usuario integer NOT NULL DEFAULT nextval('usuario_admin_id_usuario_seq'::regclass),
+    id_persona bigint,
+    id_rol smallint,
+    usuario text COLLATE pg_catalog."default",
+    password text COLLATE pg_catalog."default",
+    CONSTRAINT usuario_admin_pkey PRIMARY KEY (id_usuario)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
 
 INSERT INTO usuario_admin (usuario, password)
 values    ('admin','202cb962ac59075b964b07152d234b70');
 
+ALTER TABLE public.usuario_admin
+    OWNER to postgres;
+	
 INSERT INTO menus (id, parent, name, icono, slug, orden) VALUES
 (1, NULL, 'Normativa', '', 'normativas', 1),
 (2, NULL, 'Usuarios VANT', '', 'usuarios_vant', 2),

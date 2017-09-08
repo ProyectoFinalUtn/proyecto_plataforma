@@ -5,7 +5,7 @@
 // $config["menu_parent"]           = 'parent';
 // $config["menu_icon"] 			 = 'icon';
 $config["menu_key"]              = 'slug';
-$config["menu_order"]            = 'number';
+$config["menu_order"]            = 'orden';
 
 $config["nav_tag_open"]          = '<ul>';
 $config["nav_tag_close"]         = '</ul>';

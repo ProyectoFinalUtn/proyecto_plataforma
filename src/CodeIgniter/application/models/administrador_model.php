@@ -10,7 +10,7 @@ class Administrador_model extends CI_Model {
         public function get_password($nombre)
         {
                 $this->db->select('password');
-                $query = $this->db->get_where('administrador', array('nombre =' => $nombre))->row();
+                $query = $this->db->get_where('usuario_admin', array('usuario =' => $nombre))->row();
                 if (count($query) > 0) {
                    return $query->password;
                 }else {

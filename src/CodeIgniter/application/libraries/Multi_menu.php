@@ -192,7 +192,7 @@ class Multi_menu {
 	 * 
 	 * @var string
 	 */
-	private $menu_order               = 'order';	
+	private $menu_order               = 'orden';	
 
 	/**
 	 * Array key that holds Menu Icon
@@ -200,7 +200,7 @@ class Multi_menu {
 	 * 
 	 * @var string
 	 */
-	private $menu_icon               = 'icon';
+	private $menu_icon               = 'icono';
 
 	/**
 	 * Position of the menu icon
