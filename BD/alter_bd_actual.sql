@@ -147,18 +147,3 @@ INSERT INTO menus (id, parent, name, icono, slug, orden) VALUES
 (6, 1, 'Zonas Temporales', '', 'zonas_temporales', 1),
 (7, 2, 'Listar Usuarios', '', 'listar_usuarios', 2),
 (8, 3, 'Listar Solicitudes', '', 'listar_solicitudes', 2);
-
-CREATE OR REPLACE FUNCTION encripta_pass()
-    RETURNS trigger AS 
-    $BODY$
-    BEGIN
-         NEW.pass:= MD5(NEW.pass);
-         RETURN NEW;
-    END 
-    $BODY$ 
-    LANGUAGE 'plpgsql';
-	
-CREATE TRIGGER trigger_encripta_pass
-AFTER INSERT or UPDATE ON usuario_vant
-FOR EACH ROW 
-EXECUTE PROCEDURE encripta_pass();

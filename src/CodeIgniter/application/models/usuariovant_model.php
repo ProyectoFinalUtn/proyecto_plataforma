@@ -20,8 +20,8 @@
         
         public function crear_perfil($perfil)
         {        
-            //$this->db->trans_begin();    
-            $this->db->trans_start(true);
+            $this->db->trans_begin();  
+            //$this->db->trans_start(TRUE);
             $this->load->model('Persona_model');
             $id_persona = $this->Persona_model->guardar_persona($perfil);
             //$error = $this->db->error(); 
@@ -30,14 +30,15 @@
             $perfil["idPerfil"] = $id_perfil;
             $perfil["usuarioCad"] = $perfil["email"];
             $id_usuario = $this->guardar_usuario_vant($perfil);
-            $this->db->trans_complete();
+            //$this->db->trans_complete();
             if ($this->db->trans_status() === FALSE)
             {
-                
+                $this->db->trans_rollback();
                 throw new Exception("Se producto un error al guardar los datos del perfil");
             }
             else
             {
+                $this->db->trans_commit();
                 return $id_usuario;
             }
         }
@@ -63,7 +64,7 @@
                 'id_persona' => $usuario["idPersona"],     
                 'id_perfil' => $usuario["idPerfil"],    
                 'usuario' => $usuario["usuarioCad"],
-                'pass' => $usuario["passCad"]
+                'pass' =>  md5($usuario["passCad"])
             ]);
             if(!$result){
                 $db_error = $this->db->error();
