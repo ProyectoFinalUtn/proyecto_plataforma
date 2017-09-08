@@ -32,7 +32,7 @@
             $id = $this->get('id');
             if ($id === NULL)
             {   
-                $this->setMensajeError('El id no puede ser nulo');
+                $this->set_mensaje_error('El id no puede ser nulo');
                 $this->response($this->responseError, REST_Controller::HTTP_BAD_REQUEST); 
 
             }
@@ -41,7 +41,7 @@
             // Validate the id.
             if ($id <= 0)
             {
-                $this->setMensajeError('El id es invalido');
+                $this->set_mensaje_error('El id es invalido');
                 $this->response($this->responseError, REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
             }
 
@@ -60,12 +60,12 @@
 
             if (!empty($user))
             {
-                $this->setRespuesta($user);
+                $this->set_respuesta($user);
                 $this->set_response($this->responseOk, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
             }
             else
             {
-                $this->setMensajeError('No se encontró el usuario');
+                $this->set_mensaje_error('No se encontró el usuario');
                 $this->response($this->responseError, REST_Controller::HTTP_NOT_FOUND); // NOT_FOUND (404) being the HTTP response code
             }
         }
@@ -81,12 +81,12 @@
 
             if ($users)
             {
-                $this->setRespuesta($users);
+                $this->set_respuesta($users);
                 $this->set_response($this->responseOk, REST_Controller::HTTP_OK);
             }
             else
             {
-                $this->setMensajeError('No se encontraron el usuarios');
+                $this->set_mensaje_error('No se encontraron el usuarios');
                 $this->response($this->responseError, REST_Controller::HTTP_NOT_FOUND);
             }
         }
@@ -111,34 +111,34 @@
             try{
                 $this->load->model('Usuariovant_model');
                 if($this->post("nombre") && $this->post("apellido") && 
-                   $this->post("email") && $this->post("edad") && 
+                   $this->post("email") && $this->post("edad") && $this->post("pass") && 
                    $this->post("nombreDePerfil") && $this->post("fotoPerfil")){
                     $perfil = ['nombre' => $this->post("nombre"), 'apellido' => $this->post("apellido"), 
                                'email' => $this->post("email"), 'edad' => $this->post("edad"),
                                'nombreDePerfil' => $this->post("nombreDePerfil"), 'logueadoEnCad' => false, 
                                'fotoPerfil' => $this->post("fotoPerfil"), 'tipoDoc' => $this->post("tipoDoc"),
-                               'nroDoc' => $this->post("nroDoc")];
+                               'nroDoc' => $this->post("nroDoc"), 'passCad' => $this->post("pass")];
                     $idUsuarioVant = $this->Usuariovant_model->crear_perfil($perfil);
                     $perfil['idUsuarioVant'] = $idUsuarioVant;
-                    $this->setRespuesta($perfil);
+                    $this->set_respuesta($perfil);
                     $this->set_response($this->responseOk, REST_Controller::HTTP_CREATED);
                 }else{
-                    $this->setMensajeError('Verifique los campos enviados');
+                    $this->set_mensaje_error('Verifique los campos enviados');
                     $this->response($this->responseError, REST_Controller::HTTP_BAD_REQUEST);
                 }
             }
             catch(Exception $exception){
-                $this->setMensajeError($exception->getMessage());
+                $this->set_mensaje_error($exception->getMessage());
                 $this->response($this->responseError, REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
             }
         }   
 
-        private function setMensajeError($mensaje)
+        private function set_mensaje_error($mensaje)
         {
             $this->responseError['message']= $mensaje;
         }
 
-        private function setRespuesta($respuesta)
+        private function set_respuesta($respuesta)
         {
             $this->responseOk['response']= $respuesta;
         }

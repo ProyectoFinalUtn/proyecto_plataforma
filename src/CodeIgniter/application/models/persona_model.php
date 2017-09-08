@@ -14,8 +14,8 @@
             ->insert('persona', [
                 'nombre' => $persona["nombre"],
                 'apellido' => $persona["apellido"] != NULL ? $persona["apellido"] : NULL,
-                'idTipoDocumento' =>  array_key_exists("idTipoDocumento", $persona) ? $persona["idTipoDocumento"] > 0 ? $persona["idTipoDocumento"] : NULL : NULL,
-                'nroDocumento' => array_key_exists("nroDocumento", $persona) ? $persona["nroDocumento"] > 0 ? $persona["nroDocumento"] : NULL : NULL,
+                'id_tipo_documento' =>  array_key_exists("idTipoDocumento", $persona) ? $persona["idTipoDocumento"] > 0 ? $persona["idTipoDocumento"] : NULL : NULL,
+                'nro_documento' => array_key_exists("nroDocumento", $persona) ? $persona["nroDocumento"] > 0 ? $persona["nroDocumento"] : NULL : NULL,
                 'edad' => $persona["edad"],
                 'email' => $persona["email"],
                 'sexo' => array_key_exists("sexo", $persona) ? $persona["sexo"] : NULL,

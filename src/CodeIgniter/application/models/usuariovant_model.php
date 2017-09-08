@@ -28,41 +28,46 @@
             $id_perfil = $this->guardar_perfil($perfil);
             $perfil["idPersona"] = $id_persona;
             $perfil["idPerfil"] = $id_perfil;
-            $perfil["usuarioCad"] = null;
-            $perfil["passCad"] = null;
+            $perfil["usuarioCad"] = $perfil["email"];
             $id_usuario = $this->guardar_usuario_vant($perfil);
             $this->db->trans_complete();
             if ($this->db->trans_status() === FALSE)
             {
-                //$this->db->trans_rollback();
                 throw new Exception("Se producto un error al guardar los datos del perfil");
             }
             else
             {
-                //$this->db->trans_commit();
                 return $id_usuario;
             }
         }
         
         private function guardar_perfil($perfil)
         {
-            $this->db->insert('perfil', [
+            $result = $this->db->insert('perfil', [
                 'foto' => $perfil["fotoPerfil"],
-                'logueadoEnCad' => $perfil['logueadoEnCad'],     
-                'nombreDePerfil' => $perfil["nombreDePerfil"]
+                'logueado_en_cad' => $perfil['logueadoEnCad'],     
+                'nombre_de_perfil' => $perfil["nombreDePerfil"]
             ]);
-            return $this->db->insert_id();
+            if(!$result){
+                $db_error = $this->db->error();
+                throw new Exception($db_error);
+            }
+            return $this->db->insert_id();  
         }
 
         public function guardar_usuario_vant($usuario)
         {        
-            $this->db->insert('usuario_vant', [
-                'idRol' => 1,
-                'idPersona' => $usuario["idPersona"],     
-                'idPerfil' => $usuario["idPerfil"],    
-                'usuarioCad' => $usuario["usuarioCad"],
-                'passCad' => $usuario["passCad"]
+            $result = $this->db->insert('usuario_vant', [
+                'id_rol' => 1,
+                'id_persona' => $usuario["idPersona"],     
+                'id_perfil' => $usuario["idPerfil"],    
+                'usuario' => $usuario["usuarioCad"],
+                'pass' => $usuario["passCad"]
             ]);
+            if(!$result){
+                $db_error = $this->db->error();
+                throw new Exception($db_error);
+            }
             return $this->db->insert_id();  
         }
     }
