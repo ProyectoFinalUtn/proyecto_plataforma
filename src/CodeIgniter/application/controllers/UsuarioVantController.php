@@ -15,32 +15,25 @@
             // Ensure you have created the 'limits' table and enabled 'limits' within application/config/rest.php
             $this->methods['users_get']['limit'] = 500; // 500 requests per hour per user/key
             $this->methods['perfiles_get']['limit'] = 500; // 500 requests per hour per user/key
-            $this->methods['user_by_id_get']['limit'] = 500; // 500 requests per hour per user/key
+            $this->methods['obtener_perfil_por_id_get']['limit'] = 500; // 500 requests per hour per user/key
             $this->methods['crear_perfil_post']['limit'] = 100; // 100 requests per hour per user/key
             $this->methods['login_get']['limit'] = 100; // 100 requests per hour per user/key
             $this->responseError = ['status' => FALSE, 'message' => ''];
             $this->responseOk = ['status' => TRUE, 'response' => NULL, 'message' => ''];
         }
 
-        public function user_by_id_get()
+        public function obtener_perfil_por_id_get()
         {
-            // Ejemplo de como llamarlo http://localhost/proyecto_plataforma_web/UsuarioVantController/user_by_id/id/1
-            $users = [
-                ['id' => 1, 'name' => 'John', 'email' => 'john@example.com', 'fact' => 'Loves coding'],
-                ['id' => 2, 'name' => 'Jim', 'email' => 'jim@example.com', 'fact' => 'Developed on CodeIgniter'],
-                ['id' => 3, 'name' => 'Jane', 'email' => 'jane@example.com', 'fact' => 'Lives in the USA', ['hobbies' => ['guitar', 'cycling']]],
-            ];
-
+            // Ejemplo de como llamarlo http://localhost/proyecto_plataforma_web/UsuarioVantController/obtener_perfil_por_id/id/1
             $id = $this->get('id');
             if ($id === NULL)
             {   
                 $this->set_mensaje_error('El id no puede ser nulo');
                 $this->response($this->responseError, REST_Controller::HTTP_BAD_REQUEST); 
-
             }
 
-            $id = (int) $id;        
-            // Validate the id.
+            $id = (int) $id;     
+            
             if ($id <= 0)
             {
                 $this->set_mensaje_error('El id es invalido');
@@ -49,26 +42,15 @@
 
             $user = NULL;
 
-            if (!empty($users))
-            {
-                foreach ($users as $key => $value)
-                {
-                    if (isset($value['id']) && $value['id'] === $id)
-                    {
-                        $user = $value;
-                    }
-                }
-            }
-
-            if (!empty($user))
-            {
+            try{
+                $this->load->model('Usuariovant_model');
+                $user = $this->Usuariovant_model->obtener_perfil_por_id($id);
                 $this->set_respuesta($user);
-                $this->set_response($this->responseOk, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+                $this->set_response($this->responseOk, REST_Controller::HTTP_OK);
             }
-            else
-            {
-                $this->set_mensaje_error('No se encontró el usuario');
-                $this->response($this->responseError, REST_Controller::HTTP_NOT_FOUND); // NOT_FOUND (404) being the HTTP response code
+            catch(Exception $exception){
+                $this->set_mensaje_error($exception->getMessage());
+                $this->response($this->responseError, REST_Controller::HTTP_BAD_REQUEST);
             }
         }
         
@@ -85,7 +67,7 @@
             
             try{
                 $this->load->model('Usuariovant_model');
-                $usuario = $this->login_user->crear_perfil($usuario, $pass);
+                    $usuario = $this->Usuariovant_model->login_user($usuario, $pass);
                 $this->set_respuesta($usuario);
                 $this->set_response($this->responseOk, REST_Controller::HTTP_OK);
             }

@@ -138,12 +138,3 @@ values    ('admin','202cb962ac59075b964b07152d234b70');
 ALTER TABLE public.usuario_admin
     OWNER to postgres;
 	
-INSERT INTO menus (id, parent, name, icono, slug, orden) VALUES
-(1, NULL, 'Normativa', '', 'normativas', 1),
-(2, NULL, 'Usuarios VANT', '', 'usuarios_vant', 2),
-(3, NULL, 'Solicitudes de Excepcion', '', 'solicitudes_excepcion', 3),
-(4, 1, 'Zonas de Influencia', '', 'zonas_influencia', 1),
-(5, 1, 'Cargar Zonas', '', 'cargar_zonas', 2),
-(6, 1, 'Zonas Temporales', '', 'zonas_temporales', 1),
-(7, 2, 'Listar Usuarios', '', 'listar_usuarios', 2),
-(8, 3, 'Listar Solicitudes', '', 'listar_solicitudes', 2);
