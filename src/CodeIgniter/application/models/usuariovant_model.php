@@ -12,11 +12,11 @@
             $query = $this->db->get_where('usuario_vant', array('usuario =' => $usuario))->row();
             if (count($query) > 0) {
                if($query->password != $pass){
-                   throw new Exception("Login invalido");
+                   throw new Exception("Password invalido");
                }
                return $query;
             }else {
-               throw new Exception("Login invalido");
+               throw new Exception("Usuario invalido");
             }
         }
         
@@ -43,6 +43,26 @@
                 $this->db->trans_commit();
                 return $id_usuario;
             }
+        }
+        
+        public function obtener_perfiles()
+        {        
+            $this->db->select('us.id_usuario, us.id_rol, us.usuario, us.pass, pers.*, perf.* ');    
+            $this->db->from('usuario_vant us');
+            $this->db->join('persona pers', 'us.id_persona = pers.id_persona');
+            $this->db->join('perfil perf', 'us.id_perfil = perf.id_perfil');
+            $query = $this->db->get();
+            return $query->result();
+        }
+        
+        public function obtener_perfil_por_id($idUsuario)
+        {        
+            $this->db->select('us.id_usuario, us.id_rol, us.usuario, us.pass, pers.*, perf.* ');    
+            $this->db->from('usuario_vant us');
+            $this->db->join('persona pers', 'us.id_persona = pers.id_persona');
+            $this->db->join('perfil perf', 'us.id_perfil = perf.id_perfil');
+            $query = $this->db->get_where('persona', array('id =' => $idUsuario))->row();
+            return $query->result();
         }
         
         public function cambiar_perfil($perfil)

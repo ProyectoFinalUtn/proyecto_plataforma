@@ -14,6 +14,7 @@
             // Configure limits on our controller methods
             // Ensure you have created the 'limits' table and enabled 'limits' within application/config/rest.php
             $this->methods['users_get']['limit'] = 500; // 500 requests per hour per user/key
+            $this->methods['perfiles_get']['limit'] = 500; // 500 requests per hour per user/key
             $this->methods['user_by_id_get']['limit'] = 500; // 500 requests per hour per user/key
             $this->methods['crear_perfil_post']['limit'] = 100; // 100 requests per hour per user/key
             $this->methods['login_get']['limit'] = 100; // 100 requests per hour per user/key
@@ -114,6 +115,29 @@
                 $this->response($this->responseError, REST_Controller::HTTP_NOT_FOUND);
             }
         }
+        
+        public function perfiles_get()
+        {
+           // Ejemplo de como llamarlo http://localhost/proyecto_plataforma_web/UsuarioVantController/perfiles
+           try{
+                $this->load->model('Usuariovant_model');
+                $perfiles = $this->Usuariovant_model->obtener_perfiles();
+                if ($perfiles)
+                {
+                    $this->set_respuesta($perfiles);
+                    $this->set_response($this->responseOk, REST_Controller::HTTP_OK);
+                }
+                else
+                {
+                    $this->set_mensaje_error('No se encontraron el usuarios');
+                    $this->response($this->responseError, REST_Controller::HTTP_NOT_FOUND);
+                }
+            }
+            catch(Exception $exception){
+                $this->set_mensaje_error($exception->getMessage());
+                $this->response($this->responseError, REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
 
         public function users_post()
         {
@@ -174,8 +198,7 @@
                                'nroDoc' => $this->post("nroDoc"), 'idUsuarioVant' => $this->post("idUsuarioVant"), 
                                'idPersona' => $this->post("idPersona"),'idPerfil' => $this->post("idPersona"), 
                                'passCad' => $this->post("pass")];
-                    $idUsuarioVant = $this->Usuariovant_model->cambiar_perfil($perfil);
-                    $perfil['idUsuarioVant'] = $idUsuarioVant;
+                    $this->Usuariovant_model->cambiar_perfil($perfil);
                     $this->set_respuesta($perfil);
                     $this->set_response($this->responseOk, REST_Controller::HTTP_CREATED);
                 }else{
