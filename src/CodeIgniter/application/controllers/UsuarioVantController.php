@@ -67,7 +67,7 @@
             
             try{
                 $this->load->model('Usuariovant_model');
-                    $usuario = $this->Usuariovant_model->login_user($usuario, $pass);
+                $usuario = $this->Usuariovant_model->login_user($usuario, $pass);
                 $this->set_respuesta($usuario);
                 $this->set_response($this->responseOk, REST_Controller::HTTP_OK);
             }
@@ -147,7 +147,7 @@
                                'email' => $this->post("email"), 'edad' => $this->post("edad"),
                                'nombreDePerfil' => $this->post("nombreDePerfil"), 'logueadoEnCad' => false, 
                                'fotoPerfil' => $this->post("fotoPerfil"), 'tipoDoc' => $this->post("tipoDoc"),
-                               'nroDoc' => $this->post("nroDoc"), 'passCad' => $this->post("pass")];
+                               'nroDoc' => $this->post("nroDoc"), "usuario"  => $this->post("email"), 'pass' => $this->post("pass")];
                     $idUsuarioVant = $this->Usuariovant_model->crear_perfil($perfil);
                     $perfil['idUsuarioVant'] = $idUsuarioVant;
                     $this->set_respuesta($perfil);
@@ -169,17 +169,17 @@
             try{
                 $this->load->model('Usuariovant_model');
                 if($this->post("nombre") && $this->post("apellido") && 
-                   $this->post("email") && $this->post("edad") && $this->post("pass") && 
-                   $this->post("nombreDePerfil") && $this->post("fotoPerfil")&& 
-                   $this->post("idUsuarioVant") && $this->post("idPersona")&& 
-                   $this->post("idPerfil")){
+                    $this->post("email") && $this->post("edad") && $this->post("pass") && 
+                    $this->post("nombreDePerfil") && $this->post("fotoPerfil")&& 
+                    $this->post("idUsuarioVant") && $this->post("idPersona")&& 
+                    $this->post("idPerfil")){
                     $perfil = ['nombre' => $this->post("nombre"), 'apellido' => $this->post("apellido"), 
                                'email' => $this->post("email"), 'edad' => $this->post("edad"),
                                'nombreDePerfil' => $this->post("nombreDePerfil"), 'logueadoEnCad' => false, 
                                'fotoPerfil' => $this->post("fotoPerfil"), 'tipoDoc' => $this->post("tipoDoc"),
                                'nroDoc' => $this->post("nroDoc"), 'idUsuarioVant' => $this->post("idUsuarioVant"), 
-                               'idPersona' => $this->post("idPersona"),'idPerfil' => $this->post("idPersona"), 
-                               'passCad' => $this->post("pass")];
+                               //'idPersona' => $this->post("idPersona"),'idPerfil' => $this->post("idPersona"), 
+                               'usuario' => $this->post("email"), 'passCad' => $this->post("pass")];
                     $this->Usuariovant_model->cambiar_perfil($perfil);
                     $this->set_respuesta($perfil);
                     $this->set_response($this->responseOk, REST_Controller::HTTP_CREATED);

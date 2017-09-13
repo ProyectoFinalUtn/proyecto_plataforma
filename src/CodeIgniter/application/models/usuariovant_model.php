@@ -30,7 +30,6 @@
             $id_perfil = $this->guardar_perfil($perfil);
             $perfil["idPersona"] = $id_persona;
             $perfil["idPerfil"] = $id_perfil;
-            $perfil["usuarioCad"] = $perfil["email"];
             $id_usuario = $this->guardar_usuario_vant($perfil);
             //$this->db->trans_complete();
             if ($this->db->trans_status() === FALSE)
@@ -65,11 +64,26 @@
             return $query->result();
         }
         
+        public function obtener_perfil_usuario($usuario, $pass)
+        {        
+            $this->db->select('us.id_usuario, us.id_rol, us.usuario, us.pass, pers.*, perf.* ');    
+            $this->db->from('usuario_vant us');
+            $this->db->join('persona pers', 'us.id_persona = pers.id_persona');
+            $this->db->join('perfil perf', 'us.id_perfil = perf.id_perfil');
+            $query = $this->db->get_where('us', array('usuario =' => $usuario, 'pass =' => $pass))->row();
+            if (count($query) > 0) {
+                throw new Exception("El usuario que intenta modificar se encuentra logueado");               
+            }
+            return $query;
+        }
+        
         public function cambiar_perfil($perfil)
         {        
             $this->db->trans_begin();  
             $this->load->model('Persona_model');
-            $this->Persona_model->modificar_persona($perfil);
+            $usuarioModificacion = $this->obtener_perfil_usuario($perfil['usuario'], $perfil["pass"]);
+            
+            $this->Persona_model->modificar_persona($perfil, $usuarioModificacion);
             $this->modificar_perfil($perfil);
             $this->modificar_usuario_vant($perfil);
             if ($this->db->trans_status() === FALSE)
@@ -117,8 +131,8 @@
                 'id_rol' => 1,
                 'id_persona' => $usuario["idPersona"],     
                 'id_perfil' => $usuario["idPerfil"],    
-                'usuario' => $usuario["usuarioCad"],
-                'pass' =>  md5($usuario["passCad"])
+                'usuario' => $usuario["usuario"],
+                'pass' =>  md5($usuario["pass"])
             ]);
             if(!$result){
                 $db_error = $this->db->error();
@@ -134,8 +148,8 @@
                 'id_rol' => 1,
                 'id_persona' => $usuario["idPersona"],     
                 'id_perfil' => $usuario["idPerfil"],    
-                'usuario' => $usuario["usuarioCad"],
-                'pass' =>  md5($usuario["passCad"])
+                'usuario' => $usuario["usuario"],
+                'pass' =>  md5($usuario["pass"])
             ]);
             if(!$result){
                 $db_error = $this->db->error();

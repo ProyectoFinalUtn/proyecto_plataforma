@@ -38,9 +38,9 @@
             return $this->db->insert_id();  
         }
         
-        public function modifica_persona($persona)
+        public function modifica_persona($persona, $usuarioModificacion)
         {
-            $this->valida_persona_modificacion($persona);
+            $this->valida_persona_modificacion($persona, $usuarioModificacion);
             $this->db->where('id_persona', $persona['id_persona']);
             $result =$this->db
             ->update('persona', [
@@ -85,8 +85,8 @@
             }
         }
         
-        public function valida_persona_modificacion($persona){
-            $personaGuardada = $this->obtener_persona_por_id($persona['id_persona']);
+        public function valida_persona_modificacion($persona, $personaGuardada){
+            //$personaGuardada = $this->obtener_persona_por_id($persona['id_persona']);
             if($personaGuardada->email != $persona['email']){
                 $this->db->select('id');
                 $query = $this->db->get_where('persona', array('id !=' => $persona['id_persona'], 'email =' => $persona["email"]))->row();

@@ -1,9 +1,9 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-// $config["menu_id"]               = 'id';
-// $config["menu_label"]            = 'name';
-// $config["menu_parent"]           = 'parent';
-// $config["menu_icon"] 			 = 'icon';
+$config["menu_id"]               = 'id';
+$config["menu_label"]            = 'name';
+$config["menu_parent"]           = 'parent';
+$config["menu_icon"] 		 = 'icono';
 $config["menu_key"]              = 'slug';
 $config["menu_order"]            = 'orden';
 
@@ -26,7 +26,7 @@ $config["nav_tag_open"]          = '<ul class="dropdown-menu multi-level" role="
 $config["parent_tag_open"]       = '<li class="dropdown-submenu">';
 $config["parent_anchor_tag"]     = '<a tabindex="-1" href="%s">%s</a>'; 
 $config["children_tag_open"]     = '<ul class="dropdown-menu">';
-$config["item_divider"]          = "<li class='divider'></li>";
+$config["item_divider"]          = "<li class='divider'></li>"; 
 */
 //NAVVAR
 
