@@ -200,7 +200,7 @@ class Multi_menu {
 	 * 
 	 * @var string
 	 */
-	private $menu_icon               = 'iconr';
+	private $menu_icon               = 'icon';
 
 	/**
 	 * Position of the menu icon
