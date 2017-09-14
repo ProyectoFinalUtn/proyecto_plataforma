@@ -11,7 +11,7 @@
         {
             $query = $this->db->get_where('usuario_vant', array('usuario =' => $usuario))->row();
             if (count($query) > 0) {
-               if($query->password != $pass){
+               if(md5($query->password) != $pass){
                    throw new Exception("Password invalido");
                }
                return $query;
@@ -56,23 +56,26 @@
         
         public function obtener_perfil_por_id($idUsuario)
         {        
-            $this->db->select('us.id_usuario, us.id_rol, us.usuario, us.pass, pers.*, perf.* ');    
-            $this->db->from('usuario_vant us');
-            $this->db->join('persona pers', 'us.id_persona = pers.id_persona');
-            $this->db->join('perfil perf', 'us.id_perfil = perf.id_perfil');
-            $query = $this->db->get_where('persona', array('id =' => $idUsuario))->row();
+            $this->db->select('usuario_vant.id_usuario, usuario_vant.id_rol, usuario_vant.usuario, usuario_vant.pass, pers.*, perf.* ');    
+            $this->db->from('usuario_vant');
+            $this->db->join('persona pers', 'usuario_vant.id_persona = pers.id_persona');
+            $this->db->join('perfil perf', 'usuario_vant.id_perfil = perf.id_perfil');
+            $this->db->where('pers.id', $idUsuario);
+            $query = $this->db->get()->row();
             return $query->result();
         }
         
         public function obtener_perfil_usuario($usuario, $pass)
         {        
-            $this->db->select('us.id_usuario, us.id_rol, us.usuario, us.pass, pers.*, perf.* ');    
-            $this->db->from('usuario_vant us');
-            $this->db->join('persona pers', 'us.id_persona = pers.id_persona');
-            $this->db->join('perfil perf', 'us.id_perfil = perf.id_perfil');
-            $query = $this->db->get_where('us', array('usuario =' => $usuario, 'pass =' => $pass))->row();
-            if (count($query) > 0) {
-                throw new Exception("El usuario que intenta modificar se encuentra logueado");               
+            $this->db->select('usuario_vant.id_usuario, usuario_vant.id_rol, usuario_vant.usuario, usuario_vant.pass, pers.*, perf.* ');    
+            $this->db->from('usuario_vant');
+            $this->db->join('persona pers', 'usuario_vant.id_persona = pers.id_persona');
+            $this->db->join('perfil perf', 'usuario_vant.id_perfil = perf.id_perfil');
+            $this->db->where('usuario_vant.usuario', $usuario);
+            $this->db->where('usuario_vant.pass', md5($pass));
+            $query = $this->db->get()->row();
+            if (count($query) <= 0) {
+                throw new Exception("El usuario que intenta modificar no se encuentra logueado");               
             }
             return $query;
         }
@@ -81,9 +84,11 @@
         {        
             $this->db->trans_begin();  
             $this->load->model('Persona_model');
-            $usuarioModificacion = $this->obtener_perfil_usuario($perfil['usuario'], $perfil["pass"]);
-            
-            $this->Persona_model->modificar_persona($perfil, $usuarioModificacion);
+            $perfilModificacion = $this->obtener_perfil_usuario($perfil['usuario'], $perfil['pass']);            
+            $perfil["idPersona"] = $perfilModificacion->id_persona;
+            $perfil["idPerfil"] = $perfilModificacion->id_perfil;
+            $perfil["idUsuarioVant"] = $perfilModificacion->id_usuario;
+            $this->Persona_model->modifica_persona($perfil, $perfilModificacion);            
             $this->modificar_perfil($perfil);
             $this->modificar_usuario_vant($perfil);
             if ($this->db->trans_status() === FALSE)
@@ -113,7 +118,7 @@
         
         private function modificar_perfil($perfil)
         {
-            $this->db->where('id_rol', $perfil["rolId"]);
+            $this->db->where('id_perfil', $perfil["idPerfil"]);
             $result = $this->db->update('perfil', [
                 'foto' => $perfil["fotoPerfil"],
                 'logueado_en_cad' => $perfil['logueadoEnCad'],     
@@ -143,7 +148,7 @@
         
         private function modificar_usuario_vant($usuario)
         {
-            $this->db->where('id_usuario', $usuario["usuarioId"]);
+            $this->db->where('id_usuario', $usuario["idUsuarioVant"]);
             $result = $this->db->update('usuario_vant', [
                 'id_rol' => 1,
                 'id_persona' => $usuario["idPersona"],     
