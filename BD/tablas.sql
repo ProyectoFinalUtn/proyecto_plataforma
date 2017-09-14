@@ -177,9 +177,6 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE public.usuario_vant
-    OWNER to admin;
-	
 CREATE SEQUENCE public.usuario_admin_id_usuario_seq
     INCREMENT 1
     START 1
@@ -204,6 +201,12 @@ TABLESPACE pg_default;
 ALTER TABLE public.usuario_admin
     OWNER to postgres;
 
+
+INSERT INTO usuario_admin (usuario, password)
+values    ('admin','202cb962ac59075b964b07152d234b70');
+
+ALTER TABLE public.usuario_admin
+    OWNER to postgres;
 
 INSERT INTO usuario_admin (usuario, password)
 values    ('admin','202cb962ac59075b964b07152d234b70');
