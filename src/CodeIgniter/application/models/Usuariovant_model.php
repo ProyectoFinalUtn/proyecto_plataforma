@@ -54,6 +54,12 @@
             return $query->result();
         }
         
+        public function obtener_usuarios_habilitados()
+        {   $this->db->select('*');    
+            $this->db->from('usuario_vant');     
+            return $this->db->get()->result_array();
+        }
+        
         public function obtener_perfil_por_id($idUsuario)
         {        
             $this->db->select('usuario_vant.id_usuario, usuario_vant.id_rol, usuario_vant.usuario, usuario_vant.pass, pers.*, perf.* ');    

@@ -88,11 +88,11 @@
         public function valida_persona_modificacion($persona, $personaGuardada){
             //$personaGuardada = $this->obtener_persona_por_id($persona['id_persona']);
             if($personaGuardada->email != $persona['email']){
-                $this->db->select('id_persona');
+                /*$this->db->select('id_persona');
                 $this->db->where('id_persona !=', $personaGuardada->id_persona);
                 $this->db->where('email', $persona["email"]);
-                $query = $this->db->get()->row();
-                //$query = $this->db->get_where('persona', array('id_persona !=' => $personaGuardada->id_persona, 'email =' => $persona["email"]))->row();
+                $query = $this->db->get()->row();*/
+                $query = $this->db->get_where('persona', array('id_persona !=' => $personaGuardada->id_persona, 'email =' => $persona["email"]))->row();
                 if (count($query) > 0) {
                     throw new Exception("El correo electronico ya se encuentra registrado");
                 }

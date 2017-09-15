@@ -21,6 +21,7 @@
             $this->methods['login_get']['limit'] = 100; // 100 requests per hour per user/key
             $this->responseError = ['status' => FALSE, 'message' => ''];
             $this->responseOk = ['status' => TRUE, 'response' => NULL, 'message' => ''];
+            //$this->inicializa_controller();
         }
 
         public function obtener_perfil_por_id_get()
@@ -121,6 +122,18 @@
                 $this->response($this->responseError, REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
             }
         }
+        
+        private function usuarios_habilitados()
+        {
+            try{
+                $this->load->model('Usuariovant_model');
+                $usuarios_habilitados = $this->Usuariovant_model->obtener_usuarios_habilitados();
+                return $usuarios_habilitados;
+            }
+            catch(Exception $exception){
+                return [];
+            }
+        }
 
         public function users_post()
         {
@@ -141,19 +154,8 @@
         {
             try{
                 $this->load->model('Usuariovant_model');
-                if($this->post("nombre") && $this->post("apellido") && 
-                   $this->post("email") && $this->post("pass") && 
-                   $this->post("nombreDePerfil") && $this->post("fotoPerfil")){
-                    $perfil = ['nombre' => $this->post("nombre"), 'apellido' => $this->post("apellido"), 
-                               'email' => $this->post("email"), 'edad' => $this->post("edad"), 'sexo' => $this->post("sexo"),
-                               'nombreDePerfil' => $this->post("nombreDePerfil"), 'logueadoEnCad' => false, 
-                               'fotoPerfil' => $this->post("fotoPerfil"), 'tipoDoc' => $this->post("tipoDoc"),
-                               'nroDoc' => $this->post("nroDoc"), 'idUsuarioVant' => $this->post("idUsuarioVant"),
-                               'calle' => $this->post("calle"), 'nro' => $this->post("nro"), 'piso' => $this->post("piso"), 
-                               'dpto' => $this->post("dpto"), 'provincia' => $this->post("provincia"), 
-                               'localidad' => $this->post("localidad"), 'telefono' => $this->post("telefono"), 
-                               //'idPersona' => $this->post("idPersona"),'idPerfil' => $this->post("idPersona"), 
-                               'usuario' => $this->post("email"), 'pass' => $this->post("pass")];
+                if($this->valida_obligatorios_perfil()){
+                    $perfil = $this->genera_array_perfil();
                     $idUsuarioVant = $this->Usuariovant_model->crear_perfil($perfil);
                     $perfil['idUsuarioVant'] = $idUsuarioVant;
                     $this->set_respuesta($perfil);
@@ -174,20 +176,8 @@
         {
             try{
                 $this->load->model('Usuariovant_model');
-                if($this->post("nombre") && $this->post("apellido") && 
-                    $this->post("email") && $this->post("pass") && 
-                    $this->post("nombreDePerfil") && $this->post("fotoPerfil"))/*&& 
-                    $this->post("idUsuarioVant") && $this->post("idPersona")&& $this->post("idPerfil"))*/{
-                    $perfil = ['nombre' => $this->post("nombre"), 'apellido' => $this->post("apellido"), 
-                               'email' => $this->post("email"), 'edad' => $this->post("edad"), 'sexo' => $this->post("sexo"),
-                               'nombreDePerfil' => $this->post("nombreDePerfil"), 'logueadoEnCad' => false, 
-                               'fotoPerfil' => $this->post("fotoPerfil"), 'tipoDoc' => $this->post("tipoDoc"),
-                               'nroDoc' => $this->post("nroDoc"), 'idUsuarioVant' => $this->post("idUsuarioVant"),
-                               'calle' => $this->post("calle"), 'nro' => $this->post("nro"), 'piso' => $this->post("piso"), 
-                               'dpto' => $this->post("dpto"), 'provincia' => $this->post("provincia"), 
-                               'localidad' => $this->post("localidad"), 'telefono' => $this->post("telefono"), 
-                               //'idPersona' => $this->post("idPersona"),'idPerfil' => $this->post("idPersona"), 
-                               'usuario' => $this->post("email"), 'pass' => $this->post("pass")];
+                if($this->valida_obligatorios_perfil()){
+                    $perfil = $this->genera_array_perfil();
                     $this->Usuariovant_model->cambiar_perfil($perfil);
                     $this->set_respuesta($perfil);
                     $this->set_response($this->responseOk, REST_Controller::HTTP_CREATED);
@@ -200,6 +190,29 @@
                 $this->set_mensaje_error($exception->getMessage());
                 $this->response($this->responseError, REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
             }
+        }
+        
+        private function genera_array_perfil(){
+            return ['nombre' => $this->post("nombre"), 'apellido' => $this->post("apellido"), 
+            'email' => $this->post("email"), 'edad' => $this->post("edad"), 'sexo' => $this->post("sexo"),
+            'nombreDePerfil' => $this->post("nombreDePerfil"), 'logueadoEnCad' => false, 
+            'fotoPerfil' => $this->post("fotoPerfil"), 'tipoDoc' => $this->post("tipoDoc"),
+            'nroDoc' => $this->post("nroDoc"), 'idUsuarioVant' => $this->post("idUsuarioVant"),
+            'calle' => $this->post("calle"), 'nro' => $this->post("nro"), 'piso' => $this->post("piso"), 
+            'dpto' => $this->post("dpto"), 'provincia' => $this->post("provincia"), 
+            'localidad' => $this->post("localidad"), 'telefono' => $this->post("telefono"), 
+            //'idPersona' => $this->post("idPersona"),'idPerfil' => $this->post("idPersona"), 
+            'usuario' => $this->post("email"), 'pass' => $this->post("pass")];
+        }
+        
+        private function valida_obligatorios_perfil(){
+            if($this->post("nombre") && $this->post("apellido") && 
+               $this->post("email") && $this->post("pass") && 
+               $this->post("nombreDePerfil") && $this->post("fotoPerfil"))/*&& 
+               $this->post("idUsuarioVant") && $this->post("idPersona")&& $this->post("idPerfil"))*/{
+               return true;
+            }
+            return false;
         }
 
         private function set_mensaje_error($mensaje)
