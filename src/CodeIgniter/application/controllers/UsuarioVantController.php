@@ -176,7 +176,7 @@
         {
             try{
                 $this->load->model('Usuariovant_model');
-                if($this->valida_obligatorios_perfil()){
+                if($this->valida_obligatorios_perfil() === true){
                     $perfil = $this->genera_array_perfil();
                     $this->Usuariovant_model->cambiar_perfil($perfil);
                     $this->set_respuesta($perfil);
@@ -208,8 +208,7 @@
         private function valida_obligatorios_perfil(){
             if($this->post("nombre") && $this->post("apellido") && 
                $this->post("email") && $this->post("pass") && 
-               $this->post("nombreDePerfil") && $this->post("fotoPerfil"))/*&& 
-               $this->post("idUsuarioVant") && $this->post("idPersona")&& $this->post("idPerfil"))*/{
+               $this->post("nombreDePerfil") && $this->post("fotoPerfil")){
                return true;
             }
             return false;
