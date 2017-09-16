@@ -208,7 +208,7 @@
         private function valida_obligatorios_perfil(){
             if($this->post("nombre") && $this->post("apellido") && 
                $this->post("email") && $this->post("pass") && 
-               $this->post("nombreDePerfil") && $this->post("fotoPerfil")){
+               $this->post("nombreDePerfil")){
                return true;
             }
             return false;

@@ -126,7 +126,6 @@
         {
             $this->db->where('id_perfil', $perfil["idPerfil"]);
             $result = $this->db->update('perfil', [
-                'foto' => $perfil["fotoPerfil"],
                 'logueado_en_cad' => $perfil['logueadoEnCad'],     
                 'nombre_de_perfil' => $perfil["nombreDePerfil"]
             ]);
