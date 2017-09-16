@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Zonas_influencia extends MY_Controller
+class Zonas_temporales extends MY_Controller
 {
 
 	 public function __construct()
@@ -11,6 +11,6 @@ class Zonas_influencia extends MY_Controller
 
 	public function index()
 	{	
-            $this->load->view('zonas_influencia'); 	 		 	 
+            $this->load->view('zonas_temporales'); 	 		 	 
 	}
 }
