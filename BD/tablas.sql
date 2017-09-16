@@ -177,8 +177,36 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE public.usuario_vant
-    OWNER to admin;
+CREATE SEQUENCE public.usuario_admin_id_usuario_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    CACHE 1;
+	
+CREATE TABLE public.usuario_admin
+(
+    id_usuario integer NOT NULL DEFAULT nextval('usuario_admin_id_usuario_seq'::regclass),
+    id_persona bigint,
+    id_rol smallint,
+    usuario text COLLATE pg_catalog."default",
+    password text COLLATE pg_catalog."default",
+    CONSTRAINT usuario_admin_pkey PRIMARY KEY (id_usuario)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.usuario_admin
+    OWNER to postgres;
+
+
+INSERT INTO usuario_admin (usuario, password)
+values    ('admin','202cb962ac59075b964b07152d234b70');
+
+ALTER TABLE public.usuario_admin
+    OWNER to postgres;
 
 INSERT INTO usuario_admin (usuario, password)
 values    ('admin','202cb962ac59075b964b07152d234b70');

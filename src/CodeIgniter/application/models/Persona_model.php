@@ -38,21 +38,21 @@
             return $this->db->insert_id();  
         }
         
-        public function modifica_persona($persona, $usuarioModificacion)
+        public function modifica_persona($persona, $personaModificacion)
         {
-            $this->valida_persona_modificacion($persona, $usuarioModificacion);
-            $this->db->where('id_persona', $persona['id_persona']);
-            $result =$this->db
-            ->update('persona', [
+            $this->valida_persona_modificacion($persona, $personaModificacion);
+            $result = $this->db->where('id_persona', $personaModificacion->id_persona);
+            
+            $this->db->update('persona', [
                 'nombre' => $persona["nombre"],
                 'apellido' => $persona["apellido"] != NULL ? $persona["apellido"] : NULL,
                 'id_tipo_documento' =>  array_key_exists("idTipoDocumento", $persona) ? $persona["idTipoDocumento"] > 0 ? $persona["idTipoDocumento"] : NULL : NULL,
                 'nro_documento' => array_key_exists("nroDocumento", $persona) ? $persona["nroDocumento"] > 0 ? $persona["nroDocumento"] : NULL : NULL,
-                'edad' => $persona["edad"],
+                'edad' => array_key_exists("edad", $persona) ? $persona["edad"] : NULL,
                 'email' => $persona["email"],
-                'sexo' => array_key_exists("sexo", $persona) ? $persona["sexo"] : NULL,
+                //'sexo' => array_key_exists("sexo", $persona) ? $persona["sexo"] : NULL,
                 'calle' => array_key_exists("calle", $persona) ? $persona["calle"] : NULL,
-                'numero' => array_key_exists("numero", $persona) ? $persona["numero"] : NULL,
+                'numero' => array_key_exists("nro", $persona) ? $persona["nro"] : NULL,
                 'piso' => array_key_exists("piso", $persona) ? $persona["piso"] : NULL,    
                 'dpto' => array_key_exists("dpto", $persona) ? $persona["dpto"] : NULL,
                 'provincia' => array_key_exists("provincia", $persona) ? $persona["provincia"] : NULL,
@@ -88,8 +88,11 @@
         public function valida_persona_modificacion($persona, $personaGuardada){
             //$personaGuardada = $this->obtener_persona_por_id($persona['id_persona']);
             if($personaGuardada->email != $persona['email']){
-                $this->db->select('id');
-                $query = $this->db->get_where('persona', array('id !=' => $persona['id_persona'], 'email =' => $persona["email"]))->row();
+                /*$this->db->select('id_persona');
+                $this->db->where('id_persona !=', $personaGuardada->id_persona);
+                $this->db->where('email', $persona["email"]);
+                $query = $this->db->get()->row();*/
+                $query = $this->db->get_where('persona', array('id_persona !=' => $personaGuardada->id_persona, 'email =' => $persona["email"]))->row();
                 if (count($query) > 0) {
                     throw new Exception("El correo electronico ya se encuentra registrado");
                 }

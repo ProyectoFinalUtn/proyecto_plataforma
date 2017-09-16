@@ -548,7 +548,8 @@ abstract class REST_Controller extends CI_Controller {
                     $this->config->item('rest_message_field_name') => $this->lang->line('text_rest_ajax_only')
                 ], self::HTTP_NOT_ACCEPTABLE);
         }
-
+        
+        
         // When there is no specific override for the current class/method, use the default auth value set in the config
         if ($this->auth_override === FALSE &&
             (! ($this->config->item('rest_enable_keys') && $this->_allow === TRUE) ||
@@ -1900,6 +1901,31 @@ abstract class REST_Controller extends CI_Controller {
 
         return $this->{$auth_library_class}->$auth_library_function($username, $password);
     }
+    
+    private function usuarios_habilitados()
+    {
+        try{
+            $this->load->model('Usuariovant_model');
+            $usuarios_habilitados = $this->Usuariovant_model->obtener_usuarios_habilitados();
+            return $usuarios_habilitados;
+        }
+        catch(Exception $exception){
+            return [];
+        }
+    }
+        
+    private function inicializa_controller(){
+        $usuarios_habilitados = $this->usuarios_habilitados();
+        $permisos= array();
+        foreach ($usuarios_habilitados as $usuario_habilitado){
+            $usuario = $usuario_habilitado['usuario'];
+            /*$usuario = str_replace("@", "_", $usuario);
+            $usuario = str_replace(".", "_", $usuario);*/
+            $permisos[$usuario]= $usuario_habilitado['pass'];
+        }
+	$permisos['admin']= md5("1234");
+        return $permisos;
+    }
 
     /**
      * Check if the user is logged in
@@ -1915,11 +1941,11 @@ abstract class REST_Controller extends CI_Controller {
         {
             return FALSE;
         }
-
+        $password = md5($password);
         $auth_source = strtolower($this->config->item('auth_source'));
         $rest_auth = strtolower($this->config->item('rest_auth'));
-        $valid_logins = $this->config->item('rest_valid_logins');
-
+        //$valid_logins = $this->config->item('rest_valid_logins');
+        $valid_logins = $this->inicializa_controller();
         if ( ! $this->config->item('auth_source') && $rest_auth === 'digest')
         {
             // For digest we do not have a password passed as argument
