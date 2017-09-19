@@ -20,6 +20,28 @@
             }
         }
         
+        public function login_perfil($usuario, $pass)
+        {
+            $sql = 'usuario_vant.id_usuario idUsuarioVant, perf.nombre_de_perfil nombreDePerfil, '. 
+                   'usuario_vant.usuario, usuario_vant.pass, pers.nombre, pers.apellido, '.
+                   'pers.email, pers.edad, pers.sexo, pers.id_tipo_documento tipoDoc, pers.nro_documento nroDoc, '.
+                   'pers.calle, pers.numero nro, pers.piso, pers.dpto, pers.provincia, pers.localidad, pers.telefono';
+            $this->db->select($sql);
+            $this->db->from('usuario_vant');
+            $this->db->join('persona pers', 'usuario_vant.id_persona = pers.id_persona');
+            $this->db->join('perfil perf', 'usuario_vant.id_perfil = perf.id_perfil');
+            $this->db->where('usuario_vant.usuario = ', $usuario);
+            $query = $this->db->get()->row();
+            if (count($query) > 0) {
+               if($query->pass != md5($pass)){
+                   throw new Exception("Password invalido");
+               }
+               return $query;
+            }else {
+               throw new Exception("Usuario invalido");
+            }
+        }
+        
         public function crear_perfil($perfil)
         {        
             $this->db->trans_begin();  
