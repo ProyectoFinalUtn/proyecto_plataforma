@@ -1,5 +1,5 @@
 <?php
-    class Usuariovant_model extends CI_Model {
+    class Vant_model extends CI_Model {
 
         public function __construct()
         {
