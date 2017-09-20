@@ -16,8 +16,8 @@ class Panel extends MY_Controller
  		 $items = $this->menu->all(); 		 
  		 $this->multi_menu->set_items($items);
  		 $this->load->view('header'); 		 
- 		 $data = array('menu' => $this->multi_menu->render());
- 		 $this->load->view('panel',$data); 		 
+ 		 $menu = array('menu' => $this->multi_menu->render());
+ 		 $this->load->view('panel',$menu); 		 
  		 $this->load->view('footer'); 		 
 	}
 }
