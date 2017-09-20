@@ -18,7 +18,7 @@
             $this->methods['obtener_perfil_por_id_get']['limit'] = 500; // 500 requests per hour per user/key
             $this->methods['crear_perfil_post']['limit'] = 100; // 100 requests per hour per user/key
             $this->methods['cambiar_perfil_post']['limit'] = 100; // 100 requests per hour per user/key
-            $this->methods['login_get']['limit'] = 100; // 100 requests per hour per user/key
+            $this->methods['login_perfil']['limit'] = 100; // 100 requests per hour per user/key
             $this->responseError = ['status' => FALSE, 'message' => ''];
             $this->responseOk = ['status' => TRUE, 'response' => NULL, 'message' => ''];
             //$this->inicializa_controller();
@@ -56,20 +56,22 @@
             }
         }
         
-        public function login_get()
+        public function login_perfil_post()
         {
-            $usuario = $this->get('usuario');
-            $pass = $this->get('pass');
-            if (($usuario === NULL) || ($pass === NULL))
+            
+            if(!$this->post("usuario") || !$this->post("pass"))
             {   
                 $this->set_mensaje_error('El usuario o contraseña no pueden ser nulos');
                 $this->response($this->responseError, REST_Controller::HTTP_BAD_REQUEST); 
 
             }
             
+            $user = $this->post('usuario');
+            $pass = $this->post('pass');
+            
             try{
                 $this->load->model('Usuariovant_model');
-                $usuario = $this->Usuariovant_model->login_user($usuario, $pass);
+                $usuario = $this->Usuariovant_model->login_perfil($user, $pass);
                 $this->set_respuesta($usuario);
                 $this->set_response($this->responseOk, REST_Controller::HTTP_OK);
             }
