@@ -9,8 +9,8 @@
               
         public function obtener_vant_por_usuario($idUsuario)
         {        
-            $sql = 'id_vant idVant, id_usuario_vant idUsuarioVant, marca, modelo, nro_serie, fabricante, lugar_fabricacion lFab '. 
-                   'anio_fabricacion anioFab, alto, ancho, largo, vel_max velMax, '.
+            $sql = 'id_vant idVant, id_usuario_vant idUsuarioVant, marca, modelo, nro_serie, fabricante, '. 
+                   'lugar_fabricacion lFab, anio_fabricacion anioFab, alto, ancho, largo, vel_max velMax, '.
                    'alt_max altMax, peso, color, lugar_guardado lGuardado';
             $this->db->select($sql);
             $this->db->from('vant');

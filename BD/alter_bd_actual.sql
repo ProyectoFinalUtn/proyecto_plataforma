@@ -81,6 +81,7 @@ CREATE TABLE public.vant
     alto integer,
     ancho integer,
     largo integer,
+	peso smallint,
     vel_max integer,
     alt_max integer,
     lugar_guardado text COLLATE pg_catalog."default",

@@ -96,8 +96,9 @@
             $this->db->from('usuario_vant');
             $this->db->join('persona pers', 'usuario_vant.id_persona = pers.id_persona');
             $this->db->join('perfil perf', 'usuario_vant.id_perfil = perf.id_perfil');
-            $this->db->where('usuario_vant.id_usuario', $idUsuario);
-            return $this->db->get()->result_array();
+            $this->db->where('usuario_vant.id_usuario = ', $idUsuario);
+            $query = $this->db->get()->row();
+            return $query;
         }
         
         public function cambiar_perfil($perfil)
@@ -184,12 +185,14 @@
         
         public function valida_usuario($id_usuario, $nombreUsuario){
             $user = $this->obtener_perfil_por_id($id_usuario);
-            if($user->usuario != $nombreUsuario){
-                throw new Exception("Solo puede obtener los datos del usuario enviado");  
-            }
             if (count($user) <= 0) {
                 throw new Exception("El usuario referenciado no existe en el sistema");               
             }
+            
+            if(str_replace("@", "", $user->usuario) != $nombreUsuario){
+                throw new Exception("Solo puede obtener los datos del usuario enviado");  
+            }
+            
         }
         
     }

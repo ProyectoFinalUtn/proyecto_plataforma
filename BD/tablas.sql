@@ -165,7 +165,15 @@ CREATE TABLE public.usuario_vant
     id_perfil integer,
     usuario text COLLATE pg_catalog."default",
     pass text COLLATE pg_catalog."default",
-    CONSTRAINT usuario_vant_pkey PRIMARY KEY (id_usuario)
+    CONSTRAINT usuario_vant_pkey PRIMARY KEY (id_usuario),
+	CONSTRAINT id_perfil_perfil FOREIGN KEY (id_perfil)
+        REFERENCES public.perfil (id_perfil) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT id_persona_persona FOREIGN KEY (id_persona)
+        REFERENCES public.persona (id_persona) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
 )
 WITH (
     OIDS = FALSE
@@ -286,6 +294,7 @@ CREATE TABLE public.vant
     alto integer,
     ancho integer,
     largo integer,
+	peso smallint,
     vel_max integer,
     alt_max integer,
     lugar_guardado text COLLATE pg_catalog."default",

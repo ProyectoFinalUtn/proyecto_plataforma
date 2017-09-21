@@ -21,7 +21,7 @@
         }
 
         public function obtener_vants_usuario_get()
-        {
+        {   
             $id_usuario = $this->get('id_usuario');
             $usuario = $this->get('usuario');
             if ($id_usuario === NULL)
