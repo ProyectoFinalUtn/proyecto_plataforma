@@ -7,40 +7,26 @@
             $this->load->database();       
         }
               
-        public function obtener_perfiles()
+        public function obtener_vant_por_usuario($idUsuario)
         {        
-            $this->db->select('us.id_usuario, us.id_rol, us.usuario, us.pass, pers.*, perf.* ');    
-            $this->db->from('usuario_vant us');
-            $this->db->join('persona pers', 'us.id_persona = pers.id_persona');
-            $this->db->join('perfil perf', 'us.id_perfil = perf.id_perfil');
-            $query = $this->db->get();
-            return $query->result();
-        }
-        
-        public function obtener_usuarios_habilitados()
-        {   $this->db->select('*');    
-            $this->db->from('usuario_vant');     
-            return $this->db->get()->result_array();
-        }
-        
-        public function obtener_solicitudes_por_usuario($idUsuario)
-        {        
-            $this->db->select('usuario_vant.id_usuario, usuario_vant.id_rol, usuario_vant.usuario, usuario_vant.pass, pers.*, perf.* ');    
-            $this->db->from('usuario_vant');
-            $this->db->join('persona pers', 'usuario_vant.id_persona = pers.id_persona');
-            $this->db->join('perfil perf', 'usuario_vant.id_perfil = perf.id_perfil');
-            $this->db->where('pers.id', $idUsuario);
+            $sql = 'id_vant idVant, id_usuario_vant idUsuarioVant, marca, modelo, nro_serie, fabricante, lugar_fabricacion lFab '. 
+                   'anio_fabricacion anioFab, alto, ancho, largo, vel_max velMax, '.
+                   'alt_max altMax, peso, color, lugar_guardado lGuardado';
+            $this->db->select($sql);
+            $this->db->from('vant');
+            $this->db->where('id_usuario_vant = ', $idUsuario);
             $query = $this->db->get();
             return $query->result_array();
         }
         
-        public function obtener_solicitud_por_id($idSolicitud)
+        public function obtener_vant_por_id($idVant)
         {        
-            $this->db->select('usuario_vant.id_usuario, usuario_vant.id_rol, usuario_vant.usuario, usuario_vant.pass, pers.*, perf.* ');    
-            $this->db->from('usuario_vant');
-            $this->db->join('persona pers', 'usuario_vant.id_persona = pers.id_persona');
-            $this->db->join('perfil perf', 'usuario_vant.id_perfil = perf.id_perfil');
-            $this->db->where('pers.id', $idSolicitud);
+            $sql = 'id_vant idVant, id_usuario_vant idUsuarioVant, marca, modelo, nro_serie, fabricante, lugar_fabricacion lFab '. 
+                   'anio_fabricacion anioFab, alto, ancho, largo, vel_max velMax, '.
+                   'alt_max altMax, peso, color, lugar_guardado lGuardado';
+            $this->db->select($sql);
+            $this->db->from('vant');
+            $this->db->where('id_vant = ', $idVant);
             $query = $this->db->get()->row();
             return $query;
         }
@@ -85,9 +71,9 @@
         private function guardar_vant_solicitud($solicitud)
         {
             for ($i = 0; $i <= count($solicitud['vants']); $i++) {
-                $result = $this->db->insert('solicitud', [
+                $result = $this->db->insert('vants_por_solicitud', [
                     'id_solicitud' => $solicitud["idSolicitud"],
-                    'id_vant' => $solicitud['idVant']
+                    'id_vant' => $solicitud['vants'][$i]['idVant']
                 ]);
                 if(!$result){
                     $db_error = $this->db->error();
@@ -100,13 +86,13 @@
         private function guardar_solicitud($solicitud)
         {
             $result = $this->db->insert('solicitud', [
-                'id_usuario_vant' => $solicitud["fotoPerfil"],
-                'id_tipo_solicitud' => $solicitud['logueadoEnCad'],     
+                'id_usuario_vant' => $solicitud["idUsuarioVant"],
+                'id_tipo_solicitud' => $solicitud['idTipoSolicitud'],     
                 'id_estado_solicitud' => $solicitud['idEstadoSolicitud'],
                 'latitud' => $solicitud['latitud'],
                 'longitud' => $solicitud['longitud'],
-                'radio_vuelo' => $solicitud['longitud'],
-                'fecha_hora_vuelo' => $solicitud['longitud']
+                'radio_vuelo' => $solicitud['radioVuelo'],
+                'fecha_hora_vuelo' => $solicitud['fechaHoraVuelo']
             ]);
             if(!$result){
                 $db_error = $this->db->error();
@@ -115,12 +101,38 @@
             return $this->db->insert_id();  
         }
         
-        private function modificar_vant_solicitud($solicitud)
+        public function modifica_solicitud($solicitud)
         {
             $this->db->where('id_solicitud', $solicitud["idSolicitud"]);
-            $this->db->delete('vants_por_solicitud');
-            $this->db->where('solicitud', $solicitud["idSolicitud"]);
-            $this->guardar_vant_solicitud($solicitud);            
+            $result = $this->db->update('solicitud', [
+                'id_usuario_vant' => $solicitud["idUsuarioVant"],
+                'id_tipo_solicitud' => $solicitud['idTipoSolicitud'],     
+                'id_estado_solicitud' => $solicitud['idEstadoSolicitud'],
+                'latitud' => $solicitud['latitud'],
+                'longitud' => $solicitud['longitud'],
+                'radio_vuelo' => $solicitud['radioVuelo'],
+                'fecha_hora_vuelo' => $solicitud['fechaHoraVuelo']
+            ]);
+            
+            if(!$result){
+                $db_error = $this->db->error();
+                throw new Exception($db_error);
+            }
+            return;  
+        }
+        
+        public function modifica_vant_solicitud($solicitud)
+        {
+            $this->db->where('id_solicitud', $solicitud["idSolicitud"]);
+            $result=$this->db->delete('vants_por_solicitud');   
+            
+            if(!$result){
+                $db_error = $this->db->error();
+                throw new Exception($db_error);
+            }
+            
+            $this->guardar_vant_solicitud($solicitud);
+            return;  
         }
     }
 ?>

@@ -21,7 +21,6 @@
 
         public function solicitudes_get()
         {
-            // Ejemplo de como llamarlo http://localhost/proyecto_plataforma_web/UsuarioVantController/obtener_perfil_por_id/id/1
             $id_usuario = $this->get('id_usuario');
             $usuario = $this->get('usuario');
             if ($id_usuario === NULL)
@@ -39,17 +38,10 @@
             }
             
             try{
-                $this->load->model('Usuariovant_model');
-                $user = $this->Usuariovant_model->obtener_perfil_por_id($id_usuario);
-                if($user->usuario != $usuario){
-                    throw new Exception("Solo puede obtener los vants del usuario");  
-                }
-                if (count($user) <= 0) {
-                    throw new Exception("El usuario referenciado no existe en el sistema");               
-                }
+                $this->valida_pedido($id_usuario, $usuario);
                 $this->load->model('Solicitud_model');
-                $solicitudes = $this->Solicitud_model->obtener_solicitudes_por_usuario($id_usuario);
-                $this->set_respuesta($solicitudes);
+                $solicitud = $this->Solicitud_model->obtener_solicitud_por_usuario($id_usuario);
+                $this->set_respuesta($solicitud);
                 $this->set_response($this->responseOk, REST_Controller::HTTP_OK);
             }
             catch(Exception $exception){
@@ -60,10 +52,10 @@
         
         public function solicitud_get()
         {
-            // Ejemplo de como llamarlo http://localhost/proyecto_plataforma_web/UsuarioVantController/obtener_perfil_por_id/id/1
-            $id_solicitud = $this->get('id_usuario');
+            $id_solicitud = $this->get('idSolicitud');
             $usuario = $this->get('usuario');
-            if ($id_solicitud === NULL)
+            
+            if (c === NULL)
             {   
                 $this->set_mensaje_error('El id no puede ser nulo');
                 $this->response($this->responseError, REST_Controller::HTTP_BAD_REQUEST); 
@@ -80,10 +72,8 @@
             try{                
                 $this->load->model('Solicitud_model');
                 $solicitud = $this->Solicitud_model->obtener_solicitud_por_id($id_solicitud);
-                if($solicitud){
-                    if($solicitud->usuario != $usuario){
-                        throw new Exception("Solo puede obtener los vants del usuario");  
-                    }
+                if($id_solicitud){
+                    $this->valida_pedido($solicitud->idUsuarioVant, $usuario);
                 }
                 $this->set_respuesta($solicitud);
                 $this->set_response($this->responseOk, REST_Controller::HTTP_OK);
@@ -119,8 +109,8 @@
         public function cambiar_solicitud_post()
         {
             try{
-                $this->load->model('Usuariovant_model');
                 if($this->valida_obligatorios_perfil() === true){
+                    $this->load->model('Solicitud_model');
                     $solicitud = $this->genera_array_solicitud();
                     $this->Solicitud_model->cambiar_solicitud($solicitud);
                     $this->set_respuesta($solicitud);
@@ -138,8 +128,9 @@
         
         private function genera_array_solicitud(){
             return ['idSolicitud' => $this->post("idSolicitud"), 'idUsuarioVant' => $this->post("idUsuarioVant"), 
-            'latitud' => $this->post("latitud"), 'longitud' => $this->post("longitud"), 'radio_vuelo' => $this->post("radio_vuelo"),
-            'fecha_hora_vuelo' => $this->post("fecha_hora_vuelo"), 'vants' => $this->post("vants")];
+                    'idTipoSolicitud' => $this->post("idTipoSolicitud"), 'idEstadoSolicitud' => $this->post("idEstadoSolicitud"),
+                    'latitud' => $this->post("latitud"), 'longitud' => $this->post("longitud"), 'radio_vuelo' => $this->post("radioVuelo"),
+                    'fechaHoraVuelo' => $this->post("fechaHoraVuelo"), 'vants' => $this->post("vants")];
         }
         
         private function valida_obligatorios_solicitud(){

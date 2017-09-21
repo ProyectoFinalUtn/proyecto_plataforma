@@ -41,9 +41,8 @@
         public function modifica_persona($persona, $personaModificacion)
         {
             $this->valida_persona_modificacion($persona, $personaModificacion);
-            $result = $this->db->where('id_persona', $personaModificacion->id_persona);
-            
-            $this->db->update('persona', [
+            $this->db->where('id_persona', $personaModificacion->id_persona);
+            $result = $this->db->update('persona', [
                 'nombre' => $persona["nombre"],
                 'apellido' => $persona["apellido"] != NULL ? $persona["apellido"] : NULL,
                 'id_tipo_documento' =>  array_key_exists("idTipoDocumento", $persona) ? $persona["idTipoDocumento"] > 0 ? $persona["idTipoDocumento"] : NULL : NULL,

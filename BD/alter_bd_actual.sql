@@ -71,19 +71,26 @@ ALTER SEQUENCE public.vant_id_vant_seq
 CREATE TABLE public.vant
 (
     id_vant bigint NOT NULL DEFAULT nextval('vant_id_vant_seq'::regclass),
+    id_usuario_vant integer,
     marca text COLLATE pg_catalog."default" NOT NULL,
     modelo text COLLATE pg_catalog."default",
     nro_serie text COLLATE pg_catalog."default",
     fabricante text COLLATE pg_catalog."default",
     lugar_fabricacion text COLLATE pg_catalog."default",
-    anio_fabricacion text COLLATE pg_catalog."default",
+    anio_fabricacion integer,
     alto integer,
     ancho integer,
     largo integer,
     vel_max integer,
     alt_max integer,
     lugar_guardado text COLLATE pg_catalog."default",
-    CONSTRAINT vant_pkey PRIMARY KEY (id_vant)
+    color text COLLATE pg_catalog."default",
+    activo smallint NOT NULL,
+    CONSTRAINT vant_pkey PRIMARY KEY (id_vant),
+    CONSTRAINT id_usuario_vant_usuario FOREIGN KEY (id_usuario_vant)
+        REFERENCES public.usuario_vant (id_usuario) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
 )
 WITH (
     OIDS = FALSE

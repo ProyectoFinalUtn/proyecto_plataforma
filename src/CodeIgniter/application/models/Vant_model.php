@@ -1,141 +1,90 @@
 <?php
-    class Vant_model extends CI_Model {
+    class vant_model extends CI_Model {
 
         public function __construct()
         {
             parent::__construct();
             $this->load->database();       
         }
-
-        public function login_user($usuario, $pass)
-        {
-            $query = $this->db->get_where('usuario_vant', array('usuario =' => $usuario))->row();
-            if (count($query) > 0) {
-               if(md5($query->password) != $pass){
-                   throw new Exception("Password invalido");
-               }
-               return $query;
-            }else {
-               throw new Exception("Usuario invalido");
-            }
-        }
-        
-        public function login_perfil($usuario, $pass)
-        {
-            $sql = 'usuario_vant.id_usuario idUsuarioVant, perf.nombre_de_perfil nombreDePerfil, '. 
-                   'usuario_vant.usuario, usuario_vant.pass, pers.nombre, pers.apellido, '.
-                   'pers.email, pers.edad, pers.sexo, pers.id_tipo_documento tipoDoc, pers.nro_documento nroDoc, '.
-                   'pers.calle, pers.numero nro, pers.piso, pers.dpto, pers.provincia, pers.localidad, pers.telefono';
+              
+        public function obtener_vant_por_usuario($idUsuario)
+        {        
+            $sql = 'id_vant idVant, id_usuario_vant idUsuarioVant, marca, modelo, nro_serie, fabricante, lugar_fabricacion lFab '. 
+                   'anio_fabricacion anioFab, alto, ancho, largo, vel_max velMax, '.
+                   'alt_max altMax, peso, color, lugar_guardado lGuardado';
             $this->db->select($sql);
-            $this->db->from('usuario_vant');
-            $this->db->join('persona pers', 'usuario_vant.id_persona = pers.id_persona');
-            $this->db->join('perfil perf', 'usuario_vant.id_perfil = perf.id_perfil');
-            $this->db->where('usuario_vant.usuario = ', $usuario);
-            $query = $this->db->get()->row();
-            if (count($query) > 0) {
-               if($query->pass != md5($pass)){
-                   throw new Exception("Password invalido");
-               }
-               return $query;
-            }else {
-               throw new Exception("Usuario invalido");
-            }
-        }
-        
-        public function crear_perfil($perfil)
-        {        
-            $this->db->trans_begin();  
-            //$this->db->trans_start(TRUE);
-            $this->load->model('Persona_model');
-            $id_persona = $this->Persona_model->guardar_persona($perfil);
-            //$error = $this->db->error(); 
-            $id_perfil = $this->guardar_perfil($perfil);
-            $perfil["idPersona"] = $id_persona;
-            $perfil["idPerfil"] = $id_perfil;
-            $id_usuario = $this->guardar_usuario_vant($perfil);
-            //$this->db->trans_complete();
-            if ($this->db->trans_status() === FALSE)
-            {
-                $this->db->trans_rollback();
-                throw new Exception("Se producto un error al guardar los datos del perfil");
-            }
-            else
-            {
-                $this->db->trans_commit();
-                return $id_usuario;
-            }
-        }
-        
-        public function obtener_perfiles()
-        {        
-            $this->db->select('us.id_usuario, us.id_rol, us.usuario, us.pass, pers.*, perf.* ');    
-            $this->db->from('usuario_vant us');
-            $this->db->join('persona pers', 'us.id_persona = pers.id_persona');
-            $this->db->join('perfil perf', 'us.id_perfil = perf.id_perfil');
+            $this->db->from('vant');
+            $this->db->where('id_usuario_vant = ', $idUsuario);
+            $this->db->where('activo = ', 1);
             $query = $this->db->get();
-            return $query->result();
+            return $query->result_array();
         }
         
-        public function obtener_usuarios_habilitados()
-        {   $this->db->select('*');    
-            $this->db->from('usuario_vant');     
-            return $this->db->get()->result_array();
-        }
-        
-        public function obtener_perfil_por_id($idUsuario)
+        public function obtener_vant_por_id($idVant)
         {        
-            $this->db->select('usuario_vant.id_usuario, usuario_vant.id_rol, usuario_vant.usuario, usuario_vant.pass, pers.*, perf.* ');    
-            $this->db->from('usuario_vant');
-            $this->db->join('persona pers', 'usuario_vant.id_persona = pers.id_persona');
-            $this->db->join('perfil perf', 'usuario_vant.id_perfil = perf.id_perfil');
-            $this->db->where('usuario_vant.id_usuario', $idUsuario);
+            $sql = 'id_vant idVant, id_usuario_vant idUsuarioVant, marca, modelo, nro_serie, fabricante, lugar_fabricacion lFab '. 
+                   'anio_fabricacion anioFab, alto, ancho, largo, vel_max velMax, '.
+                   'alt_max altMax, peso, color, lugar_guardado lGuardado';
+            $this->db->select($sql);
+            $this->db->from('vant');
+            $this->db->where('id_vant = ', $idVant);
+            $this->db->where('activo = ', 1);
             $query = $this->db->get()->row();
             return $query;
         }
         
-        public function obtener_perfil_usuario($usuario, $pass)
-        {        
-            $this->db->select('usuario_vant.id_usuario, usuario_vant.id_rol, usuario_vant.usuario, usuario_vant.pass, pers.*, perf.* ');    
-            $this->db->from('usuario_vant');
-            $this->db->join('persona pers', 'usuario_vant.id_persona = pers.id_persona');
-            $this->db->join('perfil perf', 'usuario_vant.id_perfil = perf.id_perfil');
-            $this->db->where('usuario_vant.usuario', $usuario);
-            $this->db->where('usuario_vant.pass', md5($pass));
-            $query = $this->db->get()->row();
-            if (count($query) <= 0) {
-                throw new Exception("El usuario que intenta modificar no se encuentra logueado");               
-            }
-            return $query;
-        }
-        
-        public function cambiar_perfil($perfil)
+        public function crear_vant($vant)
         {        
             $this->db->trans_begin();  
-            $this->load->model('Persona_model');
-            $perfilModificacion = $this->obtener_perfil_usuario($perfil['usuario'], $perfil['pass']);            
-            $perfil["idPersona"] = $perfilModificacion->id_persona;
-            $perfil["idPerfil"] = $perfilModificacion->id_perfil;
-            $perfil["idUsuarioVant"] = $perfilModificacion->id_usuario;
-            $this->Persona_model->modifica_persona($perfil, $perfilModificacion);            
-            $this->modificar_perfil($perfil);
-            $this->modificar_usuario_vant($perfil);
+            $id_vant = $this->guardar_vant($vant);
             if ($this->db->trans_status() === FALSE)
             {
                 $this->db->trans_rollback();
-                throw new Exception("Se producto un error al modificar los datos del perfil");
+                throw new Exception("Se producto un error al guardar la vant");
             }
             else
             {
                 $this->db->trans_commit();
+                return $id_vant;
             }
         }
         
-        private function guardar_perfil($perfil)
+        public function cambiar_vant($vant)
         {
-            $result = $this->db->insert('perfil', [
-                'foto' => $perfil["fotoPerfil"],
-                'logueado_en_cad' => $perfil['logueadoEnCad'],     
-                'nombre_de_perfil' => $perfil["nombreDePerfil"]
+            $this->db->trans_begin();  
+            $this->modificar_vant($vant);
+            
+            if ($this->db->trans_status() === FALSE)
+            {
+                $this->db->trans_rollback();
+                throw new Exception("Se producto un error al modificar el vant");
+            }
+            else
+            {
+                $this->db->trans_commit();
+                return;
+            }
+        }
+        
+        private function guardar_vant($vant)
+        {
+            $result = $this->db->insert('vant', [
+                'id_usuario_vant' => $vant["idUsuarioVant"],  
+                'marca' => $vant['marca'],
+                'modelo' => $vant['modelo'],
+                'nro_serie' => $vant['nroSerie'],
+                'fabricante' => $vant['fabricante'],
+                'lugar_fabricacion' => $vant['lFab'],
+                'anio_fabricacion' => $vant['anioFab'],
+                'alto' => $vant['alto'],
+                'ancho' => $vant['ancho'],
+                'largo' => $vant['largo'],
+                'vel_max' => $vant['velMax'],
+                'alt_max' => $vant['altMax'],
+                'peso' => $vant['peso'],
+                'color' => $vant['color'],
+                'lugar_guardado' => $vant['lGuardado'],
+                'activo' => 1
             ]);
             if(!$result){
                 $db_error = $this->db->error();
@@ -144,45 +93,28 @@
             return $this->db->insert_id();  
         }
         
-        private function modificar_perfil($perfil)
+        public function modifica_vant($vant)
         {
-            $this->db->where('id_perfil', $perfil["idPerfil"]);
-            $result = $this->db->update('perfil', [
-                'logueado_en_cad' => $perfil['logueadoEnCad'],     
-                'nombre_de_perfil' => $perfil["nombreDePerfil"]
+            $this->db->where('id_vant', $vant["idVant"]);
+            $result = $this->db->update('persona', [
+                'id_usuario_vant' => $vant["idUsuarioVant"],  
+                'marca' => $vant['marca'],
+                'modelo' => $vant['modelo'],
+                'nro_serie' => $vant['nroSerie'],
+                'fabricante' => $vant['fabricante'],
+                'lugar_fabricacion' => $vant['lFab'],
+                'anio_fabricacion' => $vant['anioFab'],
+                'alto' => $vant['alto'],
+                'ancho' => $vant['ancho'],
+                'largo' => $vant['largo'],
+                'vel_max' => $vant['velMax'],
+                'alt_max' => $vant['altMax'],
+                'peso' => $vant['peso'],
+                'color' => $vant['color'],
+                'lugar_guardado' => $vant['lGuardado'],
+                'activo' => 1
             ]);
-            if(!$result){
-                $db_error = $this->db->error();
-                throw new Exception($db_error);
-            };  
-        }
-
-        private function guardar_usuario_vant($usuario)
-        {        
-            $result = $this->db->insert('usuario_vant', [
-                'id_rol' => 1,
-                'id_persona' => $usuario["idPersona"],     
-                'id_perfil' => $usuario["idPerfil"],    
-                'usuario' => $usuario["usuario"],
-                'pass' =>  md5($usuario["pass"])
-            ]);
-            if(!$result){
-                $db_error = $this->db->error();
-                throw new Exception($db_error);
-            }
-            return $this->db->insert_id();  
-        }
-        
-        private function modificar_usuario_vant($usuario)
-        {
-            $this->db->where('id_usuario', $usuario["idUsuarioVant"]);
-            $result = $this->db->update('usuario_vant', [
-                'id_rol' => 1,
-                'id_persona' => $usuario["idPersona"],     
-                'id_perfil' => $usuario["idPerfil"],    
-                'usuario' => $usuario["usuario"],
-                'pass' =>  md5($usuario["pass"])
-            ]);
+            
             if(!$result){
                 $db_error = $this->db->error();
                 throw new Exception($db_error);
@@ -190,6 +122,18 @@
             return;  
         }
         
-        
+        public function eliminar_vant($idVant)
+        {
+            $this->db->where('id_vant', $idVant);
+            $result = $this->db->update('persona', [
+                'activo' => 0
+            ]);
+            
+            if(!$result){
+                $db_error = $this->db->error();
+                throw new Exception($db_error);
+            }
+            return;  
+        }
     }
 ?>

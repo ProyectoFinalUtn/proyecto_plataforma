@@ -68,12 +68,16 @@
         
         public function obtener_perfiles()
         {        
-            $this->db->select('us.id_usuario, us.id_rol, us.usuario, us.pass, pers.*, perf.* ');    
-            $this->db->from('usuario_vant us');
-            $this->db->join('persona pers', 'us.id_persona = pers.id_persona');
-            $this->db->join('perfil perf', 'us.id_perfil = perf.id_perfil');
-            $query = $this->db->get();
-            return $query->result();
+            $sql = 'usuario_vant.id_usuario idUsuarioVant, perf.nombre_de_perfil nombreDePerfil, '. 
+                   'usuario_vant.usuario, usuario_vant.pass, pers.nombre, pers.apellido, '.
+                   'pers.email, pers.edad, pers.sexo, pers.id_tipo_documento tipoDoc, pers.nro_documento nroDoc, '.
+                   'pers.calle, pers.numero nro, pers.piso, pers.dpto, pers.provincia, pers.localidad, pers.telefono';
+            $this->db->select($sql);
+            $this->db->from('usuario_vant');
+            $this->db->join('persona pers', 'usuario_vant.id_persona = pers.id_persona');
+            $this->db->join('perfil perf', 'usuario_vant.id_perfil = perf.id_perfil');
+            $query = $this->db->get()->result_array();
+            return $query;
         }
         
         public function obtener_usuarios_habilitados()
@@ -84,28 +88,16 @@
         
         public function obtener_perfil_por_id($idUsuario)
         {        
-            $this->db->select('usuario_vant.id_usuario, usuario_vant.id_rol, usuario_vant.usuario, usuario_vant.pass, pers.*, perf.* ');    
+            $sql = 'usuario_vant.id_usuario idUsuarioVant, perf.nombre_de_perfil nombreDePerfil, '. 
+                   'usuario_vant.usuario, usuario_vant.pass, pers.nombre, pers.apellido, '.
+                   'pers.email, pers.edad, pers.sexo, pers.id_tipo_documento tipoDoc, pers.nro_documento nroDoc, '.
+                   'pers.calle, pers.numero nro, pers.piso, pers.dpto, pers.provincia, pers.localidad, pers.telefono';
+            $this->db->select($sql);
             $this->db->from('usuario_vant');
             $this->db->join('persona pers', 'usuario_vant.id_persona = pers.id_persona');
             $this->db->join('perfil perf', 'usuario_vant.id_perfil = perf.id_perfil');
             $this->db->where('usuario_vant.id_usuario', $idUsuario);
-            $query = $this->db->get()->row();
-            return $query;
-        }
-        
-        public function obtener_perfil_usuario($usuario, $pass)
-        {        
-            $this->db->select('usuario_vant.id_usuario, usuario_vant.id_rol, usuario_vant.usuario, usuario_vant.pass, pers.*, perf.* ');    
-            $this->db->from('usuario_vant');
-            $this->db->join('persona pers', 'usuario_vant.id_persona = pers.id_persona');
-            $this->db->join('perfil perf', 'usuario_vant.id_perfil = perf.id_perfil');
-            $this->db->where('usuario_vant.usuario', $usuario);
-            $this->db->where('usuario_vant.pass', md5($pass));
-            $query = $this->db->get()->row();
-            if (count($query) <= 0) {
-                throw new Exception("El usuario que intenta modificar no se encuentra logueado");               
-            }
-            return $query;
+            return $this->db->get()->result_array();
         }
         
         public function cambiar_perfil($perfil)
@@ -190,6 +182,15 @@
             return;  
         }
         
+        public function valida_usuario($id_usuario, $nombreUsuario){
+            $user = $this->obtener_perfil_por_id($id_usuario);
+            if($user->usuario != $nombreUsuario){
+                throw new Exception("Solo puede obtener los datos del usuario enviado");  
+            }
+            if (count($user) <= 0) {
+                throw new Exception("El usuario referenciado no existe en el sistema");               
+            }
+        }
         
     }
 ?>
