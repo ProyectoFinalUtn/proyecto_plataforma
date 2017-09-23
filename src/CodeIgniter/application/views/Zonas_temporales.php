@@ -1,3 +1,2 @@
-<div id="mapZonas"></div>
-<div id="mouse-position"></div>
-<script src="assets/js/zonas-temporales.js"></script>
+<div id="map" class="map"></div>
+<script src="<?php echo base_url(); ?>assets/js/script.js"></script>

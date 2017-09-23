@@ -15,7 +15,7 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap-submenu.min.css">
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/doc.min.css">
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/ol.css">
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/zonas-temporales.css">
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/styles.css">
 <link href="https://unpkg.com/ol3-geocoder/build/ol3-geocoder.min.css" rel="stylesheet">
 <link href="//cdn.jsdelivr.net/openlayers.contextmenu/latest/ol3-contextmenu.min.css" rel="stylesheet">
 
@@ -30,6 +30,10 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/ol3/4.3.3/ol.js"></script>
 <script src="//cdn.jsdelivr.net/openlayers.geocoder/latest/ol3-geocoder.js"></script>
 <script src="//cdn.jsdelivr.net/openlayers.contextmenu/latest/ol3-contextmenu.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/olContextMenu.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/utility.js"></script>
+
+
 
 
    

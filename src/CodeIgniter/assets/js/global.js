@@ -6,5 +6,5 @@ $(document).ready(function() {
       $(".main").empty();
       $(".main").load(URL);      
     });
-
+    
 });
