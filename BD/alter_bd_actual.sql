@@ -131,11 +131,11 @@ CREATE TABLE public.solicitud
     CONSTRAINT id_estado_solicitud_solicitud FOREIGN KEY (id_estado_solicitud)
         REFERENCES public.estado_solicitud (id_estado_solicitud) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+        ON DELETE NO ACTION,
     CONSTRAINT id_usuario_aprobador_usuario FOREIGN KEY (id_usuario_aprobador)
         REFERENCES public.usuario_admin (id_usuario) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+        ON DELETE NO ACTION,
     CONSTRAINT id_usuario_vant_solicitud FOREIGN KEY (id_usuario_vant)
         REFERENCES public.usuario_vant (id_usuario) MATCH SIMPLE
         ON UPDATE NO ACTION
