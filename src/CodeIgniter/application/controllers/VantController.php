@@ -11,7 +11,7 @@
             parent::__construct();
             // Configure limits on our controller methods
             // Ensure you have created the 'limits' table and enabled 'limits' within application/config/rest.php
-            $this->methods['obtener_vant_usuario_get']['limit'] = 500; // 500 requests per hour per user/key
+            $this->methods['obtener_vant_id_usuario_get']['limit'] = 500; // 500 requests per hour per user/key
             $this->methods['obtener_vants_usuario_get']['limit'] = 500; // 500 requests per hour per user/key
             $this->methods['guardar_vant_post']['limit'] = 500; // 100 requests per hour per user/key
             $this->methods['modificar_vant_post']['limit'] = 500;
@@ -51,11 +51,10 @@
             }
         }
         
-        public function obtener_vant_usuario_get()
+        public function obtener_vant_id_usuario_get()
         {
             $id_vant = $this->get('idVant');
             $usuario = $this->get('usuario');
-            
             if ($id_vant === NULL)
             {   
                 $this->set_mensaje_error('El id no puede ser nulo');
@@ -74,9 +73,8 @@
                 $this->load->model('Vant_model');
                 $vant = $this->Vant_model->obtener_vant_por_id($id_vant);
                 if($vant){
-                    $this->valida_pedido($vant->idUsuario, $usuario);
+                    $this->valida_pedido($vant->idUsuarioVant, $usuario);
                 }
-                $this->eliminar_vant($id_vant);
                 $this->set_respuesta($vant);
                 $this->set_response($this->responseOk, REST_Controller::HTTP_OK);
             }
@@ -130,29 +128,19 @@
         
         public function eliminar_vant_post()
         {
-            $id_vant = $this->post('idVant');
+            $id_vant = $this->post("vant")["idVant"];
             $usuario = $this->post('usuario');
-            
-            if ($id_vant === NULL)
-            {   
-                $this->set_mensaje_error('El id no puede ser nulo');
+            if(!$this->es_id_valido($id_vant)){
                 $this->response($this->responseError, REST_Controller::HTTP_BAD_REQUEST); 
-            }
-
-            $id_vant = (int) $id_vant;     
-            
-            if ($id_vant <= 0)
-            {
-                $this->set_mensaje_error('El id es invalido');
-                $this->response($this->responseError, REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
             }
             
             try{                
                 $this->load->model('Vant_model');
                 $vant = $this->Vant_model->obtener_vant_por_id($id_vant);
                 if($vant){
-                    $this->valida_pedido($vant->idUsuarioVant, $usuario);
+                    $this->valida_pedido($vant->idUsuarioVant, str_replace("@", "", $usuario));
                 }
+                $this->Vant_model->eliminar_vant($id_vant);
                 $this->set_respuesta($vant);
                 $this->set_response($this->responseOk, REST_Controller::HTTP_OK);
             }
@@ -172,7 +160,7 @@
         }
         
         private function valida_obligatorios_vant(){
-            if($this->post("idVant") && $this->post("marca") && 
+            if($this->post("idUsuarioVant") && $this->post("marca") && 
                $this->post("modelo")){
                return true;
             }
@@ -192,6 +180,22 @@
         private function valida_pedido($id_usuario, $usuario){
             $this->load->model('Usuariovant_model');
             $this->Usuariovant_model->valida_usuario($id_usuario, $usuario);
+        }
+        
+        private function es_id_valido($id_vant){
+            if ($id_vant === NULL)
+            {   
+                $this->set_mensaje_error('El id no puede ser nulo');
+                return false;
+            }
+
+            $id_vant = (int) $id_vant;     
+            
+            if ($id_vant <= 0)
+            {
+                $this->set_mensaje_error('El id es invalido');                
+            }
+            return true;
         }
     }
 ?>

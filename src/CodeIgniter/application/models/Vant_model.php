@@ -22,8 +22,8 @@
         
         public function obtener_vant_por_id($idVant)
         {        
-            $sql = 'id_vant idVant, id_usuario_vant idUsuarioVant, marca, modelo, nro_serie, fabricante, lugar_fabricacion lFab '. 
-                   'anio_fabricacion anioFab, alto, ancho, largo, vel_max velMax, '.
+            $sql = 'id_vant idVant, id_usuario_vant idUsuarioVant, marca, modelo, nro_serie, fabricante, '. 
+                   'lugar_fabricacion lFab, anio_fabricacion anioFab, alto, ancho, largo, vel_max velMax, '.
                    'alt_max altMax, peso, color, lugar_guardado lGuardado';
             $this->db->select($sql);
             $this->db->from('vant');
@@ -93,10 +93,10 @@
             return $this->db->insert_id();  
         }
         
-        public function modifica_vant($vant)
+        public function modificar_vant($vant)
         {
             $this->db->where('id_vant', $vant["idVant"]);
-            $result = $this->db->update('persona', [
+            $result = $this->db->update('vant', [
                 'id_usuario_vant' => $vant["idUsuarioVant"],  
                 'marca' => $vant['marca'],
                 'modelo' => $vant['modelo'],
@@ -125,7 +125,7 @@
         public function eliminar_vant($idVant)
         {
             $this->db->where('id_vant', $idVant);
-            $result = $this->db->update('persona', [
+            $result = $this->db->update('vant', [
                 'activo' => 0
             ]);
             
