@@ -112,7 +112,8 @@
                 if($this->valida_obligatorios_vant() === true){
                     $this->load->model('Vant_model');
                     $vant= $this->genera_array_vant();
-                    $this->Vant_model->cambiar_vant($vant);
+                    $idVant = $this->Vant_model->cambiar_vant($vant);
+                    $vant["idVant"] = $idVant;
                     $this->set_respuesta($vant);
                     $this->set_response($this->responseOk, REST_Controller::HTTP_CREATED);
                 }else{

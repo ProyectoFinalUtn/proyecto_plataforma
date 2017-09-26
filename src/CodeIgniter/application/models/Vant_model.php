@@ -52,7 +52,7 @@
         public function cambiar_vant($vant)
         {
             $this->db->trans_begin();  
-            $this->modificar_vant($vant);
+            $idVant = $this->modificar_vant($vant);
             
             if ($this->db->trans_status() === FALSE)
             {
@@ -62,7 +62,7 @@
             else
             {
                 $this->db->trans_commit();
-                return;
+                return $idVant;
             }
         }
         
@@ -119,7 +119,7 @@
                 $db_error = $this->db->error();
                 throw new Exception($db_error);
             }
-            return;  
+            return $vant["idVant"];  
         }
         
         public function eliminar_vant($idVant)
