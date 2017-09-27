@@ -339,7 +339,9 @@ CREATE TABLE public.solicitud
     latitud text COLLATE pg_catalog."default" NOT NULL,
     longitud text COLLATE pg_catalog."default" NOT NULL,
     radio_vuelo text COLLATE pg_catalog."default" NOT NULL,
-    fecha_hora_vuelo date NOT NULL,
+    fecha_vuelo date NOT NULL,
+	hora_vuelo_desde time without time zone NOT NULL,
+	hora_vuelo_hasta time without time zone NOT NULL,
     CONSTRAINT solicitud_pkey PRIMARY KEY (id_solicitud),
     CONSTRAINT id_estado_solicitud_solicitud FOREIGN KEY (id_estado_solicitud)
         REFERENCES public.estado_solicitud (id_estado_solicitud) MATCH SIMPLE

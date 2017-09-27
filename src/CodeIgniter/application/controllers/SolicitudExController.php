@@ -52,6 +52,14 @@
             try{                
                 $this->load->model('Solicitud_model');
                 $solicitud = $this->Solicitud_model->obtener_solicitud_por_id($id_solicitud);
+                $vantsPorSol = $this->Solicitud_model->obtener_vants_por_solicitud($id_solicitud);
+                $vants = array();
+                foreach ($vantsPorSol as $vantPorSol){
+                    $this->load->model('Vant_model');
+                    $vant = $this->Vant_model->obtener_vant_por_id($vantPorSol["idVant"]);
+                    $vants[] = $vant;
+                }
+                $solicitud->vants = $vants;
                 if($solicitud){
                     $this->valida_pedido($solicitud->idUsuarioVant, $usuario);
                 }
@@ -135,7 +143,8 @@
             return ['idSolicitud' => $this->post("idSolicitud"), 'idUsuarioVant' => $this->post("idUsuarioVant"), 
                     'idTipoSolicitud' => $this->post("idTipoSolicitud"), 'idEstadoSolicitud' => $this->post("idEstadoSolicitud"),
                     'latitud' => $this->post("latitud"), 'longitud' => $this->post("longitud"), 'radioVuelo' => $this->post("radioVuelo"),
-                    'fechaHoraVuelo' => $this->post("fechaHoraVuelo"), 'vants' => $this->post("vants")];
+                    'fechaVuelo' => $this->post("fecha"), 'horaVueloDesde' => $this->post("horaVueloDesde"),
+                    'horaVueloHasta' => $this->post("horaVueloHasta"), 'vants' => $this->post("vants")];
         }
         
         private function valida_obligatorios_solicitud(){

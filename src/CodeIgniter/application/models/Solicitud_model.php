@@ -11,7 +11,8 @@
         {        
             $sql = 'sol.id_solicitud idSolicitud, id_usuario_vant idUsuarioVant, id_tipo_solicitud idTipoSolicitud, '. 
                    'id_usuario_aprobador idUsuarioAprobador, sol.id_estado_solicitud idEstadoSolicitud, '.
-                   'es.descripcion descripcionEstadoSolicitud, latitud, longitud, radio_vuelo radioVuelo, fecha_hora_vuelo fechaHoraVuelo';
+                   'es.descripcion descripcionEstadoSolicitud, latitud, longitud, radio_vuelo radioVuelo, '.
+                   "to_char(fecha_vuelo, 'DD/MM/YYYY') fecha, hora_vuelo_desde horaVueloDesde, hora_vuelo_hasta horaVueloHasta";
             $this->db->select($sql);
             $this->db->from('solicitud sol');
             $this->db->join('estado_solicitud es', 'sol.id_estado_solicitud = es.id_estado_solicitud');
@@ -24,18 +25,17 @@
         {        
             $sql = 'sol.id_solicitud idSolicitud, id_usuario_vant idUsuarioVant, id_tipo_solicitud idTipoSolicitud, '. 
                    'id_usuario_aprobador idUsuarioAprobador, sol.id_estado_solicitud idEstadoSolicitud, '.
-                   'es.descripcion descripcionEstadoSolicitud, latitud, longitud, radio_vuelo radioVuelo, fecha_hora_vuelo fechaHoraVuelo';
+                   'es.descripcion descripcionEstadoSolicitud, latitud, longitud, radio_vuelo radioVuelo, '.
+                   "to_char(fecha_vuelo, 'DD/MM/YYYY') fecha, hora_vuelo_desde horaVueloDesde, hora_vuelo_hasta horaVueloHasta";
             $this->db->select($sql);
             $this->db->from('solicitud sol');
             $this->db->join('estado_solicitud es', 'sol.id_estado_solicitud = es.id_estado_solicitud');
-            $this->db->where('id_usuario_vant = ', $idUsuario);
+            $this->db->where('sol.id_solicitud = ', $idSolicitud);
             $query = $this->db->get()->row();
-            $vantsPorSol = $this->obtener_vants_por_solicitud($idSolicitud);
-            $query["vants"] = $vantsPorSol;
             return $query;
         }
         
-        public function obtener_solicitudes_por_solicitud($idSolicitud)
+        public function obtener_vants_por_solicitud($idSolicitud)
         {        
             $sql = 'id_solicitud idSolicitud, id_vant idVant ';
             $this->db->select($sql);
@@ -107,7 +107,9 @@
                 'latitud' => $solicitud['latitud'],
                 'longitud' => $solicitud['longitud'],
                 'radio_vuelo' => $solicitud['radioVuelo'],
-                'fecha_hora_vuelo' => $solicitud['fechaHoraVuelo']
+                'fecha_vuelo' => $solicitud['fechaVuelo'],
+                'hora_vuelo_desde' => $solicitud['horaVueloDesde'],
+                'hora_vuelo_hasta' => $solicitud['horaVueloHasta']
             ]);
             if(!$result){
                 $db_error = $this->db->error();
@@ -126,7 +128,9 @@
                 'latitud' => $solicitud['latitud'],
                 'longitud' => $solicitud['longitud'],
                 'radio_vuelo' => $solicitud['radioVuelo'],
-                'fecha_hora_vuelo' => $solicitud['fechaHoraVuelo']
+                'fecha_vuelo' => $solicitud['fechaVuelo'],
+                'hora_vuelo_desde' => $solicitud['horaVueloDesde'],
+                'hora_vuelo_hasta' => $solicitud['horaVueloHasta']
             ]);
             
             if(!$result){
