@@ -135,9 +135,9 @@ var view = new ol.View({
                 }
             },
             {
-                text: 'EditArea',
+                text: 'Guardar Area',
                 callback: function (obj, map) {
-                    handleFeatureContexMenuEvent2('editarea', ID, ModelName, mapX, mapY);
+                    handleFeatureContexMenuEvent2('GuardaArea', ID, ModelName, mapX, mapY);
                 }
             }];
             contextmenu.extend(FeatureContextMenu);
@@ -182,24 +182,9 @@ function addInteraction(value) {
         map.removeInteraction(draw);
     if (value !== 'None') {
         var geometryFunction, maxPoints;
-        if (value === 'Square') {
-            value = 'Circle';
-            geometryFunction = ol.interaction.Draw.createRegularPolygon(4);
-        } else if (value === 'Box') {
-            value = 'LineString';
-            maxPoints = 2;
-            geometryFunction = function (coordinates, geometry) {
-                if (!geometry) {
-                    geometry = new ol.geom.Polygon(null);
-                }
-                var start = coordinates[0];
-                var end = coordinates[1];
-                geometry.setCoordinates([
-                  [start, [start[0], end[1]], end, [end[0], start[1]], start]
-                ]);
-                return geometry;
-            };
-        }
+        if (value === 'Circle') {
+        //TODO    
+        } 
         draw = new ol.interaction.Draw({
             source: source,
             type: /** @type {ol.geom.GeometryType} */ (value),
@@ -243,16 +228,10 @@ function handleFeatureContexMenuEvent2(option, ID, ModelName, x, y) {
        console.log('edit');
     } else if (option == 'view') {
          console.log('view');
-    } else if (option == 'editarea') {
-        console.log('editarea');
-        var AreaEditMenu = [
-            {
-                text: 'Save', 
-            },
-            {
-                text: 'Cancel',
-            }
-        ];
-        contextmenu.extend(AreaEditMenu);
+    } else if (option == 'GuardaArea') {
+        var allFeatures = vector.getSource().getFeatures();
+        var format = new ol.format.GeoJSON();
+        var routeFeatures = format.writeFeatures(allFeatures);
+        console.log(routeFeatures);        
     }
 }

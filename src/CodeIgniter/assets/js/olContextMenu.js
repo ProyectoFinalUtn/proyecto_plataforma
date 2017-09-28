@@ -1,13 +1,13 @@
 
  var StandardContextItems = [
           {
-              text: 'Center map here',
+              text: 'Centrar el mapa aqui',
               classname: 'some-style-class', // add some CSS rules,
               callback: center
           },
           '-', // this is a separator,
         {
-            text: 'Draw',
+            text: 'Definir Zona Temporal',
             classname: 'some-style-class', // you can add this icon with a CSS class
             // instead of `icon` property (see next line)
             items: [{
@@ -19,22 +19,7 @@
                     addInteraction('None');
                 }
             }, {
-                text: 'Point',
-                classname: 'some-style-class', // you can add this icon with a CSS class
-                // instead of `icon` property (see next line)
-                callback: function (obj, map) {
-                    addInteraction('Point');
-                }
-            }, {
-                text: 'LineString',
-                classname: 'some-style-class', // you can add this icon with a CSS class
-                // instead of `icon` property (see next line)
-              
-                callback: function (obj, map) {
-                    addInteraction('LineString');
-                }
-            }, {
-                text: 'Polygon',
+                text: 'Poligono',
                 classname: 'some-style-class', // you can add this icon with a CSS class
                 // instead of `icon` property (see next line)
                
@@ -42,7 +27,7 @@
                     addInteraction('Polygon');
                 }
             }, {
-                text: 'Circle',
+                text: 'Circulo con radio',
                 classname: 'some-style-class', // you can add this icon with a CSS class
                 // instead of `icon` property (see next line)
                 
@@ -50,23 +35,7 @@
                     addInteraction('Circle');
                 }
             }, {
-                text: 'Square',
-                classname: 'some-style-class', // you can add this icon with a CSS class
-                // instead of `icon` property (see next line)
-              
-                callback: function (obj, map) {
-                    addInteraction('Square');
-                }
-            }, {
-                text: 'Box',
-                classname: 'some-style-class', // you can add this icon with a CSS class
-                // instead of `icon` property (see next line)
-               
-                callback: function (obj, map) {
-                    addInteraction('Box');
-                }
-            }, {
-                text: 'Clean',
+                text: 'Limpiar',
                 classname: 'some-style-class', // you can add this icon with a CSS class
                 // instead of `icon` property (see next line)
                 
