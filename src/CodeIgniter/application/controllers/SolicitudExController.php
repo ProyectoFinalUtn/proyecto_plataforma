@@ -78,6 +78,8 @@
                 $this->load->model('Solicitud_model');
                 if($this->valida_obligatorios_solicitud()){
                     $solicitud = $this->genera_array_solicitud();
+                    $solicitud['idTipoSolicitud'] = 1;
+                    $solicitud['idEstadoSolicitud'] = 1;
                     $id_solicitud = $this->Solicitud_model->crear_solicitud($solicitud);
                     $solicitud['idSolicitud'] = $id_solicitud;
                     $this->set_respuesta($solicitud);
@@ -143,15 +145,15 @@
             return ['idSolicitud' => $this->post("idSolicitud"), 'idUsuarioVant' => $this->post("idUsuarioVant"), 
                     'idTipoSolicitud' => $this->post("idTipoSolicitud"), 'idEstadoSolicitud' => $this->post("idEstadoSolicitud"),
                     'latitud' => $this->post("latitud"), 'longitud' => $this->post("longitud"), 'radioVuelo' => $this->post("radioVuelo"),
-                    'fechaVuelo' => $this->post("fecha"), 'horaVueloDesde' => $this->post("horaVueloDesde"),
+                    'fecha' => $this->post("fecha"), 'horaVueloDesde' => $this->post("horaVueloDesde"),
                     'horaVueloHasta' => $this->post("horaVueloHasta"), 'vants' => $this->post("vants")];
         }
         
         private function valida_obligatorios_solicitud(){
-            if($this->post("idSolicitud") && $this->post("idUsuarioVant") && 
-               $this->post("longitud") && $this->post("radioVuelo") && 
-               $this->post("latitud") && $this->post("longitud") &&
-               $this->post("radioVuelo") && $this->post("fechaHoraVuelo") &&
+            if($this->post("idUsuarioVant") && 
+               $this->post("longitud") && $this->post("latitud") && 
+               $this->post("radioVuelo") && $this->post("fecha") &&
+               $this->post("horaVueloDesde") && $this->post("horaVueloHasta") &&
                $this->post("vants")){
                return true;
             }

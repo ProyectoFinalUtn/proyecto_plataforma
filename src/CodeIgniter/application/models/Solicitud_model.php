@@ -54,7 +54,7 @@
             $sql = 'sol.id_solicitud idSolicitud, id_usuario_vant idUsuarioVant, id_tipo_solicitud idTipoSolicitud, '. 
                    'id_usuario_aprobador idUsuarioAprobador, sol.id_estado_solicitud idEstadoSolicitud, '.
                    'es.descripcion descripcionEstadoSolicitud, latitud, longitud, radio_vuelo radioVuelo, '.
-                   "to_char(fecha_vuelo, 'DD/MM/YYYY') fecha, hora_vuelo_desde horaVueloDesde, hora_vuelo_hasta horaVueloHasta";
+                   "to_char(fecha_vuelo, 'YYYY-MM-DD') fecha, hora_vuelo_desde horaVueloDesde, hora_vuelo_hasta horaVueloHasta";
             $this->db->select($sql);
             $this->db->from('solicitud sol');
             $this->db->join('estado_solicitud es', 'sol.id_estado_solicitud = es.id_estado_solicitud');
@@ -113,15 +113,8 @@
         
         private function guardar_vant_solicitud($solicitud)
         {
-            for ($i = 0; $i <= count($solicitud['vants']); $i++) {
-                $result = $this->db->insert('vants_por_solicitud', [
-                    'id_solicitud' => $solicitud["idSolicitud"],
-                    'id_vant' => $solicitud['vants'][$i]['idVant']
-                ]);
-                if(!$result){
-                    $db_error = $this->db->error();
-                    throw new Exception($db_error);
-                }
+            for ($i = 0; $i < count($solicitud['vants']); $i++) {
+                $this->insertar_vant_solicitud($solicitud["idSolicitud"], $solicitud['vants'][$i]);
             }
             return;  
         }
@@ -135,7 +128,7 @@
                 'latitud' => $solicitud['latitud'],
                 'longitud' => $solicitud['longitud'],
                 'radio_vuelo' => $solicitud['radioVuelo'],
-                'fecha_vuelo' => $solicitud['fechaVuelo'],
+                'fecha_vuelo' => $solicitud['fecha'],
                 'hora_vuelo_desde' => $solicitud['horaVueloDesde'],
                 'hora_vuelo_hasta' => $solicitud['horaVueloHasta']
             ]);
@@ -146,7 +139,7 @@
             return $this->db->insert_id();  
         }
         
-        public function modifica_solicitud($solicitud)
+        public function modificar_solicitud($solicitud)
         {
             $this->db->where('id_solicitud', $solicitud["idSolicitud"]);
             $result = $this->db->update('solicitud', [
@@ -156,7 +149,7 @@
                 'latitud' => $solicitud['latitud'],
                 'longitud' => $solicitud['longitud'],
                 'radio_vuelo' => $solicitud['radioVuelo'],
-                'fecha_vuelo' => $solicitud['fechaVuelo'],
+                'fecha_vuelo' => $solicitud['fecha'],
                 'hora_vuelo_desde' => $solicitud['horaVueloDesde'],
                 'hora_vuelo_hasta' => $solicitud['horaVueloHasta']
             ]);
@@ -166,6 +159,15 @@
                 throw new Exception($db_error);
             }
             return $solicitud["idSolicitud"];  
+        }
+        
+        public function modificar_vant_solicitud($solicitud)
+        {
+            $this->eliminar_vant_solicitud($solicitud);
+            for ($i = 0; $i < count($solicitud['vants']); $i++) {
+                $this->insertar_vant_solicitud($solicitud["idSolicitud"], $solicitud['vants'][$i]);
+            }
+            return;  
         }
         
         public function eliminar_solicitud($idSolicitud)
@@ -180,6 +182,27 @@
                 throw new Exception($db_error);
             }
             return;  
+        }
+        
+        public function eliminar_vant_solicitud($solicitud)
+        {
+            $result = $this->db->delete('vants_por_solicitud', array('id_solicitud = ' => $solicitud["idSolicitud"]));
+            if(!$result){
+                $db_error = $this->db->error();
+                throw new Exception($db_error);
+            }
+            return;  
+        }
+        
+        private function insertar_vant_solicitud($id_solicitud, $vant_solicitud){
+            $result = $this->db->insert('vants_por_solicitud', [
+                'id_solicitud' => $id_solicitud,
+                'id_vant' => $vant_solicitud['idVant']
+            ]);
+            if(!$result){
+                $db_error = $this->db->error();
+                throw new Exception($db_error);
+            }
         }
     }
 ?>
