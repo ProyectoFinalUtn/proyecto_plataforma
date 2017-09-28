@@ -7,6 +7,34 @@
             $this->load->database();       
         }
               
+        public function obtener_solicitudes()
+        {        
+            $sql = 'sol.id_solicitud idSolicitud, id_usuario_vant idUsuarioVant, id_tipo_solicitud idTipoSolicitud, '. 
+                   'id_usuario_aprobador idUsuarioAprobador, sol.id_estado_solicitud idEstadoSolicitud, '.
+                   'es.descripcion descripcionEstadoSolicitud, latitud, longitud, radio_vuelo radioVuelo, '.
+                   "to_char(fecha_vuelo, 'DD/MM/YYYY') fecha, hora_vuelo_desde horaVueloDesde, hora_vuelo_hasta horaVueloHasta";
+            $this->db->select($sql);
+            $this->db->from('solicitud sol');
+            $this->db->join('estado_solicitud es', 'sol.id_estado_solicitud = es.id_estado_solicitud');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+        
+        public function obtener_solicitud_por_estado($idEstadoSolicitud)
+        {        
+            $sql = 'sol.id_solicitud idSolicitud, id_usuario_vant idUsuarioVant, id_tipo_solicitud idTipoSolicitud, '. 
+                   'id_usuario_aprobador idUsuarioAprobador, sol.id_estado_solicitud idEstadoSolicitud, '.
+                   'es.descripcion descripcionEstadoSolicitud, latitud, longitud, radio_vuelo radioVuelo, '.
+                   "to_char(fecha_vuelo, 'DD/MM/YYYY') fecha, hora_vuelo_desde horaVueloDesde, hora_vuelo_hasta horaVueloHasta";
+            $this->db->select($sql);
+            $this->db->from('solicitud sol');
+            $this->db->join('estado_solicitud es', 'sol.id_estado_solicitud = es.id_estado_solicitud');
+            $query = $this->db->get();
+            $this->db->where('sol.id_estado_solicitud = ', $idEstadoSolicitud);
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+        
         public function obtener_solicitud_por_usuario($idUsuario)
         {        
             $sql = 'sol.id_solicitud idSolicitud, id_usuario_vant idUsuarioVant, id_tipo_solicitud idTipoSolicitud, '. 
