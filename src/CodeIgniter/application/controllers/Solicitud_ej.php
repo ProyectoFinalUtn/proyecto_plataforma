@@ -45,6 +45,7 @@ class Solicitud_ej extends MY_Controller
                 $solicitud = $this->obtener_solicitud_por_id($solicitudes[0]['idSolicitud']);
                 echo "id segunda solicitud: ". $solicitud->idSolicitud;
             }
+            //$this->load->view('mi_vista'); 
             
 	}
         
