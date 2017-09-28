@@ -372,7 +372,7 @@ CREATE TABLE public.vants_por_solicitud
 (
     id_solicitud bigint NOT NULL,
     id_vant bigint,
-    CONSTRAINT vants_por_solicitud_pkey PRIMARY KEY (id_solicitud),
+    CONSTRAINT vants_por_solicitud_pkey PRIMARY KEY (id_solicitud, id_vant),
     CONSTRAINT id_solicitud_solicitud FOREIGN KEY (id_solicitud)
         REFERENCES public.solicitud (id_solicitud) MATCH SIMPLE
         ON UPDATE NO ACTION
