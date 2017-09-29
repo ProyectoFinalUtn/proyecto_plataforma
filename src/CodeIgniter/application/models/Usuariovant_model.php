@@ -103,7 +103,7 @@
 
 		public function obtener_perfil_usuario($usuario, $pass)
 		{
-			$sql = 'usuario_vant.id_usuario idUsuarioVant, perf.id_perfil, perf.nombre_de_perfil nombreDePerfil, '.
+			$sql = 'usuario_vant.id_usuario id_usuario, perf.id_perfil, perf.nombre_de_perfil nombreDePerfil, '.
 				'usuario_vant.usuario, usuario_vant.pass, pers.id_persona, pers.nombre, pers.apellido, '.
 				'pers.email, pers.edad, pers.sexo, pers.id_tipo_documento tipoDoc, pers.nro_documento nroDoc, '.
 				'pers.calle, pers.numero nro, pers.piso, pers.dpto, pers.provincia, pers.localidad, pers.telefono';
