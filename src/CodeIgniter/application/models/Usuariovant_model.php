@@ -110,8 +110,8 @@
         
         public function obtener_perfil_por_id($idUsuario)
         {        
-            $sql = 'usuario_vant.id_usuario idUsuarioVant, perf.nombre_de_perfil nombreDePerfil, '. 
-                   'usuario_vant.usuario, usuario_vant.pass, pers.nombre, pers.apellido, '.
+            $sql = 'usuario_vant.id_usuario idUsuarioVant, perf.id_perfil, perf.nombre_de_perfil nombreDePerfil, '.
+                   'usuario_vant.usuario, usuario_vant.pass, pers.nombre, pers.apellido, pers.id_persona, '.
                    'pers.email, pers.edad, pers.sexo, pers.id_tipo_documento tipoDoc, pers.nro_documento nroDoc, '.
                    'pers.calle, pers.numero nro, pers.piso, pers.dpto, pers.provincia, pers.localidad, pers.telefono';
             $this->db->select($sql);
