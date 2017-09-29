@@ -11,6 +11,6 @@ class Zonas_temporales extends MY_Controller
 
 	public function index()
 	{	
-		$this->load->view('zonas_temporales'); 	 		 	 
+		$this->load->view('Zonas_temporales'); 	 		 	 
 	}
 }
