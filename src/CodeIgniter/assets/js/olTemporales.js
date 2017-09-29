@@ -17,12 +17,12 @@ var view = new ol.View({
 //});
 
 //function initMap() {
-	
-	var attribution = new ol.control.Attribution({
+  
+  var attribution = new ol.control.Attribution({
         collapsible: false
     });
 // create a vector layer used for editing
-	var stroke = new ol.style.Stroke({
+  var stroke = new ol.style.Stroke({
                 color: 'red'
             });
             var textStroke = new ol.style.Stroke({
@@ -32,46 +32,46 @@ var view = new ol.View({
             var textFill = new ol.style.Fill({
                 color: '#000'
             });
-	var vector = new ol.layer.Vector({
-					name: 'my_vectorlayer',
-					source: source,
-					style: (function () {
-						var textStroke = new ol.style.Stroke({
-							color: '#fff',
-							width: 3
-						});
-						var textFill = new ol.style.Fill({
-							color: '#000'
-						});
-						return function (feature, resolution) {
-								return [new ol.style.Style({
-									cursor: 'pointer',
-									text: new ol.style.Text({
-										font: '34px Calibri,sans-serif',
-										text: getAreaLabel(feature),
-										fill: textFill,
-										stroke: textStroke
-									}),
-									image: new ol.style.Circle({
-										radius: 7,
-										fill: new ol.style.Fill({
-											color: '#ff7733'
-										})
-									}),
-									fill: new ol.style.Fill({
-									   color: 'rgba(255, 255, 255, 0.2)'
-									}),
-									stroke: new ol.style.Stroke({
-										color: '#ffcc33',
-										width: 2
-									})
-								})];
-						};
-					})()
-	});
+  var vector = new ol.layer.Vector({
+          name: 'my_vectorlayer',
+          source: source,
+          style: (function () {
+            var textStroke = new ol.style.Stroke({
+              color: '#fff',
+              width: 3
+            });
+            var textFill = new ol.style.Fill({
+              color: '#000'
+            });
+            return function (feature, resolution) {
+                return [new ol.style.Style({
+                  cursor: 'pointer',
+                  text: new ol.style.Text({
+                    font: '34px Calibri,sans-serif',
+                    text: getAreaLabel(feature),
+                    fill: textFill,
+                    stroke: textStroke
+                  }),
+                  image: new ol.style.Circle({
+                    radius: 7,
+                    fill: new ol.style.Fill({
+                      color: '#ff7733'
+                    })
+                  }),
+                  fill: new ol.style.Fill({
+                     color: 'rgba(255, 255, 255, 0.2)'
+                  }),
+                  stroke: new ol.style.Stroke({
+                    color: '#ffcc33',
+                    width: 2
+                  })
+                })];
+            };
+          })()
+  });
 
-	// Create a map
-	map = new ol.Map({
+  // Create a map
+  map = new ol.Map({
         layers: [
           new ol.layer.Group({
               'title': 'Base map',
@@ -90,8 +90,8 @@ var view = new ol.View({
     });
 
 
-	//create contextmenu
-	contextmenu = new ContextMenu({
+  //create contextmenu
+  contextmenu = new ContextMenu({
         width: 170,
         default_items: true, //default_items are (for now) Zoom In/Zoom Out
         items: StandardContextItems
@@ -107,9 +107,9 @@ var view = new ol.View({
         var clkfeatures = [];
         map.forEachFeatureAtPixel([mapX, mapY], function (ft, layer) {
               if(typeof ft.get('ModelName') !== 'undefined'){
-				 if (!contains.call(clkfeatures, ft)){
-					clkfeatures.push(ft);
-				 }
+         if (!contains.call(clkfeatures, ft)){
+          clkfeatures.push(ft);
+         }
             }
         });
         console.log('length : ' +clkfeatures.length);
@@ -147,7 +147,7 @@ var view = new ol.View({
             contextmenu.extend(StandardContextItems);
         }
     });
-//	return map;
+//  return map;
 //}
 //Instantiate with some options and add the Control
 var geocoder = new Geocoder('nominatim', {
@@ -182,9 +182,25 @@ function addInteraction(value) {
         map.removeInteraction(draw);
     if (value !== 'None') {
         var geometryFunction, maxPoints;
-        if (value === 'Circle') {
-        //TODO    
+        if (value === 'Circle') { 
+
+          //var view = map.getView();
+          //var projection = view.getProjection();
+          //var resolutionAtEquator = view.getResolution();
+          var center = map.getView().getCenter();
+          //var var pointResolution = projection.getPointResolution(resolutionAtEquator, center);
+          //var resolutionFactor = resolutionAtEquator/pointResolution;
+          var radius = prompt( "Ingrese el radio en Km:", "10" );
+          var radius = (radius*1000 / ol.proj.METERS_PER_UNIT.m) ;//* resolutionFactor;
+
+
+          var circle = new ol.geom.Circle(center, radius);
+          var circleFeature = new ol.Feature(circle);
+
+          source.addFeature(circleFeature);          
+          return;
         } 
+
         draw = new ol.interaction.Draw({
             source: source,
             type: /** @type {ol.geom.GeometryType} */ (value),
@@ -192,20 +208,20 @@ function addInteraction(value) {
             maxPoints: maxPoints
         });
         map.addInteraction(draw);
-		
-		draw.on('drawend', function(event) {
+    
+    draw.on('drawend', function(event) {
             map.removeInteraction(draw);
        
             var title = prompt( "Please provide the Area Title:", "untitled" );
             
-			event.feature.setProperties({
-				'id': title + GetID(),
-				'name': title,
-				'MapMarkerTitle': title,
-				'Display': title,
-				'ModelName': title,
-				'MapAreaLabelText': title
-			  });
+      event.feature.setProperties({
+        'id': title + GetID(),
+        'name': title,
+        'MapMarkerTitle': title,
+        'Display': title,
+        'ModelName': title,
+        'MapAreaLabelText': title
+        });
         });
     }
 }
@@ -218,9 +234,9 @@ function getAreaLabel(feature) {
     if(typeof feature.get('ModelName') !== 'undefined') {
         var title = feature.get('Display');
         return title;
-	}
+  }
 }
-	
+  
 
 function handleFeatureContexMenuEvent2(option, ID, ModelName, x, y) {
     contextmenu.clear();
