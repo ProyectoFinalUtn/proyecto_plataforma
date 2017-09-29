@@ -11,6 +11,6 @@ class Zonas_influencia extends MY_Controller
 
 	public function index()
 	{	
-            $this->load->view('zonas_influencia'); 	 		 	 
+            $this->load->view('Zonas_influencia'); 	 		 	 
 	}
 }

@@ -27,11 +27,11 @@ class Sessions extends CI_Controller
         if ($password == md5($this->input->post('password')))
         {
             $this->session->set_userdata('loggedin', true);
-            redirect('panel');
+            redirect('Panel');
         }
         else
         {
-            redirect('sessions/login');
+            redirect('Sessions/Login');
         }
         
     }

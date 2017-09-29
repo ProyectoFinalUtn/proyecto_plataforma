@@ -12,7 +12,7 @@ class Panel extends MY_Controller
 
 	public function index()
 	{
-		 $this->load->model("menu_model", "menu");		 
+		 $this->load->model("Menu_model", "menu");		 
  		 $items = $this->menu->all(); 		 
  		 $this->multi_menu->set_items($items);
  		 $this->load->view('header'); 		 
