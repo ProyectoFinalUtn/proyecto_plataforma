@@ -10,7 +10,7 @@ class Sessions extends CI_Controller
         $this->load->helper('url');
     }
 
-    public function login()
+    public function Login()
     {
         //$this->load->view('header');
         $this->load->view('Login');
@@ -31,7 +31,7 @@ class Sessions extends CI_Controller
         }
         else
         {
-            redirect('sessions/login');
+            redirect('Sessions/Login');
         }
         
     }
