@@ -31,7 +31,7 @@ class Sessions extends CI_Controller
         }
         else
         {
-            redirect('Sessions/Login');
+            redirect('Sessions/login');
         }
         
     }
