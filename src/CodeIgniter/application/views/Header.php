@@ -7,7 +7,7 @@
    <style>
 
    </style>
-   <title>G.O-Guide</title>
+   <title>Plataforma de Administración de Normativa</title>
 
 <script src="http://code.jquery.com/jquery-2.1.1.min.js" defer></script>
 

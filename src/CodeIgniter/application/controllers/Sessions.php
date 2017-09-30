@@ -13,7 +13,12 @@ class Sessions extends CI_Controller
     public function login()
     {
         //$this->load->view('header');
-        $this->load->view('Login');
+        if(!isset($_COOKIE['usuario'])) {
+            $this->load->view('Login');
+        } else {
+            redirect('Panel');
+        }
+        
         //$this->load->view('footer');
     }
 
@@ -27,6 +32,9 @@ class Sessions extends CI_Controller
         if ($password == md5($this->input->post('password')))
         {
             $this->session->set_userdata('loggedin', true);
+            $cookie_name = "usuario";
+            $cookie_value = $this->input->post('nombreUsuario');
+            setcookie($cookie_name, $cookie_value, time() + (86400), "/"); // 86400 = 1 day
             redirect('Panel');
         }
         else

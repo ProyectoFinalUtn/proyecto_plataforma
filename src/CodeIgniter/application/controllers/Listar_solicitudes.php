@@ -38,14 +38,8 @@ class Listar_solicitudes extends MY_Controller
              */
             
             $solicitudes = $this->obtener_solicitudes();
-            $solicitud = null;
-            var_dump($solicitudes);
-            if($solicitudes != null){
-                echo "id primera solicitud: ".$solicitudes[0]['idSolicitud']. "---";
-                $solicitud = $this->obtener_solicitud_por_id($solicitudes[0]['idSolicitud']);
-                echo "id segunda solicitud: ". $solicitud->idSolicitud;
-            }
-            //$this->load->view('mi_vista'); 
+            $data['solicitudes'] = $solicitudes;
+            $this->load->view('Listar_solicitudes', $data);
             
 	}
         
