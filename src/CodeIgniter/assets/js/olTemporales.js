@@ -1,23 +1,13 @@
-
 // Code goes here
 var map;
 var contextmenu;
 var source = new ol.source.Vector({ wrapX: false });
 var view = new ol.View({
-    center:  [11560106.846765194,148975.76812780878],
-    zoom: 14
+    center: ol.proj.transform([-58.39, -34.63], 'EPSG:4326', 'EPSG:3857'),
+    zoom: 10
 });
 
-//window.addEventListener('load', function () {
-//    map = initMap();
-//});
 
-//document.getElementById("map").addEventListener('load', function () {
-//    map = initMap();
-//});
-
-//function initMap() {
-  
   var attribution = new ol.control.Attribution({
         collapsible: false
     });
@@ -73,31 +63,76 @@ var view = new ol.View({
   // Create a map
   map = new ol.Map({
         layers: [
-          new ol.layer.Group({
-              'title': 'Base map',
-              layers: [
-                   new ol.layer.Tile({
-                       title: 'Base',
-                       source: new ol.source.OSM(),
-                   }),
-                  vector
-              ],
-          })
+            new ol.layer.Group({
+                'title': 'Base maps',
+                layers: [
+                    new ol.layer.Group({
+                        title: 'Water color',
+                        type: 'base',
+                        combine: true,
+                        visible: false,
+                        layers: [
+                            new ol.layer.Tile({
+                                source: new ol.source.Stamen({
+                                    layer: 'watercolor'
+                                })
+                            }),
+                            new ol.layer.Tile({
+                                source: new ol.source.Stamen({
+                                    layer: 'terrain-labels'
+                                })
+                            })
+                        ]
+                    }),
+                    new ol.layer.Tile({
+                        title: 'OSM',
+                        type: 'base',
+                        visible: true,
+                        source: new ol.source.OSM()
+                    }),
+                      new ol.layer.Tile({
+                      title: 'Wikimedia',
+                      type: 'base',
+                      visible: false,
+                      source: new ol.source.XYZ(
+                      {
+                        urls : ["https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png"]
+                      })                      
+                    })
+                ]
+            }),
+            new ol.layer.Group({
+                title: 'Overlays',
+                layers: [
+                    new ol.layer.Image({
+                        title: 'Countries',
+                        source: new ol.source.ImageArcGISRest({
+                            ratio: 1,
+                            params: {'LAYERS': 'show:0'},
+                            url: "https://ons-inspire.esriuk.com/arcgis/rest/services/Administrative_Boundaries/Countries_December_2016_Boundaries/MapServer"
+                        })
+                    })
+                ]
+            })
         ],
         controls: ol.control.defaults({ attribution: false }).extend([attribution]),
         target: 'map',
         view: view
     });
+    map.addLayer(vector);
 
-
+    var layerSwitcher = new ol.control.LayerSwitcher({
+       tipLabel: 'Leyenda' // Optional label for button
+    });
+    map.addControl(layerSwitcher);         
   //create contextmenu
   contextmenu = new ContextMenu({
         width: 170,
         default_items: true, //default_items are (for now) Zoom In/Zoom Out
         items: StandardContextItems
-    });
+  });
 
-    map.addControl(contextmenu);
+  map.addControl(contextmenu);
      
     map.getViewport().addEventListener('contextmenu', function (e) {
           e.preventDefault();
@@ -147,8 +182,7 @@ var view = new ol.View({
             contextmenu.extend(StandardContextItems);
         }
     });
-//  return map;
-//}
+
 //Instantiate with some options and add the Control
 var geocoder = new Geocoder('nominatim', {
   provider: 'osm',
@@ -181,25 +215,7 @@ function addInteraction(value) {
     if (value)
         map.removeInteraction(draw);
     if (value !== 'None') {
-        var geometryFunction, maxPoints;
-        if (value === 'Circle') { 
-
-          //var view = map.getView();
-          //var projection = view.getProjection();
-          //var resolutionAtEquator = view.getResolution();
-          var center = map.getView().getCenter();
-          //var var pointResolution = projection.getPointResolution(resolutionAtEquator, center);
-          //var resolutionFactor = resolutionAtEquator/pointResolution;
-          var radius = prompt( "Ingrese el radio en Km:", "10" );
-          var radius = (radius*1000 / ol.proj.METERS_PER_UNIT.m) ;//* resolutionFactor;
-
-
-          var circle = new ol.geom.Circle(center, radius);
-          var circleFeature = new ol.Feature(circle);
-
-          source.addFeature(circleFeature);          
-          return;
-        } 
+        var geometryFunction, maxPoints;        
 
         draw = new ol.interaction.Draw({
             source: source,
@@ -210,13 +226,22 @@ function addInteraction(value) {
         map.addInteraction(draw);
     
     draw.on('drawend', function(event) {
-            map.removeInteraction(draw);
+          map.removeInteraction(draw);
        
-            var title = prompt( "Please provide the Area Title:", "untitled" );
+          var title = prompt( "Please provide the Area Title:", "untitled" );
+          if (value === 'Point') {           
+            var center = event.feature.getGeometry().getCoordinates();
+            var radius = prompt( "Ingrese el radio en Km:", "10" );
+            var radius = (radius*1000 / ol.proj.METERS_PER_UNIT.m) ;
+            var circle = new ol.geom.Circle(center, radius);
+            var circleFeature = new ol.Feature(circle);
+            source.addFeature(circleFeature);          
+          }  
             
       event.feature.setProperties({
         'id': title + GetID(),
         'name': title,
+        'radius': radius,
         'MapMarkerTitle': title,
         'Display': title,
         'ModelName': title,
