@@ -24,18 +24,8 @@
         {   
             $id_usuario = $this->get('id_usuario');
             $usuario = $this->get('usuario');
-            if ($id_usuario === NULL)
-            {   
-                $this->set_mensaje_error('El id no puede ser nulo');
+            if(!$this->es_id_valido($id_usuario)){
                 $this->response($this->responseError, REST_Controller::HTTP_BAD_REQUEST); 
-            }
-
-            $id_usuario = (int) $id_usuario;     
-            
-            if ($id_usuario <= 0)
-            {
-                $this->set_mensaje_error('El id es invalido');
-                $this->response($this->responseError, REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
             }
             
             try{
@@ -55,18 +45,8 @@
         {
             $id_vant = $this->get('idVant');
             $usuario = $this->get('usuario');
-            if ($id_vant === NULL)
-            {   
-                $this->set_mensaje_error('El id no puede ser nulo');
+            if(!$this->es_id_valido($id_vant)){
                 $this->response($this->responseError, REST_Controller::HTTP_BAD_REQUEST); 
-            }
-
-            $id_vant = (int) $id_vant;     
-            
-            if ($id_vant <= 0)
-            {
-                $this->set_mensaje_error('El id es invalido');
-                $this->response($this->responseError, REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
             }
             
             try{                
