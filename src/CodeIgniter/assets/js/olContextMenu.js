@@ -90,6 +90,6 @@ function center(obj) {
     center: obj.coordinate
   });
 }
-console.log(view.getCenter());
-view.setCenter(obj.coordinate);
+
+
 
