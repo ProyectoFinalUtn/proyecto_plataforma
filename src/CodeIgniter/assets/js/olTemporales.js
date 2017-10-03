@@ -100,20 +100,7 @@ var view = new ol.View({
                       })                      
                     })
                 ]
-            }),
-            new ol.layer.Group({
-                title: 'Overlays',
-                layers: [
-                    new ol.layer.Image({
-                        title: 'Countries',
-                        source: new ol.source.ImageArcGISRest({
-                            ratio: 1,
-                            params: {'LAYERS': 'show:0'},
-                            url: "https://ons-inspire.esriuk.com/arcgis/rest/services/Administrative_Boundaries/Countries_December_2016_Boundaries/MapServer"
-                        })
-                    })
-                ]
-            })
+            })              
         ],
         controls: ol.control.defaults({ attribution: false }).extend([attribution]),
         target: 'map',

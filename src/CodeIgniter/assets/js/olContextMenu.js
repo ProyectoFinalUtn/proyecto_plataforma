@@ -85,12 +85,11 @@ function clearDraw() {
 }
 
 function center(obj) {
-    var pan = ol.animation.pan({
-        duration: 1000,
-        easing: elastic,
-        source: view.getCenter()
-    });
-    console.log(view.getCenter());
-    map.beforeRender(pan);
-    view.setCenter(obj.coordinate);
+  view.animate({
+    duration: 700,    
+    center: obj.coordinate
+  });
 }
+console.log(view.getCenter());
+view.setCenter(obj.coordinate);
+
