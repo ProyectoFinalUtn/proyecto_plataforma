@@ -122,7 +122,7 @@ var view = new ol.View({
   map.addControl(contextmenu);
      
     map.getViewport().addEventListener('contextmenu', function (e) {
-          e.preventDefault();
+        e.preventDefault();
         var offset = $(this).offset();
         var mapX = e.x - offset.left;
         var mapY = e.y - offset.top;
@@ -142,6 +142,7 @@ var view = new ol.View({
         } else if (clkfeatures.length == 1) {
             contextmenu.clear();
             var ID = clkfeatures[0].get('ID');
+            
             var ModelName = clkfeatures[0].get('OpenlayersMapType')
             var FeatureContextMenu = [{
                 text: 'View',
@@ -226,15 +227,14 @@ function addInteraction(value) {
           }  
             
       event.feature.setProperties({
-        'id': title + GetID(),
-        'name': title,
-        'radius': radius,
+        'id': GetID(),
+        'name': title,        
         'MapMarkerTitle': title,
         'Display': title,
         'ModelName': title,
         'MapAreaLabelText': title
-        });
-        });
+      });
+    });
     }
 }
 
@@ -258,8 +258,9 @@ function handleFeatureContexMenuEvent2(option, ID, ModelName, x, y) {
          console.log('view');
     } else if (option == 'GuardaArea') {
         var allFeatures = vector.getSource().getFeatures();
+        //var feature = vector.getSource().getClosestFeatureToCoordinate(x,y);
         var format = new ol.format.GeoJSON();
-        var routeFeatures = format.writeFeatures(allFeatures);
-        console.log(routeFeatures);        
+        var geoJson = format.writeFeatures(allFeatures); 
+        console.log(geoJson);                
     }
 }

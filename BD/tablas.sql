@@ -63,6 +63,22 @@ TABLESPACE pg_default;
 ALTER TABLE public.menus
     OWNER to admin;
 
+CREATE TABLE public.zonas_temporales
+(
+    id bigint NOT NULL,
+    nombre "char" NOT NULL,
+    descripcion "char",
+    "geoJson" json NOT NULL,
+    CONSTRAINT zonas_temporales_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.zonas_temporales
+    OWNER to admin;
+
 GRANT ALL ON TABLE public.menus TO admin WITH GRANT OPTION;
 
 GRANT ALL ON TABLE public.menus TO admin;
