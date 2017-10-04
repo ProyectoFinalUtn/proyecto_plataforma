@@ -117,6 +117,8 @@
         public function cambiar_solicitud($solicitud)
         {
             $this->db->trans_begin();  
+            $this->valida_modificacion_solicitud($idSolicitud);
+            $this->valida_modificacion_solicitud($solicitud["idSolicitud"]);
             $this->modificar_solicitud($solicitud);
             $solicitud['idEstadoSolicitud'] = 1;
             $idSolicitud = $this->modificar_vant_solicitud($solicitud);
@@ -194,21 +196,33 @@
         
         public function eliminar_solicitud($idSolicitud)
         {
-            $this->db->where('id_solicitud', $idSolicitud);
+            $this->db->trans_begin();
+            $this->valida_modificacion_solicitud($idSolicitud);
+            /*$this->db->where('id_solicitud', $idSolicitud);
             $result = $this->db->update('s', [
                 'activo' => 0
-            ]);
-            
+            ]);*/
+            $this->eliminar_vant_solicitud($idSolicitud);
+            $result =  $this->db->delete('solicitud', array('id_solicitud' => $idSolicitud)); 
             if(!$result){
                 $db_error = $this->db->error();
                 throw new Exception($db_error);
             }
-            return;  
+            
+            if ($this->db->trans_status() === FALSE)
+            {
+                $this->db->trans_rollback();
+                throw new Exception("Se producto un error al eliminar el solicitud");
+            }
+            else
+            {
+                $this->db->trans_commit();
+            }
         }
         
-        public function eliminar_vant_solicitud($solicitud)
+        public function eliminar_vant_solicitud($idSolicitud)
         {
-            $result = $this->db->delete('vants_por_solicitud', array('id_solicitud = ' => $solicitud["idSolicitud"]));
+            $result = $this->db->delete('vants_por_solicitud', array('id_solicitud = ' => $idSolicitud));
             if(!$result){
                 $db_error = $this->db->error();
                 throw new Exception($db_error);
@@ -224,6 +238,13 @@
             if(!$result){
                 $db_error = $this->db->error();
                 throw new Exception($db_error);
+            }
+        }
+        
+        private function valida_modificacion_solicitud($idSolicitud){
+            $solAnterior = $this->obtener_solicitud_por_id($idSolicitud);
+            if($solAnterior->idEstadoSolicitud != 1){
+                throw new Exception("La solicitud fue procesada por el administrador no se puede modificar.");
             }
         }
     }

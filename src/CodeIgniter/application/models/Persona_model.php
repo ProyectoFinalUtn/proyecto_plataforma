@@ -49,7 +49,7 @@
                 'nro_documento' => array_key_exists("nroDocumento", $persona) ? $persona["nroDocumento"] > 0 ? $persona["nroDocumento"] : NULL : NULL,
                 'edad' => array_key_exists("edad", $persona) ? $persona["edad"] : NULL,
                 'email' => $persona["email"],
-                //'sexo' => array_key_exists("sexo", $persona) ? $persona["sexo"] : NULL,
+                'sexo' => array_key_exists("sexo", $persona) ? $persona["sexo"] : NULL,
                 'calle' => array_key_exists("calle", $persona) ? $persona["calle"] : NULL,
                 'numero' => array_key_exists("nro", $persona) ? $persona["nro"] : NULL,
                 'piso' => array_key_exists("piso", $persona) ? $persona["piso"] : NULL,    
