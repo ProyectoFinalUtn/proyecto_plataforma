@@ -39,12 +39,27 @@
                         foreach ($solicitudes as $solicitud)
                         {
                             echo "<tr><td>".$solicitud['idSolicitud']."</td>";
-                            echo "<td>".$solicitud['idUsuarioVant']."</td>";
+                            foreach ($usuariosVant as $usuarioVant) {
+                                if ($usuarioVant['idUsuarioVant'] == $solicitud['idUsuarioVant']) {
+                                    echo "<td>".$usuarioVant['apellido']." ".$usuarioVant['nombre']."</td>";
+                                    break;
+                                }
+                            }
                             echo "<td>".$solicitud['latitud'].",".$solicitud['latitud']."</td>";
                             echo "<td>".$solicitud['radioVuelo']."</td>";
                             echo "<td>".$solicitud['fecha']."</td>";
                             echo "<td>".$solicitud['horaVueloDesde']." - ".$solicitud['horaVueloHasta']."</td>";
-                            echo "<td>".$solicitud['idUsuarioAprobador']."</td>";
+                            if ($solicitud['idUsuarioAprobador'] != null) {
+                                foreach ($usuariosAdmin as $usuarioAdmin) {
+                                    if ($usuarioAdmin['id_usuario'] == $solicitud['idUsuarioAprobador']) {
+                                        echo "<td>".$usuarioAdmin['usuario']."</td>";
+                                        break;
+                                    }
+                                }
+                            }
+                            else {
+                                echo "<td></td>";
+                            }
                             echo "<td><select name=\"estados\">"."<option value=\"".$solicitud['idEstadoSolicitud']."\" selected=\"selected\">" . 
                                 $solicitud['descripcionEstadoSolicitud']."</option>";
                             foreach ($estadosPosibles as $estado => $estadoPosible)

@@ -18,6 +18,12 @@ class Administrador_model extends CI_Model {
                 }
                 
         }
+        
+        public function obtener_datos_usuarios_admin()
+        {   $this->db->select('id_usuario, usuario');    
+            $this->db->from('usuario_admin');
+            return $this->db->get()->result_array();
+        }
 
 /*********************************************************************************** 
        public function insert_entry()
