@@ -59,7 +59,7 @@
                                         echo "</option>";
                                     }
                                 }
-                                echo "</select></td><td><a href=\"Procesar_solicitud\">Editar</a></td></tr>";
+                                echo "</select></td><td><a href=\"Procesar_solicitud?idSolicitud=".$solicitud['idSolicitud']."\" class=\"btn navbar-btn ml-2 text-white btn-secondary\">Procesar</a></td></tr>";
                             }
                         ?>
                     </table>

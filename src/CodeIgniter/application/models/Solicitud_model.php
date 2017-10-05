@@ -79,7 +79,7 @@
             $this->db->join('estado_solicitud es', 'sol.id_estado_solicitud = es.id_estado_solicitud');
             $this->db->join('usuario_vant uv', 'sol.id_usuario_vant = uv.id_usuario');
             $this->db->join('persona pers', 'uv.id_persona = pers.id_persona');
-            $this->db->join('usuario_admin adm', 'sol.id_usuario_aprobador = adm.id_usuario');
+            $this->db->join('usuario_admin adm', 'sol.id_usuario_aprobador = adm.id_usuario', 'left outer ');
             $this->db->where('sol.id_solicitud = ', $idSolicitud);
             $query = $this->db->get()->row();
             return $query;

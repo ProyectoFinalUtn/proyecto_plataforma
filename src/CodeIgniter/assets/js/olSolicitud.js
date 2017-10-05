@@ -1,10 +1,12 @@
 // Code goes here
+var lati = parseFloat(readCookie('sol_latitud'));
+var longi = parseFloat(readCookie('sol_longitud'));
 var map;
 var contextmenu;
 var source = new ol.source.Vector({ wrapX: false });
 var view = new ol.View({
-    center: ol.proj.transform([-58.39, -34.63], 'EPSG:4326', 'EPSG:3857'),
-    zoom: 10
+    center: ol.proj.transform([longi, lati], 'EPSG:4326', 'EPSG:3857'),
+    zoom: 15
 });
 
 
@@ -111,86 +113,8 @@ var view = new ol.View({
     var layerSwitcher = new ol.control.LayerSwitcher({
        tipLabel: 'Leyenda' // Optional label for button
     });
-    map.addControl(layerSwitcher);         
-  //create contextmenu
-  contextmenu = new ContextMenu({
-        width: 170,
-        default_items: true, //default_items are (for now) Zoom In/Zoom Out
-        items: StandardContextItems
-  });
+    map.addControl(layerSwitcher);
 
-  map.addControl(contextmenu);
-     
-    map.getViewport().addEventListener('contextmenu', function (e) {
-        e.preventDefault();
-        var offset = $(this).offset();
-        var mapX = e.x - offset.left;
-        var mapY = e.y - offset.top;
-        var clkfeatures = [];
-        map.forEachFeatureAtPixel([mapX, mapY], function (ft, layer) {
-              if(typeof ft.get('ModelName') !== 'undefined'){
-         if (!contains.call(clkfeatures, ft)){
-          clkfeatures.push(ft);
-         }
-            }
-        });
-        console.log('length : ' +clkfeatures.length);
-        if (clkfeatures.length > 1) {
-            contextmenu.clear();
-            contextmenu.extend(SelectorContextMenu);
-          
-        } else if (clkfeatures.length == 1) {
-            contextmenu.clear();
-            var ID = clkfeatures[0].get('ID');
-            
-            var ModelName = clkfeatures[0].get('OpenlayersMapType')
-            var FeatureContextMenu = [{
-                text: 'View',
-                callback: function (obj, map) {
-               
-                    handleFeatureContexMenuEvent2('view', ID, ModelName);
-                }
-            },
-            {
-                text: 'Edit',
-                callback: function (obj, map) {
-                    handleFeatureContexMenuEvent2('edit', ID, ModelName);
-                }
-            },
-            {
-                text: 'Guardar Area',
-                callback: function (obj, map) {
-                    handleFeatureContexMenuEvent2('GuardaArea', ID, ModelName, mapX, mapY);
-                }
-            }];
-            contextmenu.extend(FeatureContextMenu);
-        }
-        else {
-            contextmenu.clear();
-            contextmenu.extend(StandardContextItems);
-        }
-    });
-
-//Instantiate with some options and add the Control
-var geocoder = new Geocoder('nominatim', {
-  provider: 'osm',
-  lang: 'es',
-  placeholder: 'Buscar ...',
-  limit: 5,
-  debug: true,
-  autoComplete: true,
-  keepOpen: true,
-  preventDefault: false,
-  countrycodes: 'ar' //x ahora solo busca de Argentina
-});
-map.addControl(geocoder);
-
-//Listen when an address is chosen
-geocoder.on('addresschosen', function(evt){
-  var feature = evt.feature,
-      coord = evt.coordinate;
-  overlay.setPosition(coord);
-});
 
 var mousePositionControl = new ol.control.MousePosition({
         coordinateFormat: ol.coordinate.createStringXY(2),
@@ -198,45 +122,6 @@ var mousePositionControl = new ol.control.MousePosition({
         undefinedHTML: '&nbsp;'
 });
 map.addControl(mousePositionControl);
-var draw; // global so we can remove it later
-function addInteraction(value) {
-    if (value)
-        map.removeInteraction(draw);
-    if (value !== 'None') {
-        var geometryFunction, maxPoints;        
-
-        draw = new ol.interaction.Draw({
-            source: source,
-            type: /** @type {ol.geom.GeometryType} */ (value),
-            geometryFunction: geometryFunction,
-            maxPoints: maxPoints
-        });
-        map.addInteraction(draw);
-    
-    draw.on('drawend', function(event) {
-          map.removeInteraction(draw);
-       
-          var title = prompt( "Please provide the Area Title:", "untitled" );
-          if (value === 'Point') {           
-            var center = event.feature.getGeometry().getCoordinates();
-            var radius = prompt( "Ingrese el radio en Km:", "10" );
-            var radius = (radius*1000 / ol.proj.METERS_PER_UNIT.m) ;
-            var circle = new ol.geom.Circle(center, radius);
-            var circleFeature = new ol.Feature(circle);
-            source.addFeature(circleFeature);          
-          }  
-            
-      event.feature.setProperties({
-        'id': GetID(),
-        'name': title,        
-        'MapMarkerTitle': title,
-        'Display': title,
-        'ModelName': title,
-        'MapAreaLabelText': title
-      });
-    });
-    }
-}
 
 function getLongLatFromPoint(loc) {
     return ol.proj.transform(loc, 'EPSG:3857', 'EPSG:4326')
@@ -248,19 +133,15 @@ function getAreaLabel(feature) {
         return title;
   }
 }
-  
 
-function handleFeatureContexMenuEvent2(option, ID, ModelName, x, y) {
-    contextmenu.clear();
-    if (option == 'edit') {
-       console.log('edit');
-    } else if (option == 'view') {
-         console.log('view');
-    } else if (option == 'GuardaArea') {
-        var allFeatures = vector.getSource().getFeatures();
-        //var feature = vector.getSource().getClosestFeatureToCoordinate(x,y);
-        var format = new ol.format.GeoJSON();
-        var geoJson = format.writeFeatures(allFeatures); 
-        console.log(geoJson);                
-    }
+function readCookie(name) {
+	var nameEQ = name + "=";
+	var ca = document.cookie.split(';');
+	for(var i=0;i < ca.length;i++) {
+		var c = ca[i];
+		while (c.charAt(0)==' ') c = c.substring(1,c.length);
+		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+	}
+	return null;
 }
+
