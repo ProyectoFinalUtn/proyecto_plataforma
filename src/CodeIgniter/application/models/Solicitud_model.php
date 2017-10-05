@@ -247,5 +247,20 @@
                 throw new Exception("La solicitud fue procesada por el administrador no se puede modificar.");
             }
         }
+        
+        public function cambiar_estado_solicitud($idSolicitud,$estadoNuevo,$idUsuarioAprobador)
+        {
+            $this->db->where('id_solicitud', $idSolicitud);
+            $result = $this->db->update('solicitud', [
+                'id_estado_solicitud' => $estadoNuevo,
+                'id_usuario_aprobador' => $idUsuarioAprobador
+            ]);
+            
+            if(!$result){
+                $db_error = $this->db->error();
+                throw new Exception($db_error);
+            }
+            return $idSolicitud;  
+        }
     }
 ?>

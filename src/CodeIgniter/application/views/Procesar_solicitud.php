@@ -50,29 +50,29 @@
                                 echo "<p></p>";
                                 echo "<h1>Número de Solicitud: ".$solicitud->idSolicitud."</h1>";
                                 echo "<p>Solicitud de excepción generada por usuario de VANT</p>";
-                                echo "<form action=\"Procesar_solicitudes\" method=\"get\">";
+                                echo "<form action=\"Procesar_solicitud\" method=\"post\" enctype=\"multipart/form-data\">";
                                 echo "<div class=\"form-group\"> <label>Apellido</label>";
-                                echo "<input type=\"text\" class=\"form-control\" id=\"apellido\" placeholder=\"".$solicitud->apellido."\" disabled> </div>";
+                                echo "<input type=\"text\" class=\"form-control\" id=\"apellido\" value=\"".$solicitud->apellido."\" disabled> </div>";
                                 echo "<div class=\"form-group\"> <label>Nombre</label>";
-                                echo "<input type=\"text\" class=\"form-control\" id=\"nombre\" placeholder=\"".$solicitud->nombre."\" disabled> </div>";
+                                echo "<input type=\"text\" class=\"form-control\" id=\"nombre\" value=\"".$solicitud->nombre."\" disabled> </div>";
                                 echo "<div class=\"form-group\"> <label>Número de Documento</label>";
-                                echo "<input type=\"text\" class=\"form-control\" id=\"documento\" placeholder=\"".$solicitud->documento."\" disabled> </div>";
+                                echo "<input type=\"text\" class=\"form-control\" id=\"documento\" value=\"".$solicitud->documento."\" disabled> </div>";
                                 echo "<div class=\"form-group\"> <label>Edad</label>";
-                                echo "<input type=\"text\" class=\"form-control\" id=\"edad\" placeholder=\"".$solicitud->edad."\" disabled> </div>";
+                                echo "<input type=\"text\" class=\"form-control\" id=\"edad\" value=\"".$solicitud->edad."\" disabled> </div>";
                                 echo "<div class=\"form-group\"> <label>Correo Electrónico</label>";
-                                echo "<input type=\"text\" class=\"form-control\" id=\"email\" placeholder=\"".$solicitud->email."\" disabled> </div>";
+                                echo "<input type=\"text\" class=\"form-control\" id=\"email\" value=\"".$solicitud->email."\" disabled> </div>";
                                 echo "<div class=\"form-group\"> <label>Ubicación solicitada</label>";
-                                echo "<input type=\"text\" class=\"form-control\" id=\"ubicacion\" placeholder=\"".$solicitud->latitud.",".$solicitud->longitud."\" disabled> </div>";
+                                echo "<input type=\"text\" class=\"form-control\" id=\"ubicacion\" value=\"".$solicitud->latitud.",".$solicitud->longitud."\" disabled> </div>";
                                 echo "<div class=\"form-group\"> <label>Radio de vuelo</label>";
-                                echo "<input type=\"text\" class=\"form-control\" id=\"radio\" placeholder=\"".$solicitud->radioVuelo."\" disabled> </div>";
+                                echo "<input type=\"text\" class=\"form-control\" id=\"radio\" value=\"".$solicitud->radioVuelo."\" disabled> </div>";
                                 echo "<div class=\"form-group\"> <label>Fecha solicitada</label>";
-                                echo "<input type=\"text\" class=\"form-control\" id=\"fecha\" placeholder=\"".$solicitud->fecha."\" disabled> </div>";
+                                echo "<input type=\"text\" class=\"form-control\" id=\"fecha\" value=\"".$solicitud->fecha."\" disabled> </div>";
                                 echo "<div class=\"form-group\"> <label>Horario solicitado: </label>";
-                                echo "<input type=\"text\" class=\"form-control\" id=\"horario\" placeholder=\"Desde las ".$solicitud->horaVueloDesde." Hasta las ".$solicitud->horaVueloHasta."\" disabled> </div>";
+                                echo "<input type=\"text\" class=\"form-control\" id=\"horario\" value=\"Desde las ".$solicitud->horaVueloDesde." Hasta las ".$solicitud->horaVueloHasta."\" disabled> </div>";
                                 echo "<div class=\"form-group\"> <label>Solicitud procesada por</label>";
-                                echo "<input type=\"text\" class=\"form-control\" id=\"usuarioAprobador\" placeholder=\"".$solicitud->usuarioAprobador."\" disabled> </div>";
+                                echo "<input type=\"text\" class=\"form-control\" id=\"usuarioProcesador\" placeholder=\"Solicitud aún no procesada\" value=\"".$solicitud->usuarioAprobador."\" disabled> </div>";
                                 echo "<div class=\"form-group\"> <label>Estado actual de la solicitud</label><br>";
-                                echo "<select name=\"estados\" style=\"width:200px;height:20px;\">"."<option value=\"".$solicitud->idEstadoSolicitud."\" selected=\"selected\">" .
+                                echo "<select name=\"estadoNuevo\" style=\"width:200px;height:20px;\">"."<option value=\"".$solicitud->idEstadoSolicitud."\">" .
                                 $solicitud->descripcionEstadoSolicitud."</option>";
                                 foreach ($estadosPosibles as $estado => $estadoPosible)
                                 {
@@ -84,7 +84,9 @@
                                     }
                                 }
                                 echo "</select><br><p></p>";
-                                echo "<button type=\"submit\" class=\"btn btn-secondary\">Procesar</button><p></p>";
+                                echo "<input type=\"hidden\" name=\"usuarioAprobador\" value=\"".$_COOKIE['usuario']."\">";
+                                echo "<input type=\"hidden\" name=\"idSolicitud\" value=\"".$solicitud->idSolicitud."\">";
+                                echo "<input type=\"submit\" class=\"btn btn-secondary\" name=\"Procesar\" value=\"Procesar\"></input><p></p>";
                                 echo "</form>";
                             ?>
                         </div>
