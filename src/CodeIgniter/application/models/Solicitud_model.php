@@ -20,6 +20,7 @@
             $this->db->join('usuario_vant uv', 'sol.id_usuario_vant = uv.id_usuario');
             $this->db->join('persona pers', 'uv.id_persona = pers.id_persona');
             $this->db->join('usuario_admin adm', 'sol.id_usuario_aprobador = adm.id_usuario', 'left outer ');
+            $this->db->order_by('sol.id_solicitud');
             $query = $this->db->get();
             return $query->result_array();
         }

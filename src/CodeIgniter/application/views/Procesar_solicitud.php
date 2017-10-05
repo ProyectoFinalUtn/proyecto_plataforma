@@ -11,6 +11,7 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
         
         <script src="<?php echo base_url(); ?>assets/js/global.js" defer></script>
+        <script src="<?php echo base_url(); ?>assets/js/solicitud.js" defer></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/ol3/4.3.3/ol.js"></script>
         <script src="//cdn.jsdelivr.net/openlayers.geocoder/latest/ol3-geocoder.js"></script>
         <script src="//cdn.jsdelivr.net/openlayers.contextmenu/latest/ol3-contextmenu.js"></script>
