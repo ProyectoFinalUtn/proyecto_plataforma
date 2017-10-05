@@ -117,7 +117,6 @@
         public function cambiar_solicitud($solicitud)
         {
             $this->db->trans_begin();  
-            $this->valida_modificacion_solicitud($idSolicitud);
             $this->valida_modificacion_solicitud($solicitud["idSolicitud"]);
             $this->modificar_solicitud($solicitud);
             $solicitud['idEstadoSolicitud'] = 1;
@@ -187,7 +186,7 @@
         
         public function modificar_vant_solicitud($solicitud)
         {
-            $this->eliminar_vant_solicitud($solicitud);
+            $this->eliminar_vant_solicitud($solicitud["idSolicitud"]);
             for ($i = 0; $i < count($solicitud['vants']); $i++) {
                 $this->insertar_vant_solicitud($solicitud["idSolicitud"], $solicitud['vants'][$i]);
             }
