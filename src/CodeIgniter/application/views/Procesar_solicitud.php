@@ -36,7 +36,7 @@
                 <tr>
                     <div class="row" style="border-collapse: collapse; width: 100%; border-spacing:0; box-shadow:0 4px 10px 0 rgba(0,0,0,0.2),0 4px 20px 0 rgba(0,0,0,0.19); padding:16px; ">
                         <div class="col-md-6">
-                                <div id="map" class="map"></div>
+                                <div id="mapa-solicitud" class="map"></div>
                                 <script src="<?php echo base_url(); ?>assets/js/olSolicitud.js"></script>
                         </div>
                         <div class="col-md-6">

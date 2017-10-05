@@ -105,7 +105,7 @@ var view = new ol.View({
             })              
         ],
         controls: ol.control.defaults({ attribution: false }).extend([attribution]),
-        target: 'map',
+        target: 'mapa-solicitud',
         view: view
     });
     map.addLayer(vector);
