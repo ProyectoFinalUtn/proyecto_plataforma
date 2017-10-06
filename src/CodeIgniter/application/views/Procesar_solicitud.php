@@ -85,7 +85,7 @@
                                     }
                                 }
                                 echo "</select><br><p></p>";
-                                echo "<input type=\"hidden\" name=\"usuarioAprobador\" value=\"".$_COOKIE['usuario']."\">";
+                                echo "<input type=\"hidden\" name=\"usuarioAprobador\" value=\"".$_SESSION['usuario']."\">";
                                 echo "<input type=\"hidden\" name=\"idSolicitud\" value=\"".$solicitud->idSolicitud."\">";
                                 echo "<input type=\"submit\" class=\"btn btn-secondary\" name=\"Procesar\" value=\"Procesar\"></input><p></p>";
                                 echo "</form>";

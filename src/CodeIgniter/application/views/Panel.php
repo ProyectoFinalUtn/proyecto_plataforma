@@ -25,7 +25,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div class="collapse navbar-collapse" style="color:white;">
             <?php echo $menu;?>
         </div>
-        <a class="btn navbar-btn ml-2 text-white btn-secondary"><i class="fa d-inline fa-lg fa-2x fa-user-circle-o"></i> <?php echo $_COOKIE['usuario'] ?></a>
+        <a class="btn navbar-btn ml-2 text-white btn-secondary" href="Mi_perfil"><i class="fa d-inline fa-lg fa-2x fa-user-circle-o"></i> <?php echo $_SESSION['usuario']; ?></a>
       </div>
     </div>
   </nav>

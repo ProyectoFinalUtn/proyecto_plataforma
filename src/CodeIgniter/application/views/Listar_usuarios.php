@@ -7,6 +7,8 @@
         <link rel="stylesheet" href="https://pingendo.com/assets/bootstrap/bootstrap-4.0.0-beta.1.css" type="text/css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
         <script src="<?php echo base_url(); ?>assets/js/global.js" defer></script>
+        <script src="<?php echo base_url(); ?>assets/js/Chart.js" defer></script>
+        <script src="<?php echo base_url(); ?>assets/js/Chart.min.js" defer></script>
     </head>
     <style>
         h1,h2,h3,h4 { font-family: "Montserrat", sans-serif; }
@@ -57,6 +59,10 @@
                     </table>
                 </div>
             </div>
+            <?php
+                /* <canvas id="myChart" width="400" height="400"></canvas>
+                <script src="<?php echo base_url(); ?>assets/js/infoUsuarios.js"></script> */
+            ?>
         </div>
     </body>
 </html>
