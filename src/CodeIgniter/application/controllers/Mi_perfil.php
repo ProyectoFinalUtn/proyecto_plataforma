@@ -12,15 +12,16 @@ class Mi_perfil extends MY_Controller
 	public function index()
 	{
             if(isset($_POST['Guardar'])){
-                //id_usuario: ID, nombre: NOMBRE, apellido: APELLIDO, documento: DOCUMENTO, EDAD: edad, EMAIL: email, Guardar: 1 } );
-                $id_usuario = $_POST['id_usuario'];
-                $id_persona = $_POST['id_persona'];
-                $nombre = $_POST['nombre'];
-                $apellido = $_POST['apellido'];
-                $documento = $_POST['documento'];
-                $edad = $_POST['edad'];
-                $email = $_POST['email'];
-                $this->cambiar_datos_admin($id_usuario,$id_persona,$nombre,$apellido,$documento,$edad,$email);
+                $usuarioAdmin = [
+                    "id_usuario" => $_POST['id_usuario'],
+                    "id_persona" => $_POST['id_persona'],
+                    "nombre" => $_POST['nombre'],
+                    "apellido" => $_POST['apellido'],
+                    "documento" => $_POST['documento'],
+                    "email" => $_POST['email']
+                    ];
+
+                $this->cambiar_datos_admin($usuarioAdmin);
             }
             else {
                 $idUsuarioAdmin = $_SESSION['idUsuarioAdmin'];
@@ -42,11 +43,11 @@ class Mi_perfil extends MY_Controller
             }
         }
         
-        private function cambiar_datos_admin($id_usuario,$id_persona,$nombre,$apellido,$documento,$edad,$email)
+        private function cambiar_datos_admin($usuarioAdmin)
         {
             try{                
                 $this->load->model('Administrador_model');
-                $perfil = $this->Administrador_model->cambiar_datos_admin($id_usuario,$id_persona,$nombre,$apellido,$documento,$edad,$email);
+                $perfil = $this->Administrador_model->cambiar_datos_admin($usuarioAdmin);
                 return $perfil;
             }
             catch(Exception $exception){

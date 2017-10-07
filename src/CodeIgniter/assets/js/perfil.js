@@ -9,10 +9,9 @@ $(document).ready(function() {
 			var NOMBRE = $("input[name='nombre']").val();
 			var APELLIDO = $("input[name='apellido']").val();
 			var DOCUMENTO = $("input[name='documento']").val();
-			var EDAD = $("input[name='edad']").val();
 			var EMAIL = $("input[name='email']").val();
 			var URL_POST = $("form").attr("action");
-			var posting = $.post( URL_POST, { id_usuario: ID, id_persona: PERSONA, nombre: NOMBRE, apellido: APELLIDO, documento: DOCUMENTO, edad: EDAD, email: EMAIL, Guardar: 1 } );
+			var posting = $.post( URL_POST, { id_usuario: ID, id_persona: PERSONA, nombre: NOMBRE, apellido: APELLIDO, documento: DOCUMENTO, email: EMAIL, Guardar: 1 } );
 			posting.done(function() {
 				alert("Cambios realizados con éxito");
 			});

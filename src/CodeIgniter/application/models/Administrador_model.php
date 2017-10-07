@@ -47,23 +47,56 @@ class Administrador_model extends CI_Model {
             return $query;
         }
         
-        public function cambiar_datos_admin($id_usuario,$id_persona,$nombre,$apellido,$documento,$edad,$email)
+        private function insertar_persona_usuario_admin($usuarioAdmin)
         {
-            
-            $this->db->where('id_persona', $id_persona);
-            $result = $this->db->update('persona', [
-                'nombre' => $nombre,
-                'apellido' => $apellido,
-                'nro_documento' => $documento,
-                'edad' => $edad,
-                'email' => $email
+            $result = $this->db->insert('persona', [
+                'nombre' => $usuarioAdmin['nombre'],     
+                'apellido' => $usuarioAdmin['apellido'],
+                'nro_documento' => $usuarioAdmin['documento'],
+                'email' => $usuarioAdmin['email'],
             ]);
-            
             if(!$result){
                 $db_error = $this->db->error();
                 throw new Exception($db_error);
             }
-            return $id_usuario;  
+            return $this->db->insert_id();  
+        }
+        
+        private function asociar_persona_admin($id_persona, $id_usuario)
+        {
+            $this->db->where('id_usuario', $id_usuario);
+            $result = $this->db->update('usuario_admin', [
+            'id_persona' => $id_persona
+            ]);
+
+            if(!$result){
+                $db_error = $this->db->error();
+                throw new Exception($db_error);
+            } 
+        }
+        
+        public function cambiar_datos_admin($usuarioAdmin)
+        {
+            if ($usuarioAdmin['id_persona'] != null) {
+                $this->db->where('id_persona', $usuarioAdmin['id_persona']);
+                $result = $this->db->update('persona', [
+                'nombre' => $usuarioAdmin['nombre'],
+                'apellido' => $usuarioAdmin['apellido'],
+                'nro_documento' => $usuarioAdmin['documento'],
+                'email' => $usuarioAdmin['email']
+                ]);
+
+                if(!$result){
+                    $db_error = $this->db->error();
+                    throw new Exception($db_error);
+                }
+            }
+            else {
+                $id_persona = $this->insertar_persona_usuario_admin($usuarioAdmin);
+                $this->asociar_persona_admin($id_persona, $usuarioAdmin['id_usuario']);
+            }
+            
+            return $usuarioAdmin['id_usuario'];  
         }
 
 /*********************************************************************************** 
