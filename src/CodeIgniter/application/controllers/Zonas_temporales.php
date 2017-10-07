@@ -11,6 +11,12 @@ class Zonas_temporales extends MY_Controller
 
 	public function index()
 	{	
+		$this->load->model('Zonas_temporales_model');
 		$this->load->view('Zonas_temporales'); 	 		 	 
+	}
+
+	public function guardar_zona_temporal($zona)
+	{	
+	  $this->Zonas_temporales_model->guardar_zona($zona);	
 	}
 }

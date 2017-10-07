@@ -91,15 +91,26 @@ var view = new ol.View({
                         source: new ol.source.OSM()
                     }),
                       new ol.layer.Tile({
-                      title: 'Wikimedia',
-                      type: 'base',
-                      visible: false,
-                      source: new ol.source.XYZ(
-                      {
-                        urls : ["https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png"]
-                      })                      
-                    })
-                ]
+                        title: 'Wikimedia',
+                        type: 'base',
+                        visible: false,
+                        source: new ol.source.XYZ(
+                        {urls : ["https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png"]})
+                      }),
+                      new ol.layer.Tile({
+                        title: 'ESRI world imagery',
+                        type: 'base',                      
+                        visible: false,
+                        source: new ol.source.XYZ({
+                        attributions: [
+                        new ol.Attribution({
+                        html: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+                        })
+                        ],
+                        url: 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+                        })
+                      })
+                      ]
             })              
         ],
         controls: ol.control.defaults({ attribution: false }).extend([attribution]),
@@ -111,7 +122,9 @@ var view = new ol.View({
     var layerSwitcher = new ol.control.LayerSwitcher({
        tipLabel: 'Leyenda' // Optional label for button
     });
-    map.addControl(layerSwitcher);         
+    map.addControl(layerSwitcher);
+
+   
   //create contextmenu
   contextmenu = new ContextMenu({
         width: 170,
@@ -120,17 +133,21 @@ var view = new ol.View({
   });
 
   map.addControl(contextmenu);
-     
+   
+    var selectedFt;
     map.getViewport().addEventListener('contextmenu', function (e) {
         e.preventDefault();
         var offset = $(this).offset();
         var mapX = e.x - offset.left;
         var mapY = e.y - offset.top;
-        var clkfeatures = [];
+        var clkfeatures = [];        
+        var feature;
         map.forEachFeatureAtPixel([mapX, mapY], function (ft, layer) {
               if(typeof ft.get('ModelName') !== 'undefined'){
+                ModelName = ft.get('ModelName');                                 
+                feature = ft;
          if (!contains.call(clkfeatures, ft)){
-          clkfeatures.push(ft);
+          clkfeatures.push(ft);          
          }
             }
         });
@@ -140,30 +157,27 @@ var view = new ol.View({
             contextmenu.extend(SelectorContextMenu);
           
         } else if (clkfeatures.length == 1) {
-            contextmenu.clear();
-            var ID = clkfeatures[0].get('ID');
-            
-            var ModelName = clkfeatures[0].get('OpenlayersMapType')
+            contextmenu.clear();             
             var FeatureContextMenu = [{
                 text: 'View',
                 callback: function (obj, map) {
                
-                    handleFeatureContexMenuEvent2('view', ID, ModelName);
+                    handleFeatureContexMenuEvent2('view', feature, ModelName);
                 }
             },
             {
                 text: 'Edit',
                 callback: function (obj, map) {
-                    handleFeatureContexMenuEvent2('edit', ID, ModelName);
+                    handleFeatureContexMenuEvent2('edit', feature, ModelName);
                 }
             },
             {
                 text: 'Guardar Area',
                 callback: function (obj, map) {
-                    handleFeatureContexMenuEvent2('GuardaArea', ID, ModelName, mapX, mapY);
+                    handleFeatureContexMenuEvent2('GuardaArea', feature, ModelName, mapX, mapY);
                 }
             }];
-            contextmenu.extend(FeatureContextMenu);
+            contextmenu.extend(FeatureContextMenu);            
         }
         else {
             contextmenu.clear();
@@ -227,7 +241,7 @@ function addInteraction(value) {
           }  
             
       event.feature.setProperties({
-        'id': GetID(),
+        'ID': GetID(),
         'name': title,        
         'MapMarkerTitle': title,
         'Display': title,
@@ -248,19 +262,33 @@ function getAreaLabel(feature) {
         return title;
   }
 }
-  
 
-function handleFeatureContexMenuEvent2(option, ID, ModelName, x, y) {
-    contextmenu.clear();
+
+function handleFeatureContexMenuEvent2(option, feature, ModelName, x, y) {
+    contextmenu.clear();    
     if (option == 'edit') {
        console.log('edit');
     } else if (option == 'view') {
          console.log('view');
     } else if (option == 'GuardaArea') {
-        var allFeatures = vector.getSource().getFeatures();
-        //var feature = vector.getSource().getClosestFeatureToCoordinate(x,y);
         var format = new ol.format.GeoJSON();
-        var geoJson = format.writeFeatures(allFeatures); 
-        console.log(geoJson);                
+        var geoJson = format.writeFeature(feature); 
+        console.log(geoJson);  
+        var zona = { id:feature.get('ID'), nombre:ModelName,detalle:'A IMPLEMENTAR',json: geoJson};              
+         $.ajax({
+            type:'POST',
+            url:'/zonas_temporales#guardar_zona_temporal',
+            data: zona,
+            success: function(){
+                      alert("success");
+            },
+
+            error: function(xhr, textStatus, error){
+                              alert(xhr.statusText);
+                              alert(textStatus);
+                              alert(error);
+            }
+        });
+        //console.log("Name: "+vector.getSource().getClosestFeatureToCoordinate(oo).get('mylayer_name'));
     }
 }
