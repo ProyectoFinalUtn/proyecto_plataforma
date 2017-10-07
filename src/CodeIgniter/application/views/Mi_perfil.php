@@ -41,8 +41,6 @@
                                 echo "<input type=\"text\" class=\"form-control\" name=\"apellido\" value=\"".$perfil->apellido."\"> </div>";
                                 echo "<div class=\"form-group\"> <label>Número de Documento</label>";
                                 echo "<input type=\"text\" class=\"form-control\" name=\"documento\" value=\"".$perfil->nro_documento."\"> </div>";
-                                echo "<div class=\"form-group\"> <label>Edad</label>";
-                                echo "<input type=\"text\" class=\"form-control\" name=\"edad\" value=\"".$perfil->edad."\"> </div>";
                                 echo "<div class=\"form-group\"> <label>Correo Electrónico</label>";
                                 echo "<input type=\"text\" class=\"form-control\" name=\"email\" value=\"".$perfil->email."\"> </div>";
                                 echo "<p></p>";
