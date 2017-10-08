@@ -33,6 +33,18 @@
             return $query;
         }
         
+        public function obtener_datos_vant()
+        {        
+            $sql = 'id_vant idVant, id_usuario_vant idUsuarioVant, marca, modelo, nro_serie nroSerie, fabricante, '. 
+                   'lugar_fabricacion lFab, anio_fabricacion anioFab, alto, ancho, largo, vel_max velMax, '.
+                   'alt_max altMax, peso, color, lugar_guardado lGuardado';
+            $this->db->select($sql);
+            $this->db->from('vant');
+            $this->db->where('activo = ', 1);
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+        
         public function crear_vant($vant)
         {        
             $this->db->trans_begin();  
