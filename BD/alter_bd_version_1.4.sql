@@ -1,0 +1,1 @@
+UPDATE menus SET name = 'Información', slug = 'informacion' WHERE id = 7;

@@ -22,7 +22,7 @@
             <div id="breadcrumb" style="padding-left:8px;">G.O. Guide > Solicitudes de Excepción</div>
             <div style="padding:16px;">
                 <h1 class="pb-3 text-secondary">Solicitudes de excepción de usuarios de VANT</h1>
-                <div id="tabla-solicitudes">
+                <div id="tabla-solicitudes" style="overflow-x:auto;">
                     <table>
                         <thead id="header" style="background-color: #004ea2; color:#ffffff;">
                             <tr id="headers">

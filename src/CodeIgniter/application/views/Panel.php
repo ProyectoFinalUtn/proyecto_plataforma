@@ -17,7 +17,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     a:hover { text-decoration:none; }
 </style>
 <body>
-  <nav class="navbar navbar-expand-md bg-secondary navbar-dark">
+  <nav class="navbar navbar-expand-md bg-secondary navbar-dark" style="background-color: #00082c;">
     <div class="container">
       <a class="navbar-brand" href="Panel"><img src="assets/img/logo_menu.png" style="width:25%"></a>
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
@@ -75,7 +75,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               </div>
             </div>
             <div class="row my-5">
-                <div class="col-2 text-center"><a href="listar_usuarios"><i class="d-block mx-auto fa  fa-3x fa-area-chart"></i></a></div>
+                <div class="col-2 text-center"><a href="informacion"><i class="d-block mx-auto fa  fa-3x fa-area-chart"></i></a></div>
               <div class="col-10">
                 <h3 class="text-primary">Información</h3>
                 <p>Obtener información de los usuarios de VANT

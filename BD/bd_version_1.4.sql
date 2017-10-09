@@ -196,6 +196,9 @@ WITH (
 )
 TABLESPACE pg_default;
 
+ALTER TABLE public.usuario_vant
+    OWNER to admin;
+
 CREATE SEQUENCE public.usuario_admin_id_usuario_seq
     INCREMENT 1
     START 1
@@ -416,5 +419,5 @@ INSERT INTO menus (id, parent, name, icono, slug, orden) VALUES
 (4, 1, 'Zonas de Influencia', '', 'zonas_influencia', 1),
 (5, 1, 'Cargar Zonas', '', 'cargar_zonas', 2),
 (6, 1, 'Zonas Temporales', '', 'zonas_temporales', 1),
-(7, 2, 'Listar Usuarios', '', 'listar_usuarios', 2),
+(7, 2, 'Información', '', 'informacion', 2),
 (8, 3, 'Listar Solicitudes', '', 'listar_solicitudes', 2);

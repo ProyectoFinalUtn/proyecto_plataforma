@@ -70,12 +70,18 @@
         {        
             $sql = 'usuario_vant.id_usuario idUsuarioVant, perf.nombre_de_perfil nombreDePerfil, '. 
                    'usuario_vant.usuario, usuario_vant.pass, pers.nombre, pers.apellido, '.
-                   'pers.email, pers.edad, pers.sexo, pers.id_tipo_documento tipoDoc, pers.nro_documento nroDoc, '.
-                   'pers.calle, pers.numero nro, pers.piso, pers.dpto, pers.provincia, pers.localidad, pers.telefono';
+                   'pers.email, pers.edad, pers.sexo, pers.nro_documento nroDoc, '.
+                   'pers.calle, pers.numero nro, pers.piso, pers.dpto, pers.provincia, pers.localidad, pers.telefono, count(*) cantidadvant';
+            $by = 'usuario_vant.id_usuario, perf.nombre_de_perfil, usuario_vant.usuario, '.
+                'usuario_vant.pass, pers.nombre, pers.apellido, pers.email, pers.edad, pers.sexo, pers.nro_documento, '.
+                'pers.calle, pers.numero, pers.piso, pers.dpto, pers.provincia, pers.localidad, pers.telefono';
             $this->db->select($sql);
             $this->db->from('usuario_vant');
             $this->db->join('persona pers', 'usuario_vant.id_persona = pers.id_persona');
             $this->db->join('perfil perf', 'usuario_vant.id_perfil = perf.id_perfil');
+            $this->db->join('vant', 'vant.id_usuario_vant = usuario_vant.id_usuario', 'left outer ');
+            $this->db->group_by($by);
+            $this->db->order_by('usuario_vant.id_usuario', 'desc');
             $query = $this->db->get()->result_array();
             return $query;
         }
