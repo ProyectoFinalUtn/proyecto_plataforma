@@ -84,20 +84,19 @@
                         <b>Eje Y </b>
                         <select name="ejeY" width="300">
                             <option value="edad" selected="selected">Cantidad de VANT</option>
-                            <option value="provincia">Provincia</option>
-                            <option value="localidad">Localidad</option>
                         </select>
                         </p>
+                        <p><button type="button" class="btn btn-secondary" name="Calcular">Calcular</button></p>
                     </div>
                     <div class="col-md-4 p-4" style="text-align: center;">
-                        <canvas id="myChart" width="400" height="400"></canvas>
+                        <canvas id="graficoEdad" width="400" height="400"></canvas>
                         <script src="<?php echo base_url(); ?>assets/js/graficoUsuarios.js"></script>
                     </div>
                     <div class="col-md-4 p-4" style="text-align: center;">
                         <img class="img-fluid d-block rounded-circle mx-auto" src="./assets/img/info_chart_type.png"><br>
                         <p>
                             <b>Tipo de gráfico </b>
-                            <select name="ejeX" width="300">
+                            <select name="tipoGrafico" width="300">
                                 <option value="bar" selected="selected">Barra</option>
                                 <option value="line">Lineal</option>
                                 <option value="radar">Radar</option>
