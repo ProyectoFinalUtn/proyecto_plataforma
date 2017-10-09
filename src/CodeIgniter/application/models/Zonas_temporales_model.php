@@ -11,15 +11,11 @@ class Zonas_temporales_model extends CI_Model {
         {
             $result = $this->db->insert('zona_temporal', [
               'id' => $zona["id"],
-              'nombre' => $zona["nombre"],     
-              'detalle' => $perfil["detalle"],
-              'json' => $perfil["json"]
-            ]);
-            if(!$result){
-              $db_error = $this->db->error();
-              throw new Exception($db_error);
-            }
-            return $this->db->insert_id();  
+              'nombre'  => $zona["nombre"],    
+              'detalle' => $zona["detalle"],
+              'geoJson' => $zona["json"]
+            ]); 
+            
         }
 }
 ?>

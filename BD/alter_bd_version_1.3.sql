@@ -3,7 +3,7 @@ CREATE TABLE public.zona_temporal
     id bigint NOT NULL,
     nombre "char" NOT NULL,
     detalle "char",
-    json "geoJson" NOT NULL,
+    geoJson "json" NOT NULL,
     CONSTRAINT zonas_temporales_pkey PRIMARY KEY (id)
 )
 WITH (

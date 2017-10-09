@@ -68,7 +68,7 @@ CREATE TABLE public.zona_temporal
     id bigint NOT NULL,
     nombre "char" NOT NULL,
     detalle "char",
-    json "geoJson" NOT NULL,
+    geoJson "json" NOT NULL,
     CONSTRAINT zonas_temporales_pkey PRIMARY KEY (id)
 )
 WITH (
@@ -76,12 +76,12 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE public.zonas_temporales
+ALTER TABLE public.zona_temporal
     OWNER to admin;
 
-GRANT ALL ON TABLE public.menus TO admin WITH GRANT OPTION;
+GRANT ALL ON TABLE public.zona_temporal TO admin WITH GRANT OPTION;
 
-GRANT ALL ON TABLE public.menus TO admin;
+GRANT ALL ON TABLE public.zona_temporal TO admin;
 
 
 -- Table: public.perfil

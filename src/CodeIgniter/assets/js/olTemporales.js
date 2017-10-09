@@ -274,21 +274,13 @@ function handleFeatureContexMenuEvent2(option, feature, ModelName, x, y) {
         var format = new ol.format.GeoJSON();
         var geoJson = format.writeFeature(feature); 
         console.log(geoJson);  
-        var zona = { id:feature.get('ID'), nombre:ModelName,detalle:'A IMPLEMENTAR',json: geoJson};              
-         $.ajax({
-            type:'POST',
-            url:'/zonas_temporales#guardar_zona_temporal',
-            data: zona,
-            success: function(){
-                      alert("success");
-            },
+        var zona = { id:feature.get('ID'), nombre:ModelName,detalle:'A IMPLEMENTAR',json: geoJson};                      
+        zona = JSON.stringify(zona);
 
-            error: function(xhr, textStatus, error){
-                              alert(xhr.statusText);
-                              alert(textStatus);
-                              alert(error);
-            }
+        $.ajax({
+            type : 'POST',
+            data : 'data=' + zona,
+            url : 'zonas_temporales/guardar_zona_temporal'            
         });
-        //console.log("Name: "+vector.getSource().getClosestFeatureToCoordinate(oo).get('mylayer_name'));
     }
 }
