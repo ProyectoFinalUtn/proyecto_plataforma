@@ -67,7 +67,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           </div>
           <div class="text-left col-md-6">
             <div class="row my-5">
-                <div class="col-2 text-center"><a href="usuarios"><i class="d-block fa fa-3x fa-user"></i></a></div>
+                <div class="col-2 text-center"><a href="usuarios_admin"><i class="d-block fa fa-3x fa-user"></i></a></div>
               <div class="col-10">
                 <h3 class="text-primary">Usuarios</h4>
                 <p>Administrar los usuarios de la plataforma

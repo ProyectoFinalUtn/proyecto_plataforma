@@ -20,9 +20,15 @@ class Administrador_model extends CI_Model {
         }
         
         public function obtener_datos_usuarios_admin()
-        {   $this->db->select('id_usuario, usuario');    
-            $this->db->from('usuario_admin');
-            return $this->db->get()->result_array();
+        {   
+            $sql = 'adm.id_usuario, adm.id_persona, adm.usuario, pers.nombre, pers.apellido, '.
+            'pers.nro_documento, pers.edad, pers.sexo, pers.calle, pers.numero, pers.piso, pers.dpto,'.
+            'pers.provincia, pers.localidad, pers.telefono, pers.email';
+            $this->db->select($sql);
+            $this->db->from('usuario_admin adm');
+            $this->db->join('persona pers', 'adm.id_persona = pers.id_persona', 'left outer ');
+            $query = $this->db->get()->result_array();
+            return $query;
         }
         
         public function obtener_id_admin($usuarioAdmin)
