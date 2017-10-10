@@ -4,40 +4,59 @@ $(document).ready(function(){
 		method: "GET",
 		success: function(data) {
 			var datos = JSON.parse(data);
-			var vant = [];
 			var peso = [];
-			
+			var vant = [];
+			var maxValue = 0;
 			for(var i in datos) {
-				vant.push(datos[i].marca);
 				peso.push(datos[i].peso);
+				vant.push(datos[i].cantidadvant);
+				if (maxValue < parseInt(datos[i].cantidadvant)) {
+								maxValue = parseInt(datos[i].cantidadvant);
+				}
 			}
-
+			maxValue = maxValue + 2;
 			var chartdata = {
-				labels: vant,
+				labels: peso,
 				datasets : [
 					{
-						label: 'Peso de cada VANT',
-						backgroundColor: 'rgba(255, 99, 132, 0.2)',
-						borderColor: 'rgba(255,99,132,1)',
-						hoverBackgroundColor: 'rgba(200, 200, 200, 1)',
-						hoverBorderColor: 'rgba(200, 200, 200, 1)',
-						data: peso
+						label: 'Cantidad de VANT',
+						backgroundColor: 'rgba(8, 59, 51, 0.9)',
+						borderColor: 'rgba(0, 34, 29, 1)',
+						hoverBackgroundColor: 'rgba(8, 59, 51, 1)',
+						hoverBorderColor: 'rgba(0, 34, 29, 1)',
+						data: vant
 					}
 				]
 			};
 
-			var ctx = $("#myChart");
+			var ctx = $("#graficoPeso");
 
 			var barGraph = new Chart(ctx, {
 				type: 'bar',
 				data: chartdata,
 				options: {
 						scales: {
+							xAxes: [{
+											ticks: {
+												beginAtZero:true
+											}
+										}],
 							yAxes: [{
 								ticks: {
-									beginAtZero:true
+									beginAtZero:true,
+									max: maxValue
 								}
 							}]
+						},
+						legend: {
+							labels: {
+								fontFamily: 'Montserrat'
+							}
+						},
+						title: {
+							display: true,
+							fontFamily: 'Montserrat',
+							text: 'Cantidad de VANT por Peso'
 						}
 					}
 			});
@@ -45,5 +64,841 @@ $(document).ready(function(){
 		error: function(data) {
 			console.log(data);
 		}
+	});
+	
+	$("button[name='Calcular']").click(function() {
+		var ejeX = $("select[name='ejeX']").val();
+		$.ajax({
+			url: "Grafico_vant",
+			method: "POST",
+			data: { ejeX: ejeX }, 
+			success: function(data) {
+				var datos = JSON.parse(data);
+				var chartType = $("select[name='tipoGrafico']").val();
+				
+				switch(chartType) {
+					case 'bar':
+						var bgColor = 'rgba(8, 59, 51, 0.9)';
+						var bdColor = 'rgba(0, 34, 29, 1)';
+						var hoverBgColor = 'rgba(8, 59, 51, 1)';
+						var hoverBdColor = 'rgba(0, 34, 29, 1)';
+						var pointBgColor = '';
+						var pointBdColor = '';
+						break;
+					case 'line':
+						var bgColor = '';
+						var bdColor = 'rgba(0, 34, 29, 1)';
+						var hoverBgColor = '';
+						var hoverBdColor = 'rgba(0, 34, 29, 1)';
+						var pointBgColor = 'rgba(8, 59, 51, 0.9)';
+						var pointBdColor = 'rgba(0, 34, 29, 1)';
+						break;
+					case 'radar':
+						var bgColor = '';
+						var bdColor = 'rgba(0, 34, 29, 1)';
+						var hoverBgColor = '';
+						var hoverBdColor = 'rgba(0, 34, 29, 1)';
+						var pointBgColor = 'rgba(8, 59, 51, 0.9)';
+						var pointBdColor = 'rgba(0, 34, 29, 1)';
+						break;
+					case 'pie':
+						var bgColor = [];
+						var bdColor = [];
+						var hoverBgColor = [];
+						var hoverBdColor = [];
+						for(var j in datos) {
+							color = '#'+Math.floor(Math.random()*16777215).toString(16);
+							bgColor[j] = color;
+							bdColor[j] = "#ffffff";
+						}
+						var pointBgColor = [];
+						var pointBdColor = [];
+						break;
+					case 'doughnut':
+						var bgColor = [];
+						var bdColor = [];
+						var hoverBgColor = [];
+						var hoverBdColor = [];
+						for(var j in datos) {
+							color = '#'+Math.floor(Math.random()*16777215).toString(16);
+							bgColor[j] = color;
+							bdColor[j] = "#ffffff";
+						}
+						var pointBgColor = [];
+						var pointBdColor = [];
+						break;
+				}
+				switch(ejeX) {
+					case 'peso':
+						var peso = [];
+						var vant = [];
+						var maxValue = 0;
+						for(var i in datos) {
+							peso.push(datos[i].peso);
+							vant.push(datos[i].cantidadvant);
+							if (maxValue < parseInt(datos[i].cantidadvant)) {
+								maxValue = parseInt(datos[i].cantidadvant);
+							}
+						}
+						maxValue = maxValue + 2;
+						var chartdata = {
+							labels: peso,
+							datasets : [
+								{
+									label: 'Cantidad de VANT',
+									backgroundColor: bgColor,
+									borderColor: bdColor,
+									hoverBackgroundColor: hoverBgColor,
+									hoverBorderColor: hoverBdColor,
+									pointBackgroundColor: pointBgColor,
+									pointBorderColor: pointBdColor,
+									data: vant
+								}
+							]
+						};
+						
+						$('canvas').replaceWith('<canvas id="graficoPeso" width="400" height="100"></canvas>');
+						
+						var ctx = $("#graficoPeso");
+
+						var barGraph = new Chart(ctx, {
+							type: chartType,
+							data: chartdata,
+							options: {
+									scales: {
+										xAxes: [{
+											ticks: {
+												beginAtZero:true
+											}
+										}],
+										yAxes: [{
+											ticks: {
+												beginAtZero:true,
+												max: maxValue
+											}
+										}]
+									},
+									legend: {
+										labels: {
+											fontFamily: 'Montserrat'
+										}
+									},
+									title: {
+										display: true,
+										fontFamily: 'Montserrat',
+										text: 'Cantidad de VANT por Peso'
+									}
+								}
+						});
+						break;
+					
+					case 'marca':
+						var marca = [];
+						var vant = [];
+						var maxValue = 0;
+						for(var i in datos) {
+							marca.push(datos[i].marca);
+							vant.push(datos[i].cantidadvant);
+							if (maxValue < parseInt(datos[i].cantidadvant)) {
+								maxValue = parseInt(datos[i].cantidadvant);
+							}
+						}
+						maxValue = maxValue + 2;
+						var chartdata = {
+							labels: marca,
+							datasets : [
+								{
+									label: 'Cantidad de VANT',
+									backgroundColor: bgColor,
+									borderColor: bdColor,
+									hoverBackgroundColor: hoverBgColor,
+									hoverBorderColor: hoverBdColor,
+									pointBackgroundColor: pointBgColor,
+									pointBorderColor: pointBdColor,
+									data: vant
+								}
+							]
+						};
+						
+						$('canvas').replaceWith('<canvas id="graficoMarca" width="400" height="100"></canvas>');
+						
+						var ctx = $("#graficoMarca");
+
+						var barGraph = new Chart(ctx, {
+							type: chartType,
+							data: chartdata,
+							options: {
+									scales: {
+										xAxes: [{
+											ticks: {
+												beginAtZero:true
+											}
+										}],
+										yAxes: [{
+											ticks: {
+												beginAtZero:true,
+												max: maxValue
+											}
+										}]
+									},
+									legend: {
+										labels: {
+											fontFamily: 'Montserrat'
+										}
+									},
+									title: {
+										display: true,
+										fontFamily: 'Montserrat',
+										text: 'Cantidad de VANT por Marca'
+									}
+								}
+						});
+						break;
+					
+					case 'modelo':
+						var modelo = [];
+						var vant = [];
+						var maxValue = 0;
+						for(var i in datos) {
+							modelo.push(datos[i].modelo);
+							vant.push(datos[i].cantidadvant);
+							if (maxValue < parseInt(datos[i].cantidadvant)) {
+								maxValue = parseInt(datos[i].cantidadvant);
+							}
+						}
+						maxValue = maxValue + 2;
+						var chartdata = {
+							labels: modelo,
+							datasets : [
+								{
+									label: 'Cantidad de VANT',
+									backgroundColor: bgColor,
+									borderColor: bdColor,
+									hoverBackgroundColor: hoverBgColor,
+									hoverBorderColor: hoverBdColor,
+									pointBackgroundColor: pointBgColor,
+									pointBorderColor: pointBdColor,
+									data: vant
+								}
+							]
+						};
+						
+						$('canvas').replaceWith('<canvas id="graficoModelo" width="400" height="100"></canvas>');
+						
+						var ctx = $("#graficoModelo");
+
+						var barGraph = new Chart(ctx, {
+							type: chartType,
+							data: chartdata,
+							options: {
+									scales: {
+										xAxes: [{
+											ticks: {
+												beginAtZero:true
+											}
+										}],
+										yAxes: [{
+											ticks: {
+												beginAtZero:true,
+												max: maxValue
+											}
+										}]
+									},
+									legend: {
+										labels: {
+											fontFamily: 'Montserrat'
+										}
+									},
+									title: {
+										display: true,
+										fontFamily: 'Montserrat',
+										text: 'Cantidad de VANT por Modelo'
+									}
+								}
+						});
+						break;
+					
+					case 'fabricante':
+						var fabricante = [];
+						var vant = [];
+						var maxValue = 0;
+						for(var i in datos) {
+							fabricante.push(datos[i].fabricante);
+							vant.push(datos[i].cantidadvant);
+							if (maxValue < parseInt(datos[i].cantidadvant)) {
+								maxValue = parseInt(datos[i].cantidadvant);
+							}
+						}
+						maxValue = maxValue + 2;
+						var chartdata = {
+							labels: fabricante,
+							datasets : [
+								{
+									label: 'Cantidad de VANT',
+									backgroundColor: bgColor,
+									borderColor: bdColor,
+									hoverBackgroundColor: hoverBgColor,
+									hoverBorderColor: hoverBdColor,
+									pointBackgroundColor: pointBgColor,
+									pointBorderColor: pointBdColor,
+									data: vant
+								}
+							]
+						};
+						
+						$('canvas').replaceWith('<canvas id="graficoFabricante" width="400" height="100"></canvas>');
+						
+						var ctx = $("#graficoFabricante");
+
+						var barGraph = new Chart(ctx, {
+							type: chartType,
+							data: chartdata,
+							options: {
+									scales: {
+										xAxes: [{
+											ticks: {
+												beginAtZero:true
+											}
+										}],
+										yAxes: [{
+											ticks: {
+												beginAtZero:true,
+												max: maxValue
+											}
+										}]
+									},
+									legend: {
+										labels: {
+											fontFamily: 'Montserrat'
+										}
+									},
+									title: {
+										display: true,
+										fontFamily: 'Montserrat',
+										text: 'Cantidad de VANT por Fabricante'
+									}
+								}
+						});
+						
+						break;
+						
+					case 'lFab':
+						var lugar_fabricacion = [];
+						var vant = [];
+						var maxValue = 0;
+						for(var i in datos) {
+							lugar_fabricacion.push(datos[i].lugar_fabricacion);
+							vant.push(datos[i].cantidadvant);
+							if (maxValue < parseInt(datos[i].cantidadvant)) {
+								maxValue = parseInt(datos[i].cantidadvant);
+							}
+						}
+						maxValue = maxValue + 2;
+						var chartdata = {
+							labels: lugar_fabricacion,
+							datasets : [
+								{
+									label: 'Cantidad de VANT',
+									backgroundColor: bgColor,
+									borderColor: bdColor,
+									hoverBackgroundColor: hoverBgColor,
+									hoverBorderColor: hoverBdColor,
+									pointBackgroundColor: pointBgColor,
+									pointBorderColor: pointBdColor,
+									data: vant
+								}
+							]
+						};
+						
+						$('canvas').replaceWith('<canvas id="graficoOrigen" width="400" height="100"></canvas>');
+						
+						var ctx = $("#graficoOrigen");
+
+						var barGraph = new Chart(ctx, {
+							type: chartType,
+							data: chartdata,
+							options: {
+									scales: {
+										xAxes: [{
+											ticks: {
+												beginAtZero:true
+											}
+										}],
+										yAxes: [{
+											ticks: {
+												beginAtZero:true,
+												max: maxValue
+											}
+										}]
+									},
+									legend: {
+										labels: {
+											fontFamily: 'Montserrat'
+										}
+									},
+									title: {
+										display: true,
+										fontFamily: 'Montserrat',
+										text: 'Cantidad de VANT por Lugar de Fabricación'
+									}
+								}
+						});
+						
+						break;
+						
+					case 'anioFab':
+						var anio_fabricacion = [];
+						var vant = [];
+						var maxValue = 0;
+						for(var i in datos) {
+							anio_fabricacion.push(datos[i].anio_fabricacion);
+							vant.push(datos[i].cantidadvant);
+							if (maxValue < parseInt(datos[i].cantidadvant)) {
+								maxValue = parseInt(datos[i].cantidadvant);
+							}
+						}
+						maxValue = maxValue + 2;
+						var chartdata = {
+							labels: anio_fabricacion,
+							datasets : [
+								{
+									label: 'Cantidad de VANT',
+									backgroundColor: bgColor,
+									borderColor: bdColor,
+									hoverBackgroundColor: hoverBgColor,
+									hoverBorderColor: hoverBdColor,
+									pointBackgroundColor: pointBgColor,
+									pointBorderColor: pointBdColor,
+									data: vant
+								}
+							]
+						};
+						
+						$('canvas').replaceWith('<canvas id="graficoAnio" width="400" height="100"></canvas>');
+						
+						var ctx = $("#graficoAnio");
+
+						var barGraph = new Chart(ctx, {
+							type: chartType,
+							data: chartdata,
+							options: {
+									scales: {
+										xAxes: [{
+											ticks: {
+												beginAtZero:true
+											}
+										}],
+										yAxes: [{
+											ticks: {
+												beginAtZero:true,
+												max: maxValue
+											}
+										}]
+									},
+									legend: {
+										labels: {
+											fontFamily: 'Montserrat'
+										}
+									},
+									title: {
+										display: true,
+										fontFamily: 'Montserrat',
+										text: 'Cantidad de VANT por Año de Fabricación'
+									}
+								}
+						});
+						
+						break;
+						
+					case 'altMax':
+						var alt_max = [];
+						var vant = [];
+						var maxValue = 0;
+						for(var i in datos) {
+							alt_max.push(datos[i].alt_max);
+							vant.push(datos[i].cantidadvant);
+							if (maxValue < parseInt(datos[i].cantidadvant)) {
+								maxValue = parseInt(datos[i].cantidadvant);
+							}
+						}
+						maxValue = maxValue + 2;
+						var chartdata = {
+							labels: alt_max,
+							datasets : [
+								{
+									label: 'Cantidad de VANT',
+									backgroundColor: bgColor,
+									borderColor: bdColor,
+									hoverBackgroundColor: hoverBgColor,
+									hoverBorderColor: hoverBdColor,
+									pointBackgroundColor: pointBgColor,
+									pointBorderColor: pointBdColor,
+									data: vant
+								}
+							]
+						};
+						
+						$('canvas').replaceWith('<canvas id="graficoAltMax" width="400" height="100"></canvas>');
+						
+						var ctx = $("#graficoAltMax");
+
+						var barGraph = new Chart(ctx, {
+							type: chartType,
+							data: chartdata,
+							options: {
+									scales: {
+										xAxes: [{
+											ticks: {
+												beginAtZero:true
+											}
+										}],
+										yAxes: [{
+											ticks: {
+												beginAtZero:true,
+												max: maxValue
+											}
+										}]
+									},
+									legend: {
+										labels: {
+											fontFamily: 'Montserrat'
+										}
+									},
+									title: {
+										display: true,
+										fontFamily: 'Montserrat',
+										text: 'Cantidad de VANT por Altura Máxima'
+									}
+								}
+						});
+						
+						break;
+						
+					case 'velMax':
+						var vel_max = [];
+						var vant = [];
+						var maxValue = 0;
+						for(var i in datos) {
+							vel_max.push(datos[i].vel_max);
+							vant.push(datos[i].cantidadvant);
+							if (maxValue < parseInt(datos[i].cantidadvant)) {
+								maxValue = parseInt(datos[i].cantidadvant);
+							}
+						}
+						maxValue = maxValue + 2;
+						var chartdata = {
+							labels: vel_max,
+							datasets : [
+								{
+									label: 'Cantidad de VANT',
+									backgroundColor: bgColor,
+									borderColor: bdColor,
+									hoverBackgroundColor: hoverBgColor,
+									hoverBorderColor: hoverBdColor,
+									pointBackgroundColor: pointBgColor,
+									pointBorderColor: pointBdColor,
+									data: vant
+								}
+							]
+						};
+						
+						$('canvas').replaceWith('<canvas id="graficoVelMax" width="400" height="100"></canvas>');
+						
+						var ctx = $("#graficoVelMax");
+
+						var barGraph = new Chart(ctx, {
+							type: chartType,
+							data: chartdata,
+							options: {
+									scales: {
+										xAxes: [{
+											ticks: {
+												beginAtZero:true
+											}
+										}],
+										yAxes: [{
+											ticks: {
+												beginAtZero:true,
+												max: maxValue
+											}
+										}]
+									},
+									legend: {
+										labels: {
+											fontFamily: 'Montserrat'
+										}
+									},
+									title: {
+										display: true,
+										fontFamily: 'Montserrat',
+										text: 'Cantidad de VANT por Velocidad Máxima'
+									}
+								}
+						});
+						
+						break;
+					
+					case 'alto':
+						var alto = [];
+						var vant = [];
+						var maxValue = 0;
+						for(var i in datos) {
+							alto.push(datos[i].alto);
+							vant.push(datos[i].cantidadvant);
+							if (maxValue < parseInt(datos[i].cantidadvant)) {
+								maxValue = parseInt(datos[i].cantidadvant);
+							}
+						}
+						maxValue = maxValue + 2;
+						var chartdata = {
+							labels: alto,
+							datasets : [
+								{
+									label: 'Cantidad de VANT',
+									backgroundColor: bgColor,
+									borderColor: bdColor,
+									hoverBackgroundColor: hoverBgColor,
+									hoverBorderColor: hoverBdColor,
+									pointBackgroundColor: pointBgColor,
+									pointBorderColor: pointBdColor,
+									data: vant
+								}
+							]
+						};
+						
+						$('canvas').replaceWith('<canvas id="graficoAlto" width="400" height="100"></canvas>');
+						
+						var ctx = $("#graficoAlto");
+
+						var barGraph = new Chart(ctx, {
+							type: chartType,
+							data: chartdata,
+							options: {
+									scales: {
+										xAxes: [{
+											ticks: {
+												beginAtZero:true
+											}
+										}],
+										yAxes: [{
+											ticks: {
+												beginAtZero:true,
+												max: maxValue
+											}
+										}]
+									},
+									legend: {
+										labels: {
+											fontFamily: 'Montserrat'
+										}
+									},
+									title: {
+										display: true,
+										fontFamily: 'Montserrat',
+										text: 'Cantidad de VANT por Alto del vehículo'
+									}
+								}
+						});
+						
+						break;
+						
+					case 'ancho':
+						var ancho = [];
+						var vant = [];
+						var maxValue = 0;
+						for(var i in datos) {
+							ancho.push(datos[i].ancho);
+							vant.push(datos[i].cantidadvant);
+							if (maxValue < parseInt(datos[i].cantidadvant)) {
+								maxValue = parseInt(datos[i].cantidadvant);
+							}
+						}
+						maxValue = maxValue + 2;
+						var chartdata = {
+							labels: ancho,
+							datasets : [
+								{
+									label: 'Cantidad de VANT',
+									backgroundColor: bgColor,
+									borderColor: bdColor,
+									hoverBackgroundColor: hoverBgColor,
+									hoverBorderColor: hoverBdColor,
+									pointBackgroundColor: pointBgColor,
+									pointBorderColor: pointBdColor,
+									data: vant
+								}
+							]
+						};
+						
+						$('canvas').replaceWith('<canvas id="graficoAncho" width="400" height="100"></canvas>');
+						
+						var ctx = $("#graficoAncho");
+
+						var barGraph = new Chart(ctx, {
+							type: chartType,
+							data: chartdata,
+							options: {
+									scales: {
+										xAxes: [{
+											ticks: {
+												beginAtZero:true
+											}
+										}],
+										yAxes: [{
+											ticks: {
+												beginAtZero:true,
+												max: maxValue
+											}
+										}]
+									},
+									legend: {
+										labels: {
+											fontFamily: 'Montserrat'
+										}
+									},
+									title: {
+										display: true,
+										fontFamily: 'Montserrat',
+										text: 'Cantidad de VANT por Ancho del vehículo'
+									}
+								}
+						});
+						
+						break;
+						
+					case 'largo':
+						var largo = [];
+						var vant = [];
+						var maxValue = 0;
+						for(var i in datos) {
+							largo.push(datos[i].largo);
+							vant.push(datos[i].cantidadvant);
+							if (maxValue < parseInt(datos[i].cantidadvant)) {
+								maxValue = parseInt(datos[i].cantidadvant);
+							}
+						}
+						maxValue = maxValue + 2;
+						var chartdata = {
+							labels: largo,
+							datasets : [
+								{
+									label: 'Cantidad de VANT',
+									backgroundColor: bgColor,
+									borderColor: bdColor,
+									hoverBackgroundColor: hoverBgColor,
+									hoverBorderColor: hoverBdColor,
+									pointBackgroundColor: pointBgColor,
+									pointBorderColor: pointBdColor,
+									data: vant
+								}
+							]
+						};
+						
+						$('canvas').replaceWith('<canvas id="graficoLargo" width="400" height="100"></canvas>');
+						
+						var ctx = $("#graficoLargo");
+
+						var barGraph = new Chart(ctx, {
+							type: chartType,
+							data: chartdata,
+							options: {
+									scales: {
+										xAxes: [{
+											ticks: {
+												beginAtZero:true
+											}
+										}],
+										yAxes: [{
+											ticks: {
+												beginAtZero:true,
+												max: maxValue
+											}
+										}]
+									},
+									legend: {
+										labels: {
+											fontFamily: 'Montserrat'
+										}
+									},
+									title: {
+										display: true,
+										fontFamily: 'Montserrat',
+										text: 'Cantidad de VANT por Largo del vehículo'
+									}
+								}
+						});
+						
+						break;
+					
+					case 'color':
+						var color = [];
+						var vant = [];
+						var maxValue = 0;
+						for(var i in datos) {
+							color.push(datos[i].color);
+							vant.push(datos[i].cantidadvant);
+							if (maxValue < parseInt(datos[i].cantidadvant)) {
+								maxValue = parseInt(datos[i].cantidadvant);
+							}
+						}
+						maxValue = maxValue + 2;
+						var chartdata = {
+							labels: color,
+							datasets : [
+								{
+									label: 'Cantidad de VANT',
+									backgroundColor: bgColor,
+									borderColor: bdColor,
+									hoverBackgroundColor: hoverBgColor,
+									hoverBorderColor: hoverBdColor,
+									pointBackgroundColor: pointBgColor,
+									pointBorderColor: pointBdColor,
+									data: vant
+								}
+							]
+						};
+						
+						$('canvas').replaceWith('<canvas id="graficoColor" width="400" height="100"></canvas>');
+						
+						var ctx = $("#graficoColor");
+
+						var barGraph = new Chart(ctx, {
+							type: chartType,
+							data: chartdata,
+							options: {
+									scales: {
+										xAxes: [{
+											ticks: {
+												beginAtZero:true
+											}
+										}],
+										yAxes: [{
+											ticks: {
+												beginAtZero:true,
+												max: maxValue
+											}
+										}]
+									},
+									legend: {
+										labels: {
+											fontFamily: 'Montserrat'
+										}
+									},
+									title: {
+										display: true,
+										fontFamily: 'Montserrat',
+										text: 'Cantidad de VANT por Color del vehículo'
+									}
+								}
+						});
+						
+						break;
+				}
+				
+			},
+			error: function(data) {
+				console.log(data);
+			}
+		});
 	});
 });

@@ -41,6 +41,163 @@
             $this->db->select($sql);
             $this->db->from('vant');
             $this->db->where('activo = ', 1);
+            $this->db->order_by('vant.id_vant', 'desc');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+        
+        public function obtener_cantidad_por_peso()
+        {        
+            $sql = 'vant.peso, count(*) cantidadvant ';
+            $by = 'vant.peso';
+            $this->db->select($sql);
+            $this->db->from('vant');
+            $this->db->where('activo = ', 1);
+            $this->db->group_by($by);
+            $this->db->order_by('vant.peso', 'asc');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+        
+        public function obtener_cantidad_por_marca()
+        {        
+            $sql = 'vant.marca, count(*) cantidadvant ';
+            $by = 'vant.marca';
+            $this->db->select($sql);
+            $this->db->from('vant');
+            $this->db->where('activo = ', 1);
+            $this->db->group_by($by);
+            $this->db->order_by('vant.marca', 'asc');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+        
+        public function obtener_cantidad_por_modelo()
+        {        
+            $sql = 'vant.modelo, count(*) cantidadvant ';
+            $by = 'vant.modelo';
+            $this->db->select($sql);
+            $this->db->from('vant');
+            $this->db->where('activo = ', 1);
+            $this->db->group_by($by);
+            $this->db->order_by('vant.modelo', 'asc');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+        
+        public function obtener_cantidad_por_fabric()
+        {        
+            $sql = 'vant.fabricante, count(*) cantidadvant ';
+            $by = 'vant.fabricante';
+            $this->db->select($sql);
+            $this->db->from('vant');
+            $this->db->where('activo = ', 1);
+            $this->db->group_by($by);
+            $this->db->order_by('vant.fabricante', 'asc');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+        
+        public function obtener_cantidad_por_origen()
+        {        
+            $sql = 'vant.lugar_fabricacion, count(*) cantidadvant ';
+            $by = 'vant.lugar_fabricacion';
+            $this->db->select($sql);
+            $this->db->from('vant');
+            $this->db->where('activo = ', 1);
+            $this->db->group_by($by);
+            $this->db->order_by('vant.lugar_fabricacion', 'asc');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+        
+        public function obtener_cantidad_por_anio()
+        {        
+            $sql = 'vant.anio_fabricacion, count(*) cantidadvant ';
+            $by = 'vant.anio_fabricacion';
+            $this->db->select($sql);
+            $this->db->from('vant');
+            $this->db->where('activo = ', 1);
+            $this->db->group_by($by);
+            $this->db->order_by('vant.anio_fabricacion', 'asc');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+        
+        public function obtener_cantidad_por_altmax()
+        {        
+            $sql = 'vant.alt_max, count(*) cantidadvant ';
+            $by = 'vant.alt_max';
+            $this->db->select($sql);
+            $this->db->from('vant');
+            $this->db->where('activo = ', 1);
+            $this->db->group_by($by);
+            $this->db->order_by('vant.alt_max', 'asc');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+        
+        public function obtener_cantidad_por_velmax()
+        {        
+            $sql = 'vant.vel_max, count(*) cantidadvant ';
+            $by = 'vant.vel_max';
+            $this->db->select($sql);
+            $this->db->from('vant');
+            $this->db->where('activo = ', 1);
+            $this->db->group_by($by);
+            $this->db->order_by('vant.vel_max', 'asc');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+        
+        public function obtener_cantidad_por_alto()
+        {        
+            $sql = 'vant.alto, count(*) cantidadvant ';
+            $by = 'vant.alto';
+            $this->db->select($sql);
+            $this->db->from('vant');
+            $this->db->where('activo = ', 1);
+            $this->db->group_by($by);
+            $this->db->order_by('vant.alto', 'asc');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+        
+        public function obtener_cantidad_por_ancho()
+        {        
+            $sql = 'vant.ancho, count(*) cantidadvant ';
+            $by = 'vant.ancho';
+            $this->db->select($sql);
+            $this->db->from('vant');
+            $this->db->where('activo = ', 1);
+            $this->db->group_by($by);
+            $this->db->order_by('vant.ancho', 'asc');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+        
+        public function obtener_cantidad_por_largo()
+        {        
+            $sql = 'vant.largo, count(*) cantidadvant ';
+            $by = 'vant.largo';
+            $this->db->select($sql);
+            $this->db->from('vant');
+            $this->db->where('activo = ', 1);
+            $this->db->group_by($by);
+            $this->db->order_by('vant.largo', 'asc');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+        
+        public function obtener_cantidad_por_color()
+        {        
+            $sql = 'vant.color, count(*) cantidadvant ';
+            $by = 'vant.color';
+            $this->db->select($sql);
+            $this->db->from('vant');
+            $this->db->where('activo = ', 1);
+            $this->db->group_by($by);
+            $this->db->order_by('vant.color', 'asc');
             $query = $this->db->get();
             return $query->result_array();
         }

@@ -6,12 +6,15 @@ $(document).ready(function(){
 			var datos = JSON.parse(data);
 			var edad = [];
 			var vant = [];
-			
+			var maxValue = 0;
 			for(var i in datos) {
 				edad.push(datos[i].edad);
 				vant.push(datos[i].cantidadvant);
+				if (maxValue < parseInt(datos[i].cantidadvant)) {
+								maxValue = parseInt(datos[i].cantidadvant);
+				}
 			}
-			
+			maxValue = maxValue + 2;
 			var chartdata = {
 				labels: edad,
 				datasets : [
@@ -40,7 +43,8 @@ $(document).ready(function(){
 										}],
 							yAxes: [{
 								ticks: {
-									beginAtZero:true
+									beginAtZero:true,
+									max: maxValue
 								}
 							}]
 						},
@@ -67,7 +71,7 @@ $(document).ready(function(){
 		$.ajax({
 			url: "Grafico_usuarios",
 			method: "POST",
-			data: { ejeX: ejeX },
+			data: { ejeX: ejeX }, 
 			success: function(data) {
 				var datos = JSON.parse(data);
 				var chartType = $("select[name='tipoGrafico']").val();
@@ -110,17 +114,33 @@ $(document).ready(function(){
 						var pointBgColor = [];
 						var pointBdColor = [];
 						break;
+					case 'doughnut':
+						var bgColor = [];
+						var bdColor = [];
+						var hoverBgColor = [];
+						var hoverBdColor = [];
+						for(var j in datos) {
+							color = '#'+Math.floor(Math.random()*16777215).toString(16);
+							bgColor[j] = color;
+							bdColor[j] = "#ffffff";
+						}
+						var pointBgColor = [];
+						var pointBdColor = [];
+						break;
 				}
 				switch(ejeX) {
 					case 'sexo':
 						var sexo = [];
 						var vant = [];
-						
+						var maxValue = 0;
 						for(var i in datos) {
 							sexo.push(datos[i].sexo);
 							vant.push(datos[i].cantidadvant);
+							if (maxValue < parseInt(datos[i].cantidadvant)) {
+								maxValue = parseInt(datos[i].cantidadvant);
+							}
 						}
-
+						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: sexo,
 							datasets : [
@@ -137,7 +157,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoSe" width="400" height="400"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoSe" width="400" height="100"></canvas>');
 						
 						var ctx = $("#graficoSe");
 
@@ -153,7 +173,8 @@ $(document).ready(function(){
 										}],
 										yAxes: [{
 											ticks: {
-												beginAtZero:true
+												beginAtZero:true,
+												max: maxValue
 											}
 										}]
 									},
@@ -173,12 +194,15 @@ $(document).ready(function(){
 					case 'localidad':
 						var localidad = [];
 						var vant = [];
-						
+						var maxValue = 0;
 						for(var i in datos) {
 							localidad.push(datos[i].localidad);
 							vant.push(datos[i].cantidadvant);
+							if (maxValue < parseInt(datos[i].cantidadvant)) {
+								maxValue = parseInt(datos[i].cantidadvant);
+							}
 						}
-
+						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: localidad,
 							datasets : [
@@ -195,7 +219,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoLoc" width="400" height="400"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoLoc" width="400" height="100"></canvas>');
 						
 						var ctx = $("#graficoLoc");
 
@@ -211,7 +235,8 @@ $(document).ready(function(){
 										}],
 										yAxes: [{
 											ticks: {
-												beginAtZero:true
+												beginAtZero:true,
+												max: maxValue
 											}
 										}]
 									},
@@ -231,12 +256,15 @@ $(document).ready(function(){
 					case 'provincia':
 						var provincia = [];
 						var vant = [];
-						
+						var maxValue = 0;
 						for(var i in datos) {
 							provincia.push(datos[i].provincia);
 							vant.push(datos[i].cantidadvant);
+							if (maxValue < parseInt(datos[i].cantidadvant)) {
+								maxValue = parseInt(datos[i].cantidadvant);
+							}
 						}
-
+						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: provincia,
 							datasets : [
@@ -253,7 +281,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoProv" width="400" height="400"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoProv" width="400" height="100"></canvas>');
 						
 						var ctx = $("#graficoProv");
 
@@ -269,7 +297,8 @@ $(document).ready(function(){
 										}],
 										yAxes: [{
 											ticks: {
-												beginAtZero:true
+												beginAtZero:true,
+												max: maxValue
 											}
 										}]
 									},
@@ -289,12 +318,15 @@ $(document).ready(function(){
 					case 'edad':
 						var edad = [];
 						var vant = [];
-						
+						var maxValue = 0;
 						for(var i in datos) {
 							edad.push(datos[i].edad);
 							vant.push(datos[i].cantidadvant);
+							if (maxValue < parseInt(datos[i].cantidadvant)) {
+								maxValue = parseInt(datos[i].cantidadvant);
+							}
 						}
-						
+						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: edad,
 							datasets : [
@@ -311,7 +343,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoEdad" width="400" height="400"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoEdad" width="400" height="100"></canvas>');
 						
 						var ctx = $("#graficoEdad");
 
@@ -327,7 +359,8 @@ $(document).ready(function(){
 										}],
 										yAxes: [{
 											ticks: {
-												beginAtZero:true
+												beginAtZero:true,
+												max: maxValue
 											}
 										}]
 									},

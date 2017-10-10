@@ -59,7 +59,7 @@ class Grafico_usuarios extends MY_Controller
                     break;
             }
 	}
-       
+      
         private function obtener_vants_por_edad()
         {
             try{                

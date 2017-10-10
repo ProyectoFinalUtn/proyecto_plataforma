@@ -1,5 +1,5 @@
 <html>
-    <title>Información de Usuarios de VANT</title>
+    <title>Información VANT</title>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,42 +22,49 @@
     </style>
     <body>
         <div class = "main">
-            <div id="breadcrumb" style="padding-left:8px;">G.O. Guide > Información de Usuarios VANT > Usuarios VANT</div>
+            <div id="breadcrumb" style="padding-left:8px;">G.O. Guide > Información de Usuarios VANT > VANT</div>
             <div style="padding:16px;">
-                <h1 class="pb-3 text-secondary">Usuarios de VANT</h1>
-                <p class="my-4"><i>Información estadística sobre los usuarios de VANT que utilizan la aplicación</i></p>
-                <div id="tabla-usuarios" style="overflow-x:auto;">
+                <h1 class="pb-3 text-secondary">VANT</h1>
+                <p class="my-4"><i>Información estadística sobre los VANT registrados por la aplicación</i></p>
+                <div id="tabla-vant" style="overflow-x:auto;">
                     <table>
                         <thead id="header" style="background-color: #004ea2; color:#ffffff;">
                             <tr id="headers">
-                              <th>Usuario</th>
-                              <th>Apellido</th>
-                              <th>Nombre</th>
-                              <th>E-mail</th>
-                              <th>Edad</th>
-                              <th>Sexo</th>
-                              <th>Documento</th>
-                              <th>Domicilio</th>
-                              <th>Teléfono</th>
-                              <th>Cantidad de VANT</th>
+                              <th>Marca</th>
+                              <th>Modelo</th>
+                              <th>N° Serie</th>
+                              <th>Fabricante</th>
+                              <th>Origen</th>
+                              <th>Año Fabricación</th>
+                              <th>Alto</th>
+                              <th>Ancho</th>
+                              <th>Largo</th>
+                              <th>Velocidad Máx</th>
+                              <th>Altura Máx</th>
+                              <th>Peso</th>
+                              <th>Color</th>
+                              <th>Lugar de Guardado</th>
                             </tr>
                         </thead>
                         <?php
                             $max = 0;
-                            foreach ($usuariosVant as $usuarioVant)
+                            foreach ($vant as $cadaVant)
                             {
                                 if ($max < 25){
-                                    echo "<tr><td>".$usuarioVant['usuario']."</td>";
-                                    echo "<td>".$usuarioVant['apellido']."</td>";
-                                    echo "<td>".$usuarioVant['nombre']."</td>";
-                                    echo "<td>".$usuarioVant['email']."</td>";
-                                    echo "<td>".$usuarioVant['edad']."</td>";
-                                    echo "<td>".$usuarioVant['sexo']."</td>";
-                                    echo "<td>".$usuarioVant['nroDoc']."</td>";
-                                    echo "<td>".$usuarioVant['calle']." ".$usuarioVant['nro']." ".$usuarioVant['piso']." ".$usuarioVant['dpto'].
-                                            ", ".$usuarioVant['localidad'].", ".$usuarioVant['provincia']."</td>";
-                                    echo "<td>".$usuarioVant['telefono']."</td>";
-                                    echo "<td>".$usuarioVant['cantidadvant']."</td></tr>";
+                                    echo "<tr><td>".$cadaVant['marca']."</td>";
+                                    echo "<td>".$cadaVant['modelo']."</td>";
+                                    echo "<td>".$cadaVant['nroSerie']."</td>";
+                                    echo "<td>".$cadaVant['fabricante']."</td>";
+                                    echo "<td>".$cadaVant['lFab']."</td>";
+                                    echo "<td>".$cadaVant['anioFab']."</td>";
+                                    echo "<td>".$cadaVant['alto']."</td>";
+                                    echo "<td>".$cadaVant['ancho']."</td>";
+                                    echo "<td>".$cadaVant['largo']."</td>";
+                                    echo "<td>".$cadaVant['velMax']."</td>";
+                                    echo "<td>".$cadaVant['altMax']."</td>";
+                                    echo "<td>".$cadaVant['peso']."</td>";
+                                    echo "<td>".$cadaVant['color']."</td>";
+                                    echo "<td>".$cadaVant['lGuardado']."</td></tr>";
                                     $max = $max + 1;
                                 }
                                 else {
@@ -69,8 +76,8 @@
                 </div>
                 <p></p>
                 <div id="chart-container">
-                    <canvas id="graficoEdad" width="400" height="100"></canvas>
-                    <script src="<?php echo base_url(); ?>assets/js/graficoUsuarios.js"></script>
+                    <canvas id="graficoPeso" width="400" height="100"></canvas>
+                    <script src="<?php echo base_url(); ?>assets/js/graficoVant.js"></script>
                 </div>
                 <div class="row" id="graficos">
                     <div class="col-md-4 p-4" style="text-align: center;">
@@ -83,16 +90,24 @@
                             <b>Eje X</b>
                             <br>
                             <select name="ejeX">
-                                <option value="edad" selected="selected">Edad</option>
-                                <option value="sexo">Sexo</option>
-                                <option value="provincia">Provincia</option>
-                                <option value="localidad">Localidad</option>
+                                <option value="marca">Marca</option>
+                                <option value="modelo">Modelo</option>
+                                <option value="fabricante">Fabricante</option>
+                                <option value="lFab">Origen</option>
+                                <option value="anioFab">Año Fabricación</option>
+                                <option value="peso" selected="selected">Peso</option>
+                                <option value="altMax">Altura Máx</option>
+                                <option value="velMax">Velocidad Máx</option>
+                                <option value="alto">Alto</option>
+                                <option value="ancho">Ancho</option>
+                                <option value="largo">Largo</option>
+                                <option value="color">Color</option>
                             </select>
                         </p>
                         <p>
                             <b>Eje Y</b><br>
                             <select name="ejeY">
-                                <option value="edad" selected="selected">Cantidad de VANT</option>
+                                <option value="cantidad" selected="selected">Cantidad de VANT</option>
                             </select>
                         </p>
                         <p>
