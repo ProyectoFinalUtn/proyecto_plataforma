@@ -55,10 +55,15 @@ class Administrador_model extends CI_Model {
         
         private function insertar_persona_usuario_admin($usuarioAdmin)
         {
+            if ($usuarioAdmin['documento'] == 0) {
+                $doc = null;
+            } else {
+                $doc = $usuarioAdmin['documento'];
+            }
             $result = $this->db->insert('persona', [
                 'nombre' => $usuarioAdmin['nombre'],     
                 'apellido' => $usuarioAdmin['apellido'],
-                'nro_documento' => $usuarioAdmin['documento'],
+                'nro_documento' => $doc,
                 'email' => $usuarioAdmin['email'],
             ]);
             if(!$result){
@@ -104,6 +109,34 @@ class Administrador_model extends CI_Model {
             
             return $usuarioAdmin['id_usuario'];  
         }
+        
+        public function guardar_datos_admin($usuarioAdmin)
+        {
+            
+            $result = $this->db->insert('usuario_admin', [
+            'usuario' => $usuarioAdmin['usuario'],     
+            'password' => $usuarioAdmin['password']
+            ]);
+            if(!$result){
+                $db_error = $this->db->error();
+                throw new Exception($db_error);
+            }
+            $id_usuario = $this->db->insert_id();
+            $id_persona = $this->insertar_persona_usuario_admin($usuarioAdmin);
+            $this->asociar_persona_admin($id_persona, $id_usuario);
+            
+            return $id_usuario;
+        }
+                
+        public function existe_mail($mail)
+        {   $this->db->select('email');
+            $this->db->from('persona');
+            $this->db->where('email = ', $mail);
+            $this->db->limit(1);
+            $query = $this->db->get()->row();
+            return $query;
+        }
+
 
 /*********************************************************************************** 
        public function insert_entry()
