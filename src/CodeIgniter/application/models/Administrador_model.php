@@ -89,11 +89,16 @@ class Administrador_model extends CI_Model {
         public function cambiar_datos_admin($usuarioAdmin)
         {
             if ($usuarioAdmin['id_persona'] != null) {
+                if ($usuarioAdmin['documento'] == 0) {
+                    $doc = null;
+                } else {
+                    $doc = $usuarioAdmin['documento'];
+                }
                 $this->db->where('id_persona', $usuarioAdmin['id_persona']);
                 $result = $this->db->update('persona', [
                 'nombre' => $usuarioAdmin['nombre'],
                 'apellido' => $usuarioAdmin['apellido'],
-                'nro_documento' => $usuarioAdmin['documento'],
+                'nro_documento' => $doc,
                 'email' => $usuarioAdmin['email']
                 ]);
 
@@ -135,6 +140,21 @@ class Administrador_model extends CI_Model {
             $this->db->limit(1);
             $query = $this->db->get()->row();
             return $query;
+        }
+        
+        public function actualizar_password($idUsuario, $password)
+        {
+            $this->db->where('id_usuario', $idUsuario);
+            $result = $this->db->update('usuario_admin', [
+            'password' => $password
+            ]);
+
+            if(!$result){
+                $db_error = $this->db->error();
+                throw new Exception($db_error);
+            }
+            
+            return $id_usuario;
         }
 
 
