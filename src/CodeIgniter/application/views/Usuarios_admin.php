@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="https://pingendo.com/assets/bootstrap/bootstrap-4.0.0-beta.1.css" type="text/css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
         <script src="<?php echo base_url(); ?>assets/js/global.js" defer></script>
+        <script src="<?php echo base_url(); ?>assets/js/bajaPerfil.js" defer></script>
     </head>
     <style>
         h1,h2,h3,h4 { font-family: "Montserrat", sans-serif; }
@@ -27,7 +28,7 @@
                     <button type="button" id="eliminar" class="btn navbar-btn ml-2 text-white btn-secondary">Eliminar</button>
                 </p>
                 <div id="tabla-usuariosadmin" style="overflow-x:auto;">
-                    <table>
+                    <table id="tablausuarios">
                         <thead id="header" style="background-color: #004ea2; color:#ffffff;">
                             <tr id="headers">
                               <th></th>

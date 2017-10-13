@@ -27,6 +27,8 @@ class Administrador_model extends CI_Model {
             $this->db->select($sql);
             $this->db->from('usuario_admin adm');
             $this->db->join('persona pers', 'adm.id_persona = pers.id_persona', 'left outer ');
+            $this->db->where('adm.activo = true');
+            $this->db->order_by('adm.id_usuario', 'asc');
             $query = $this->db->get()->result_array();
             return $query;
         }
@@ -154,7 +156,22 @@ class Administrador_model extends CI_Model {
                 throw new Exception($db_error);
             }
             
-            return $id_usuario;
+            return $idUsuario;
+        }
+        
+        public function dar_baja_usuario_admin($idUsuario)
+        {
+            $this->db->where('id_usuario', $idUsuario);
+            $result = $this->db->update('usuario_admin', [
+            'activo' => false
+            ]);
+
+            if(!$result){
+                $db_error = $this->db->error();
+                throw new Exception($db_error);
+            }
+            
+            return $idUsuario;
         }
 
 

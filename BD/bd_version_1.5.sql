@@ -213,6 +213,7 @@ CREATE TABLE public.usuario_admin
     id_rol smallint,
     usuario text COLLATE pg_catalog."default",
     password text COLLATE pg_catalog."default",
+    activo boolean NOT NULL DEFAULT true,
     CONSTRAINT usuario_admin_pkey PRIMARY KEY (id_usuario)
 )
 WITH (

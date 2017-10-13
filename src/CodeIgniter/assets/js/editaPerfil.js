@@ -58,7 +58,7 @@ $(document).ready(function() {
 								posting.done(function() {
 									alert("Cambios realizados con éxito");
 									$(".main").empty();
-									var URL = "Panel";
+									var URL = "Usuarios_admin";
 									$(".main").load(URL);
 								});
 							}
@@ -78,7 +78,9 @@ $(document).ready(function() {
 						var posting = $.post( URL_POST, { id_usuario: ID, password: PSWD, id_persona: PERSONA, nombre: NOMBRE, apellido: APELLIDO, documento: DOCUMENTO, email: EMAIL, Guardar: 1 } );
 						posting.done(function() {
 							alert("Cambios realizados con éxito");
-							window.history.back();
+							$(".main").empty();
+							var URL = "Usuarios_admin";
+							$(".main").load(URL);
 						});
 					}
 				}
