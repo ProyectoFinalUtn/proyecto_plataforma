@@ -19,6 +19,17 @@ class Administrador_model extends CI_Model {
                 
         }
         
+        public function usuario_activo($nombre)
+        {
+            $this->db->select('activo');
+                $query = $this->db->get_where('usuario_admin', array('usuario =' => $nombre))->row();
+                if (count($query) > 0) {
+                   return $query->activo;
+                }else {
+                    return false;
+                }
+        }
+        
         public function obtener_datos_usuarios_admin()
         {   
             $sql = 'adm.id_usuario, adm.id_persona, adm.usuario, pers.nombre, pers.apellido, '.

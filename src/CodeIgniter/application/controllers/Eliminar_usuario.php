@@ -24,7 +24,7 @@ class Eliminar_usuario extends MY_Controller
         {
             try{                
                 $this->load->model('Administrador_model');
-                $idUsuario = $this->Administrador_model->obtener_id_admin($usuario);
+                $idUsuario = $this->Administrador_model->obtener_id_admin($usuario)->id_usuario;
                 $perfil = $this->Administrador_model->dar_baja_usuario_admin($idUsuario);
                 return $perfil;
             }
