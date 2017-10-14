@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Usuarios_admin extends MY_Controller
+class Normativas extends MY_Controller
 {
 
 	 public function __construct()
@@ -11,18 +11,18 @@ class Usuarios_admin extends MY_Controller
 
 	public function index()
 	{          
-            $listadoUsuariosAdmin = $this->obtener_datos_usuarios_admin();
-            $data['listadoUsuariosAdmin'] = $listadoUsuariosAdmin;
-            $this->load->view('Usuarios_admin', $data);
+            $listadoNormativas = $this->obtener_datos_normativas();
+            $data['listadoNormativas'] = $listadoNormativas;
+            $this->load->view('Normativas', $data);
             
 	}
         
-        private function obtener_datos_usuarios_admin()
+        private function obtener_datos_normativas()
         {   
             try{
-                $this->load->model('Administrador_model');
-                $listadoUsuariosAdmin = $this->Administrador_model->obtener_datos_usuarios_admin();
-                return $listadoUsuariosAdmin;
+                $this->load->model('Normativa_model');
+                $listadoNormativas = $this->Normativa_model->obtener_datos_normativas();
+                return $listadoNormativas;
             }
             catch(Exception $exception){
                 //$exception->getMessage()

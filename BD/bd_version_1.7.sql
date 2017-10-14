@@ -83,16 +83,6 @@ GRANT ALL ON TABLE public.zona_temporal TO admin WITH GRANT OPTION;
 
 GRANT ALL ON TABLE public.zona_temporal TO admin;
 
-CREATE SEQUENCE public.normativa_id_normativa_seq
-    INCREMENT 1
-    START 1
-    MINVALUE 1
-    MAXVALUE 9223372036854775807
-    CACHE 1;
-
-ALTER SEQUENCE public.normativa_id_normativa_seq
-    OWNER TO admin;
-
 -- Table: public.normativa
 
 -- DROP TABLE public.normativa;
@@ -103,6 +93,7 @@ CREATE TABLE public.normativa
     descripcion text COLLATE pg_catalog."default" NOT NULL,
     fecha_desde date NOT NULL,
     fecha_hasta date,
+    contenido text COLLATE pg_catalog."default",
     CONSTRAINT normativa_pkey PRIMARY KEY (id_normativa)
 )
 WITH (
