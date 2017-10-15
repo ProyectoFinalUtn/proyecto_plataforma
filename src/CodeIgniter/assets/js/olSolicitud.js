@@ -1,16 +1,41 @@
-// Code goes here
+// Ubicar en un mapa los datos de la solicitud
+var radio_solicitud = parseInt($("input[id='radio']").val());
 var lati = parseFloat(readCookie('sol_latitud'));
 var longi = parseFloat(readCookie('sol_longitud'));
+
+// Seteo el zoom segun el radio de la solicitud
+if (radio_solicitud <= 100) {
+	var zoomDinamico = 18;
+}
+else {
+	if (radio_solicitud <= 300) {
+		var zoomDinamico = 17;
+	}
+	else {
+		if (radio_solicitud <= 600) {
+			var zoomDinamico = 16;
+		}
+		else {
+			if (radio_solicitud <= 1100) {
+				var zoomDinamico = 15;
+			}
+			else {
+				var zoomDinamico = 14;
+			}
+		}		
+	}
+}
+
 var map;
 var contextmenu;
 var source = new ol.source.Vector({ wrapX: false });
 var view = new ol.View({
     center: ol.proj.transform([longi, lati], 'EPSG:4326', 'EPSG:3857'),
-    zoom: 15
+    zoom: zoomDinamico
 });
 
 
-  var attribution = new ol.control.Attribution({
+ var attribution = new ol.control.Attribution({
         collapsible: false
     });
 // create a vector layer used for editing
@@ -62,59 +87,74 @@ var view = new ol.View({
           })()
   });
 
-  // Create a map
-  map = new ol.Map({
-        layers: [
-            new ol.layer.Group({
-                'title': 'Base maps',
-                layers: [
-                    new ol.layer.Group({
-                        title: 'Water color',
-                        type: 'base',
-                        combine: true,
-                        visible: false,
-                        layers: [
-                            new ol.layer.Tile({
-                                source: new ol.source.Stamen({
-                                    layer: 'watercolor'
-                                })
-                            }),
-                            new ol.layer.Tile({
-                                source: new ol.source.Stamen({
-                                    layer: 'terrain-labels'
-                                })
-                            })
-                        ]
-                    }),
-                    new ol.layer.Tile({
-                        title: 'OSM',
-                        type: 'base',
-                        visible: true,
-                        source: new ol.source.OSM()
-                    }),
-                      new ol.layer.Tile({
-                      title: 'Wikimedia',
-                      type: 'base',
-                      visible: false,
-                      source: new ol.source.XYZ(
-                      {
-                        urls : ["https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png"]
-                      })                      
-                    })
-                ]
-            })              
-        ],
-        controls: ol.control.defaults({ attribution: false }).extend([attribution]),
-        target: 'mapa-solicitud',
-        view: view
-    });
-    map.addLayer(vector);
+// Crear el mapa
+map = new ol.Map({
+	layers: [
+		new ol.layer.Group({
+			'title': 'Base maps',
+			layers: [
+				  new ol.layer.Tile({
+				  title: 'Wikimedia',
+				  type: 'base',
+				  visible: true,
+				  source: new ol.source.XYZ(
+				  {
+					urls : ["https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png"]
+				  })                      
+				})
+			]
+		})              
+	],
+	controls: ol.control.defaults({ attribution: false }).extend([attribution]),
+	target: 'mapa-solicitud',
+	view: view
+});
+map.addLayer(vector);
 
-    var layerSwitcher = new ol.control.LayerSwitcher({
-       tipLabel: 'Leyenda' // Optional label for button
-    });
-    map.addControl(layerSwitcher);
+// Defino el layer del circulo del radio de la solicitud
+var vista = map.getView();
+var proyeccion = vista.getProjection();
+var resolutionAtEquator = vista.getResolution();
+var centroMapa = map.getView().getCenter();
+var radio = (radio_solicitud / ol.proj.METERS_PER_UNIT.m);
+var circle = new ol.geom.Circle(centroMapa, radio);
+var circleFeature = new ol.Feature(circle);
+var fuenteVectorRadio = new ol.source.Vector({
+projection: 'EPSG:4326'
+});
+fuenteVectorRadio.addFeature(circleFeature);
+var capaRadio = new ol.layer.Vector({
+source: fuenteVectorRadio
+});
 
+map.addLayer(capaRadio);
+
+// Defino el layer del icono marker donde se hizo la solicitud
+var iconFeature = new ol.Feature({
+  geometry: new ol.geom.Point(map.getView().getCenter()),
+  name: 'Ubicacion solicitada'
+});
+
+var iconStyle = new ol.style.Style({
+  image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+    anchor: [0.5, 46],
+    anchorXUnits: 'fraction',
+    anchorYUnits: 'pixels',
+    opacity: 1,
+    src: 'assets/img/marker.png'
+  }))
+});
+
+iconFeature.setStyle(iconStyle);
+
+var fuenteVector = new ol.source.Vector({
+  features: [iconFeature]
+});
+
+var capaIcono = new ol.layer.Vector({
+  source: fuenteVector
+});
+map.addLayer(capaIcono);
 
 var mousePositionControl = new ol.control.MousePosition({
         coordinateFormat: ol.coordinate.createStringXY(2),
