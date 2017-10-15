@@ -34,7 +34,7 @@
                                 echo "<p></p>";
                                 echo "<h1>Usuario Administrador de Normativa</h1>";
                                 echo "<p>Edita los datos de usuario</p>";
-                                echo "<form action=\"Mi_perfil\" method=\"post\" enctype=\"multipart/form-data\">";
+                                echo "<form action=\"Editar_usuario\" method=\"post\" enctype=\"multipart/form-data\">";
                                 echo "<div class=\"form-group\" id=\"usuario\"> <label>Nombre de Usuario</label>";
                                 echo "<input type=\"text\" class=\"form-control\" name=\"usuario\" value=\"".$perfil->usuario."\" disabled> </div>";
                                 echo "<div class=\"form-group\" id=\"nombre\"> <label>Nombre *</label>";

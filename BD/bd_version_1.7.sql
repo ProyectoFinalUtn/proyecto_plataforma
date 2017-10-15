@@ -93,7 +93,8 @@ CREATE TABLE public.normativa
     descripcion text COLLATE pg_catalog."default" NOT NULL,
     fecha_desde date NOT NULL,
     fecha_hasta date,
-    contenido text COLLATE pg_catalog."default",
+    contenido json,
+	contenido_html text COLLATE pg_catalog."default",
     CONSTRAINT normativa_pkey PRIMARY KEY (id_normativa)
 )
 WITH (

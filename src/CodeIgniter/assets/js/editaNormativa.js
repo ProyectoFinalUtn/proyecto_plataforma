@@ -4,8 +4,9 @@ $(document).ready(function() {
 		toolbar: '#toolbar'
 	},
 	placeholder: 'Ingresa el contenido de la normativa',
-	theme: 'snow'	
+	theme: 'snow'
 	});
+	editor.setContents(JSON.parse(editor.root.innerHTML.replace('</p>', '').replace('<p>', '')));
 	$("input:submit").click(function() {
 		event.preventDefault();
 		$("div.errorMsg").remove();
@@ -19,19 +20,20 @@ $(document).ready(function() {
 			ok = false;
 		}
 		if (ok) {
-			var rta = confirm("¿Confirma que desea dar de alta la nueva normativa?")
+			var rta = confirm("¿Confirma los cambios a la normativa?")
 			if (rta) {
 				var about = document.querySelector("input[name='contenido']");
 				about.value = JSON.stringify(editor.getContents());
+				var ID = $("input[name='id_normativa']").val();
 				var RESOLUCION = $("input[name='descripcion']").val();
 				var DESDE = $("input[name='fecha_desde']").val();
 				var HASTA = $("input[name='fecha_hasta']").val();
 				var CONTENT = about.value;
 				var CONTENT_HTML = editor.root.innerHTML;
 				var URL_POST = $("form").attr("action");
-				var posting = $.post( URL_POST, { descripcion: RESOLUCION, fecha_desde: DESDE, fecha_hasta: HASTA, contenido: CONTENT, contenido_html: CONTENT_HTML, Guardar: 1 } );
+				var posting = $.post( URL_POST, { id_normativa: ID, descripcion: RESOLUCION, fecha_desde: DESDE, fecha_hasta: HASTA, contenido: CONTENT, contenido_html: CONTENT_HTML, Guardar: 1 } );
 				posting.done(function() {
-					alert("Normativa creada con éxito");
+					alert("Cambios realizados con éxito");
 					$(".main").empty();
 					var URL = "Normativas";
 					$(".main").load(URL);

@@ -16,7 +16,8 @@ class Nueva_normativa extends MY_Controller
                     "descripcion" => $_POST['descripcion'],
                     "fecha_desde" => $_POST['fecha_desde'],
                     "fecha_hasta" => $_POST['fecha_hasta'],
-                    "contenido" => $_POST['contenido']
+                    "contenido" => $_POST['contenido'],
+                    "contenido_html" => $_POST['contenido_html']
                     ];
 
                 $this->guardar_normativa($normativaNueva);

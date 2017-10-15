@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="https://pingendo.com/assets/bootstrap/bootstrap-4.0.0-beta.1.css" type="text/css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
         <script src="<?php echo base_url(); ?>assets/js/global.js" defer></script>
+        <script src="<?php echo base_url(); ?>assets/js/bajaNormativa.js" defer></script>
     </head>
     <style>
         h1,h2,h3,h4 { font-family: "Montserrat", sans-serif; }
@@ -31,6 +32,7 @@
                         <thead id="header" style="background-color: #004ea2; color:#ffffff;">
                             <tr id="headers">
                               <th></th>
+                              <th>Id</th>
                               <th>Resolución</th>
                               <th>Vigente Desde</th>
                               <th>Vigente Hasta</th>
@@ -41,6 +43,7 @@
                             foreach ($listadoNormativas as $normativa)
                             {
                                 echo "<tr><td><input type=\"radio\" name=\"seleccionado\"></input></td>";
+                                echo "<td>".$normativa['id_normativa']."</td>";
                                 echo "<td>".$normativa['descripcion']."</td>";
                                 echo "<td>".$normativa['fecha_desde']."</td>";
                                 echo "<td>".$normativa['fecha_hasta']."</td>";
