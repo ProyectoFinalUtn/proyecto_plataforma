@@ -265,5 +265,16 @@
             }
             return $idSolicitud;  
         }
+        
+        public function obtener_cantidad_por_fecha()
+        {
+            $sql = 'fecha_vuelo, count(id_solicitud) cantidad';
+            $this->db->select($sql);
+            $this->db->from('solicitud');
+            $this->db->group_by('fecha_vuelo');
+            $this->db->order_by('fecha_vuelo', 'asc');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
     }
 ?>
