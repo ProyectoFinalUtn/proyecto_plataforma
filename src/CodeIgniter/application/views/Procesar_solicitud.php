@@ -38,6 +38,16 @@
                         <div class="col-md-6">
                                 <div id="mapa-solicitud" class="map"></div>
                                 <script src="<?php echo base_url(); ?>assets/js/olSolicitud.js"></script>
+                                <p>
+                                    <?php
+                                        echo "<div class=\"form-group\"> <label>Marca del VANT</label>";
+                                        echo "<input type=\"text\" class=\"form-control\" id=\"marca\" value=\"".$solicitud->marca."\" disabled> </div>";
+                                        echo "<div class=\"form-group\"> <label>Modelo del VANT</label>";
+                                        echo "<input type=\"text\" class=\"form-control\" id=\"modelo\" value=\"".$solicitud->modelo."\" disabled> </div>";
+                                        echo "<div class=\"form-group\"> <label>Peso del VANT</label>";
+                                        echo "<input type=\"text\" class=\"form-control\" id=\"peso\" value=\"".$solicitud->peso."\" disabled> </div>";
+                                    ?>
+                                </p>
                         </div>
                         <div class="col-md-6">
                             <?php

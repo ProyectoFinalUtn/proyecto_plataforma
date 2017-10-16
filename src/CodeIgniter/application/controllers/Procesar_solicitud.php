@@ -21,7 +21,6 @@ class Procesar_solicitud extends MY_Controller
                 $this->cambiar_estado_solicitud($idSolicitudActualizada,$estadoNuevo,$idUsuarioAprobador);
                 $solicitud = $this->obtener_detalle_solicitud_por_id($_POST['idSolicitud']);
                 $data['solicitud'] = $solicitud;
-                $this->load->view('Procesar_solicitud', $data);
             }
             else {
                 $solicitud = $this->obtener_detalle_solicitud_por_id($_GET['idSolicitud']);

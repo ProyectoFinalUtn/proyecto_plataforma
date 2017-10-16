@@ -70,10 +70,11 @@
         
         public function obtener_detalle_solicitud_por_id($idSolicitud)
         {        
-            $sql = 'sol.id_solicitud idSolicitud, id_usuario_vant idUsuarioVant, pers.nombre nombre, pers.apellido apellido, pers.nro_documento documento, '. 
+            $sql = 'sol.id_solicitud idSolicitud, sol.id_usuario_vant idUsuarioVant, pers.nombre nombre, pers.apellido apellido, pers.nro_documento documento, '. 
                    'pers.edad edad, pers.email email, id_tipo_solicitud idTipoSolicitud, '.
                    'id_usuario_aprobador idUsuarioAprobador, adm.usuario usuarioAprobador, sol.id_estado_solicitud idEstadoSolicitud, '.
                    'es.descripcion descripcionEstadoSolicitud, latitud, longitud, radio_vuelo radioVuelo, '.
+                   'vant.marca, vant.modelo, vant.peso, '.
                    "to_char(fecha_vuelo, 'YYYY-MM-DD') fecha, hora_vuelo_desde horaVueloDesde, hora_vuelo_hasta horaVueloHasta";
             $this->db->select($sql);
             $this->db->from('solicitud sol');
@@ -81,6 +82,8 @@
             $this->db->join('usuario_vant uv', 'sol.id_usuario_vant = uv.id_usuario');
             $this->db->join('persona pers', 'uv.id_persona = pers.id_persona');
             $this->db->join('usuario_admin adm', 'sol.id_usuario_aprobador = adm.id_usuario', 'left outer ');
+            $this->db->join('vants_por_solicitud vxs', 'vxs.id_solicitud = sol.id_solicitud', 'left outer ');
+            $this->db->join('vant', 'vant.id_vant = vxs.id_vant', 'left outer ');
             $this->db->where('sol.id_solicitud = ', $idSolicitud);
             $query = $this->db->get()->row();
             return $query;
