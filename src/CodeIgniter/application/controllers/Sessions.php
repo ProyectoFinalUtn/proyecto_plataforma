@@ -41,7 +41,9 @@ class Sessions extends CI_Controller
         }
         else
         {
-            redirect('Sessions/login');
+            $data['falla'] = true;
+            $this->load->view('Login', $data);
+            //redirect('Sessions/login', $data);
         }
         
     }
@@ -49,7 +51,8 @@ class Sessions extends CI_Controller
     public function logout()
     {
         $this->session->unset_userdata('loggedin');
-        redirect('/');
+        session_destroy();
+        redirect('Sessions/login');
     }
 }
 ?>

@@ -57,6 +57,11 @@
                                 echo "</form>";
                             ?>
                         </div>
+                        <div class="col-md-6" style="padding:32px;text-align:center;">
+                            <p><img class="img-fluid d-block rounded-circle mx-auto" src="./assets/img/user_icon.png" style="width:50%;"></p>
+                            <p>Usuario administrador de Normativa</p>
+                            <button type="button" class="btn btn-secondary" id="logout">Cerrar sesión</button><p></p>
+                        </div>
                     </div>
                 </tr>
                 </table>

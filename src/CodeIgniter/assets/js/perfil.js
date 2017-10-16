@@ -1,5 +1,12 @@
 $(document).ready(function() {
-
+	
+	$("button[id='logout']").click(function() {
+		event.preventDefault();
+		alert('SALIR');
+		var URL = "Sessions/logout";
+		$(".main").load(URL);
+	});
+	
 	$("input:submit").click(function() {
 		event.preventDefault();
 		$("div.errorMsg").remove();
