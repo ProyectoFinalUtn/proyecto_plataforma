@@ -2,9 +2,11 @@ $(document).ready(function() {
 	
 	$("button[id='logout']").click(function() {
 		event.preventDefault();
-		alert('SALIR');
-		var URL = "Sessions/logout";
-		$(".main").load(URL);
+		var confirma = confirm("¿Desea cerrar la sesión? Deberá volver a ingresar sus credenciales para operar.")
+		if (confirma) {
+			var URL = "Sessions/logout";
+			$(".main").load(URL);
+		}
 	});
 	
 	$("input:submit").click(function() {
