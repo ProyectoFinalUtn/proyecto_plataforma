@@ -80,10 +80,11 @@
                             <b>Eje X</b>
                             <br>
                             <select name="ejeX">
-                                <option value="fecha" selected="selected">Fecha</option>
-                                <option value="sexo" disabled>Sexo</option>
-                                <option value="provincia" disabled>Provincia</option>
-                                <option value="localidad" disabled>Localidad</option>
+                                <option value="fecha" selected="selected">Fecha solicitada</option>
+                                <option value="horario">Horario solicitado</option>
+                                <option value="marca">Marca del VANT</option>
+                                <option value="modelo">Modelo del VANT</option>
+                                <option value="estado">Estado de la Solicitud</option>
                             </select>
                         </p>
                         <p>
