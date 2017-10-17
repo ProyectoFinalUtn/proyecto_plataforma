@@ -31,6 +31,14 @@ class Grafico_solicitudes extends MY_Controller
                             }
                             print json_encode($data);
                             break;
+                        case 'horario':
+                            $listadoSolicitudes = $this->obtener_cantidad_por_horario();
+                            $data = array();
+                            foreach ($listadoSolicitudes as $unaSolicitud) {
+                                $data[] = $unaSolicitud;
+                            }
+                            print json_encode($data);
+                            break;
                     endswitch;
                     break;
             }
@@ -41,6 +49,18 @@ class Grafico_solicitudes extends MY_Controller
             try{
                 $this->load->model('Solicitud_model');
                 $listadoSolicitudes = $this->Solicitud_model->obtener_cantidad_por_fecha();
+                return $listadoSolicitudes;
+            }
+            catch(Exception $exception){
+                
+            }
+        }
+        
+        private function obtener_cantidad_por_horario()
+        {
+            try{
+                $this->load->model('Solicitud_model');
+                $listadoSolicitudes = $this->Solicitud_model->obtener_cantidad_por_horario();
                 return $listadoSolicitudes;
             }
             catch(Exception $exception){

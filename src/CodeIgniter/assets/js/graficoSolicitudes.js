@@ -190,7 +190,70 @@ $(document).ready(function(){
 									title: {
 										display: true,
 										fontFamily: 'Montserrat',
-										text: 'Cantidad de Solicitudes por fecha'
+										text: 'Cantidad de Solicitudes por Fecha'
+									}
+								}
+						});
+						break;
+					case 'horario':
+						console.log(datos);
+						var horario = [];
+						var cantidad = [];
+						var maxValue = 0;
+						for(var i in datos) {
+							horario.push(datos[i].rango);
+							cantidad.push(datos[i].cantidad);
+							if (maxValue < parseInt(datos[i].cantidad)) {
+											maxValue = parseInt(datos[i].cantidad);
+							}
+						}
+						maxValue = maxValue + 2;
+						var chartdata = {
+							labels: horario,
+							datasets : [
+								{
+									label: 'Cantidad de solicitudes',
+									backgroundColor: bgColor,
+									borderColor: bdColor,
+									hoverBackgroundColor: hoverBgColor,
+									hoverBorderColor: hoverBdColor,
+									pointBackgroundColor: pointBgColor,
+									pointBorderColor: pointBdColor,
+									data: cantidad
+								}
+							]
+						};
+						
+						$('canvas').replaceWith('<canvas id="graficoHorario" width="400" height="100"></canvas>');
+						
+						var ctx = $("#graficoHorario");
+
+						var barGraph = new Chart(ctx, {
+							type: chartType,
+							data: chartdata,
+							options: {
+									scales: {
+										xAxes: [{
+											ticks: {
+												beginAtZero:true
+											}
+										}],
+										yAxes: [{
+											ticks: {
+												beginAtZero:true,
+												max: maxValue
+											}
+										}]
+									},
+									legend: {
+										labels: {
+											fontFamily: 'Montserrat'
+										}
+									},
+									title: {
+										display: true,
+										fontFamily: 'Montserrat',
+										text: 'Cantidad de Solicitudes por Horario Solicitado'
 									}
 								}
 						});

@@ -276,5 +276,15 @@
             $query = $this->db->get();
             return $query->result_array();
         }
+        
+        public function obtener_cantidad_por_horario()
+        {
+            $sql = 'rango, rango_desde, rango_hasta, cant_por_rango(rango_desde, rango_hasta) as cantidad';
+            $this->db->select($sql);
+            $this->db->from('horario');
+            $this->db->order_by('rango', 'asc');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
     }
 ?>
