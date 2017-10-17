@@ -17,5 +17,11 @@ class Zonas_temporales_model extends CI_Model {
             ]); 
             
         }
+
+        public function get_zona_within_radius($punto)
+        {
+            $query = $this->db->query('SELECT en_zona_temporal('.strval($punto["long"]).','.strval($punto["lat"]).','. strval($punto["rad"]).')');
+            return $query->result();
+        }
 }
 ?>
