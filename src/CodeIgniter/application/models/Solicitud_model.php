@@ -286,5 +286,43 @@
             $query = $this->db->get();
             return $query->result_array();
         }
+        
+        public function obtener_cantidad_por_marca()
+        {
+            $sql = 'vant.marca, count(*) cantidad';
+            $this->db->select($sql);
+            $this->db->from('solicitud sol');
+            $this->db->join('vants_por_solicitud vxs', 'vxs.id_solicitud = sol.id_solicitud');
+            $this->db->join('vant', 'vant.id_vant = vxs.id_vant');
+            $this->db->group_by('vant.marca');
+            $this->db->order_by('vant.marca', 'asc');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+        
+        public function obtener_cantidad_por_modelo()
+        {
+            $sql = "(vant.marca || ' ' || vant.modelo) as modelo, count(*) cantidad";
+            $this->db->select($sql);
+            $this->db->from('solicitud sol');
+            $this->db->join('vants_por_solicitud vxs', 'vxs.id_solicitud = sol.id_solicitud');
+            $this->db->join('vant', 'vant.id_vant = vxs.id_vant');
+            $this->db->group_by('vant.marca, vant.modelo');
+            $this->db->order_by('vant.marca', 'asc');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+        
+        public function obtener_cantidad_por_estado()
+        {
+            $sql = 'es.id_estado_solicitud, es.descripcion, count(*) cantidad';
+            $this->db->select($sql);
+            $this->db->from('solicitud sol');
+            $this->db->join('estado_solicitud es', 'es.id_estado_solicitud = sol.id_estado_solicitud');
+            $this->db->group_by('es.id_estado_solicitud, es.descripcion');
+            $this->db->order_by('es.id_estado_solicitud', 'asc');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
     }
 ?>

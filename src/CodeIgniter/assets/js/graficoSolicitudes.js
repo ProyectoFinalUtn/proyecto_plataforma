@@ -58,7 +58,7 @@ $(document).ready(function(){
 						title: {
 							display: true,
 							fontFamily: 'Montserrat',
-							text: 'Cantidad de Solicitudes por Fecha'
+							text: 'Cantidad de Solicitudes por Fecha Solicitada'
 						}
 					}
 			});
@@ -190,7 +190,7 @@ $(document).ready(function(){
 									title: {
 										display: true,
 										fontFamily: 'Montserrat',
-										text: 'Cantidad de Solicitudes por Fecha'
+										text: 'Cantidad de Solicitudes por Fecha Solicitada'
 									}
 								}
 						});
@@ -254,6 +254,195 @@ $(document).ready(function(){
 										display: true,
 										fontFamily: 'Montserrat',
 										text: 'Cantidad de Solicitudes por Horario Solicitado'
+									}
+								}
+						});
+						break;
+					case 'marca':
+						console.log(datos);
+						var marca = [];
+						var cantidad = [];
+						var maxValue = 0;
+						for(var i in datos) {
+							marca.push(datos[i].marca);
+							cantidad.push(datos[i].cantidad);
+							if (maxValue < parseInt(datos[i].cantidad)) {
+											maxValue = parseInt(datos[i].cantidad);
+							}
+						}
+						maxValue = maxValue + 2;
+						var chartdata = {
+							labels: marca,
+							datasets : [
+								{
+									label: 'Cantidad de solicitudes',
+									backgroundColor: bgColor,
+									borderColor: bdColor,
+									hoverBackgroundColor: hoverBgColor,
+									hoverBorderColor: hoverBdColor,
+									pointBackgroundColor: pointBgColor,
+									pointBorderColor: pointBdColor,
+									data: cantidad
+								}
+							]
+						};
+						
+						$('canvas').replaceWith('<canvas id="graficoMarca" width="400" height="100"></canvas>');
+						
+						var ctx = $("#graficoMarca");
+
+						var barGraph = new Chart(ctx, {
+							type: chartType,
+							data: chartdata,
+							options: {
+									scales: {
+										xAxes: [{
+											ticks: {
+												beginAtZero:true
+											}
+										}],
+										yAxes: [{
+											ticks: {
+												beginAtZero:true,
+												max: maxValue
+											}
+										}]
+									},
+									legend: {
+										labels: {
+											fontFamily: 'Montserrat'
+										}
+									},
+									title: {
+										display: true,
+										fontFamily: 'Montserrat',
+										text: 'Cantidad de Solicitudes por Marca del VANT Solicitante'
+									}
+								}
+						});
+						break;
+					case 'modelo':
+						console.log(datos);
+						var modelo = [];
+						var cantidad = [];
+						var maxValue = 0;
+						for(var i in datos) {
+							modelo.push(datos[i].modelo);
+							cantidad.push(datos[i].cantidad);
+							if (maxValue < parseInt(datos[i].cantidad)) {
+											maxValue = parseInt(datos[i].cantidad);
+							}
+						}
+						maxValue = maxValue + 2;
+						var chartdata = {
+							labels: modelo,
+							datasets : [
+								{
+									label: 'Cantidad de solicitudes',
+									backgroundColor: bgColor,
+									borderColor: bdColor,
+									hoverBackgroundColor: hoverBgColor,
+									hoverBorderColor: hoverBdColor,
+									pointBackgroundColor: pointBgColor,
+									pointBorderColor: pointBdColor,
+									data: cantidad
+								}
+							]
+						};
+						
+						$('canvas').replaceWith('<canvas id="graficoModelo" width="400" height="100"></canvas>');
+						
+						var ctx = $("#graficoModelo");
+
+						var barGraph = new Chart(ctx, {
+							type: chartType,
+							data: chartdata,
+							options: {
+									scales: {
+										xAxes: [{
+											ticks: {
+												beginAtZero:true
+											}
+										}],
+										yAxes: [{
+											ticks: {
+												beginAtZero:true,
+												max: maxValue
+											}
+										}]
+									},
+									legend: {
+										labels: {
+											fontFamily: 'Montserrat'
+										}
+									},
+									title: {
+										display: true,
+										fontFamily: 'Montserrat',
+										text: 'Cantidad de Solicitudes por Modelo del VANT Solicitante'
+									}
+								}
+						});
+						break;
+					case 'estado':
+						console.log(datos);
+						var estado = [];
+						var cantidad = [];
+						var maxValue = 0;
+						for(var i in datos) {
+							estado.push(datos[i].descripcion);
+							cantidad.push(datos[i].cantidad);
+							if (maxValue < parseInt(datos[i].cantidad)) {
+											maxValue = parseInt(datos[i].cantidad);
+							}
+						}
+						maxValue = maxValue + 2;
+						var chartdata = {
+							labels: estado,
+							datasets : [
+								{
+									label: 'Cantidad de solicitudes',
+									backgroundColor: bgColor,
+									borderColor: bdColor,
+									hoverBackgroundColor: hoverBgColor,
+									hoverBorderColor: hoverBdColor,
+									pointBackgroundColor: pointBgColor,
+									pointBorderColor: pointBdColor,
+									data: cantidad
+								}
+							]
+						};
+						
+						$('canvas').replaceWith('<canvas id="graficoEstados" width="400" height="100"></canvas>');
+						
+						var ctx = $("#graficoEstados");
+
+						var barGraph = new Chart(ctx, {
+							type: chartType,
+							data: chartdata,
+							options: {
+									scales: {
+										xAxes: [{
+											ticks: {
+												beginAtZero:true
+											}
+										}],
+										yAxes: [{
+											ticks: {
+												beginAtZero:true,
+												max: maxValue
+											}
+										}]
+									},
+									legend: {
+										labels: {
+											fontFamily: 'Montserrat'
+										}
+									},
+									title: {
+										display: true,
+										fontFamily: 'Montserrat',
+										text: 'Cantidad de Solicitudes por Estados de Solicitud'
 									}
 								}
 						});
