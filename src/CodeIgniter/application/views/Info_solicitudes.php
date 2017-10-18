@@ -82,6 +82,7 @@
                             <select name="ejeX">
                                 <option value="fecha" selected="selected">Fecha solicitada</option>
                                 <option value="horario">Horario solicitado</option>
+                                <option value="momento">Momento del día</option>
                                 <option value="marca">Marca del VANT</option>
                                 <option value="modelo">Modelo del VANT</option>
                                 <option value="estado">Estado de la Solicitud</option>

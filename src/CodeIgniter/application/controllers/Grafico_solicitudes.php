@@ -63,6 +63,14 @@ class Grafico_solicitudes extends MY_Controller
                             }
                             print json_encode($data);
                             break;
+                        case 'momento':
+                            $listadoSolicitudes = $this->obtener_cantidad_por_momento();
+                            $data = array();
+                            foreach ($listadoSolicitudes as $unaSolicitud) {
+                                $data[] = $unaSolicitud;
+                            }
+                            print json_encode($data);
+                            break;
                     endswitch;
                     break;
             }
@@ -121,6 +129,18 @@ class Grafico_solicitudes extends MY_Controller
             try{
                 $this->load->model('Solicitud_model');
                 $listadoSolicitudes = $this->Solicitud_model->obtener_cantidad_por_estado();
+                return $listadoSolicitudes;
+            }
+            catch(Exception $exception){
+                
+            }
+        }
+        
+        private function obtener_cantidad_por_momento()
+        {
+            try{
+                $this->load->model('Solicitud_model');
+                $listadoSolicitudes = $this->Solicitud_model->obtener_cantidad_por_momento();
                 return $listadoSolicitudes;
             }
             catch(Exception $exception){

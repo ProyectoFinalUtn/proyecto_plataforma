@@ -196,7 +196,6 @@ $(document).ready(function(){
 						});
 						break;
 					case 'horario':
-						console.log(datos);
 						var horario = [];
 						var cantidad = [];
 						var maxValue = 0;
@@ -259,7 +258,6 @@ $(document).ready(function(){
 						});
 						break;
 					case 'marca':
-						console.log(datos);
 						var marca = [];
 						var cantidad = [];
 						var maxValue = 0;
@@ -322,7 +320,6 @@ $(document).ready(function(){
 						});
 						break;
 					case 'modelo':
-						console.log(datos);
 						var modelo = [];
 						var cantidad = [];
 						var maxValue = 0;
@@ -385,7 +382,6 @@ $(document).ready(function(){
 						});
 						break;
 					case 'estado':
-						console.log(datos);
 						var estado = [];
 						var cantidad = [];
 						var maxValue = 0;
@@ -443,6 +439,68 @@ $(document).ready(function(){
 										display: true,
 										fontFamily: 'Montserrat',
 										text: 'Cantidad de Solicitudes por Estados de Solicitud'
+									}
+								}
+						});
+						break;
+					case 'momento':
+						var momento = [];
+						var cantidad = [];
+						var maxValue = 0;
+						for(var i in datos) {
+							momento.push(datos[i].descripcion);
+							cantidad.push(datos[i].cantidad);
+							if (maxValue < parseInt(datos[i].cantidad)) {
+											maxValue = parseInt(datos[i].cantidad);
+							}
+						}
+						maxValue = maxValue + 2;
+						var chartdata = {
+							labels: momento,
+							datasets : [
+								{
+									label: 'Cantidad de solicitudes',
+									backgroundColor: bgColor,
+									borderColor: bdColor,
+									hoverBackgroundColor: hoverBgColor,
+									hoverBorderColor: hoverBdColor,
+									pointBackgroundColor: pointBgColor,
+									pointBorderColor: pointBdColor,
+									data: cantidad
+								}
+							]
+						};
+						
+						$('canvas').replaceWith('<canvas id="graficoMomentos" width="400" height="100"></canvas>');
+						
+						var ctx = $("#graficoMomentos");
+
+						var barGraph = new Chart(ctx, {
+							type: chartType,
+							data: chartdata,
+							options: {
+									scales: {
+										xAxes: [{
+											ticks: {
+												beginAtZero:true
+											}
+										}],
+										yAxes: [{
+											ticks: {
+												beginAtZero:true,
+												max: maxValue
+											}
+										}]
+									},
+									legend: {
+										labels: {
+											fontFamily: 'Montserrat'
+										}
+									},
+									title: {
+										display: true,
+										fontFamily: 'Montserrat',
+										text: 'Cantidad de Solicitudes por Momento del Día Solicitado'
 									}
 								}
 						});

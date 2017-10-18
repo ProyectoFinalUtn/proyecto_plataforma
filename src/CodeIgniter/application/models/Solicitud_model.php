@@ -324,5 +324,16 @@
             $query = $this->db->get();
             return $query->result_array();
         }
+        
+        public function obtener_cantidad_por_momento()
+        {
+            $sql = 'momento.descripcion, sum(cant_por_rango(rango_desde, rango_hasta)) as cantidad';
+            $this->db->select($sql);
+            $this->db->from('horario');
+            $this->db->join('momento', 'momento.id_momento = horario.id_momento');
+            $this->db->group_by('momento.descripcion');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
     }
 ?>
