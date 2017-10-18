@@ -937,4 +937,97 @@ $(document).ready(function(){
 			}
 		});
 	});
+	
+	$("button[name='Exportar']").click(function() {
+		var ejeX = $("select[name='ejeX']").val();
+		$.ajax({
+			url: "Grafico_vant",
+			method: "POST",
+			data: { ejeX: ejeX }, 
+			success: function(data) {
+				var datos = JSON.parse(data);
+				var tab_text = '<table>';
+				switch(ejeX) {
+					case 'peso':
+						tab_text = tab_text+'<tr><td>Peso</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].peso+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+					case 'marca':
+						tab_text = tab_text+'<tr><td>Marca</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].marca+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+					case 'modelo':
+						tab_text = tab_text+'<tr><td>Modelo</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].modelo+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+					case 'fabricante':
+						tab_text = tab_text+'<tr><td>Fabricante</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].fabricante+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+					case 'lFab':
+						tab_text = tab_text+'<tr><td>Origen</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].lugar_fabricacion+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+					case 'anioFab':
+						tab_text = tab_text+'<tr><td>Año de Fabricación</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].anio_fabricacion+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+					case 'altMax':
+						tab_text = tab_text+'<tr><td>Altura Máxima</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].alt_max+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+					case 'velMax':
+						tab_text = tab_text+'<tr><td>Velocidad Máxima</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].vel_max+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+					case 'alto':
+						tab_text = tab_text+'<tr><td>Alto</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].alto+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+					case 'ancho':
+						tab_text = tab_text+'<tr><td>Ancho</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].ancho+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+					case 'largo':
+						tab_text = tab_text+'<tr><td>Largo</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].largo+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+					case 'color':
+						tab_text = tab_text+'<tr><td>Color</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].color+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+				}
+				tab_text = tab_text + '</table>';
+				sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+			},
+			error: function(data) {
+				console.log(data);
+			}
+		});
+	});
+	
 });

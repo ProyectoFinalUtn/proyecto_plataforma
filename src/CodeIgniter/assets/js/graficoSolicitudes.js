@@ -588,7 +588,7 @@ $(document).ready(function(){
 						var maxValue = 0;
 						$('table').replaceWith('<table></table>');
 						for(var i in datos) {
-							$('table').append('<tr><td>'+datos[i].estado+'</td><td>'+datos[i].cantidad+'</td></tr>');
+							$('table').append('<tr><td>'+datos[i].descripcion+'</td><td>'+datos[i].cantidad+'</td></tr>');
 							estado.push(datos[i].descripcion);
 							cantidad.push(datos[i].cantidad);
 							if (maxValue < parseInt(datos[i].cantidad)) {
@@ -714,6 +714,137 @@ $(document).ready(function(){
 						break;
 				}
 				
+			},
+			error: function(data) {
+				console.log(data);
+			}
+		});
+	});
+	
+	$("button[name='Exportar']").click(function() {
+		var ejeX = $("select[name='ejeX']").val();
+		$.ajax({
+			url: "Grafico_solicitudes",
+			method: "POST",
+			data: { ejeX: ejeX }, 
+			success: function(data) {
+				var datos = JSON.parse(data);
+				var tab_text = '<table>';
+				switch(ejeX) {
+					case 'fecha':
+						tab_text = tab_text+'<tr><td>Fecha Solicitada</td><td>Cantidad de Solicitudes</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].fecha_vuelo+'</td><td>'+datos[i].cantidad+'</td></tr>';
+						}
+						break;
+					case 'mes':
+						var mes = [];
+						tab_text = tab_text+'<tr><td>Mes del Año</td><td>Cantidad de Solicitudes</td></tr>';
+						for(var i in datos) {
+							switch(datos[i].mes) {
+								case '1':
+									mes.push('Enero');
+									break;
+								case '2':
+									mes.push('Febrero');
+									break;
+								case '3':
+									mes.push('Marzo');
+									break;
+								case '4':
+									mes.push('Abril');
+									break;
+								case '5':
+									mes.push('Mayo');
+									break;
+								case '6':
+									mes.push('Junio');
+									break;
+								case '7':
+									mes.push('Julio');
+									break;
+								case '8':
+									mes.push('Agosto');
+									break;
+								case '9':
+									mes.push('Septiembre');
+									break;
+								case '10':
+									mes.push('Octubre');
+									break;
+								case '11':
+									mes.push('Noviembre');
+									break;
+								case '12':
+									mes.push('Diciembre');
+									break;
+							}
+							tab_text = tab_text+'<tr><td>'+mes[i]+'</td><td>'+datos[i].cantidad+'</td></tr>';
+						}
+						break;
+					case 'dia':
+						var dia = [];
+						tab_text = tab_text+'<tr><td>Día de la Semana</td><td>Cantidad de Solicitudes</td></tr>';
+						for(var i in datos) {
+							switch(datos[i].dia) {
+								case '0':
+									dia.push('Domingo');
+									break;
+								case '1':
+									dia.push('Lunes');
+									break;
+								case '2':
+									dia.push('Martes');
+									break;
+								case '3':
+									dia.push('Miércoles');
+									break;
+								case '4':
+									dia.push('Jueves');
+									break;
+								case '5':
+									dia.push('Viernes');
+									break;
+								case '6':
+									dia.push('Sábado');
+									break;
+							}
+							tab_text = tab_text+'<tr><td>'+dia[i]+'</td><td>'+datos[i].cantidad+'</td></tr>';
+						}
+						break;
+					case 'horario':
+						tab_text = tab_text+'<tr><td>Horario Solicitado</td><td>Cantidad de Solicitudes</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].rango+'</td><td>'+datos[i].cantidad+'</td></tr>';
+						}
+						break;
+					case 'marca':
+						tab_text = tab_text+'<tr><td>Marca del VANT</td><td>Cantidad de Solicitudes</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].marca+'</td><td>'+datos[i].cantidad+'</td></tr>';
+						}
+						break;
+					case 'modelo':
+						tab_text = tab_text+'<tr><td>Modelo del VANT</td><td>Cantidad de Solicitudes</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].modelo+'</td><td>'+datos[i].cantidad+'</td></tr>';
+						}
+						break;
+					case 'estado':
+						tab_text = tab_text+'<tr><td>Estado de la Solicitud</td><td>Cantidad de Solicitudes</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].descripcion+'</td><td>'+datos[i].cantidad+'</td></tr>';
+						}
+						break;
+					case 'momento':
+						tab_text = tab_text+'<tr><td>Momento del Día</td><td>Cantidad de Solicitudes</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].descripcion+'</td><td>'+datos[i].cantidad+'</td></tr>';
+						}
+						break;
+				}
+				tab_text = tab_text + '</table>';
+				sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
 			},
 			error: function(data) {
 				console.log(data);

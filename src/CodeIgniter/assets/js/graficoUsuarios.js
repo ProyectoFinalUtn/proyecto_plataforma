@@ -398,4 +398,49 @@ $(document).ready(function(){
 			}
 		});
 	});
+	
+	$("button[name='Exportar']").click(function() {
+		var ejeX = $("select[name='ejeX']").val();
+		$.ajax({
+			url: "Grafico_usuarios",
+			method: "POST",
+			data: { ejeX: ejeX }, 
+			success: function(data) {
+				var datos = JSON.parse(data);
+				var tab_text = '<table>';
+				switch(ejeX) {
+					case 'edad':
+						tab_text = tab_text+'<tr><td>Edad</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].edad+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+					case 'sexo':
+						tab_text = tab_text+'<tr><td>Sexo</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].sexo+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+					case 'localidad':
+						tab_text = tab_text+'<tr><td>Localidad</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].localidad+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+					case 'provincia':
+						tab_text = tab_text+'<tr><td>Provincia</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].provincia+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+				}
+				tab_text = tab_text + '</table>';
+				sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+			},
+			error: function(data) {
+				console.log(data);
+			}
+		});
+	});
+	
 });
