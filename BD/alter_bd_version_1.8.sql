@@ -25,7 +25,7 @@ CREATE OR REPLACE FUNCTION public.en_zona_temporal(
 
     COST 100
     VOLATILE 
-    ROWS 0
+    
 AS $BODY$
 
 DECLARE
