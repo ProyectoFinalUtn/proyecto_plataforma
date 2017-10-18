@@ -71,6 +71,22 @@ class Grafico_solicitudes extends MY_Controller
                             }
                             print json_encode($data);
                             break;
+                        case 'mes':
+                            $listadoSolicitudes = $this->obtener_cantidad_por_mes();
+                            $data = array();
+                            foreach ($listadoSolicitudes as $unaSolicitud) {
+                                $data[] = $unaSolicitud;
+                            }
+                            print json_encode($data);
+                            break;
+                        case 'dia':
+                            $listadoSolicitudes = $this->obtener_cantidad_por_dia();
+                            $data = array();
+                            foreach ($listadoSolicitudes as $unaSolicitud) {
+                                $data[] = $unaSolicitud;
+                            }
+                            print json_encode($data);
+                            break;
                     endswitch;
                     break;
             }
@@ -141,6 +157,30 @@ class Grafico_solicitudes extends MY_Controller
             try{
                 $this->load->model('Solicitud_model');
                 $listadoSolicitudes = $this->Solicitud_model->obtener_cantidad_por_momento();
+                return $listadoSolicitudes;
+            }
+            catch(Exception $exception){
+                
+            }
+        }
+        
+        private function obtener_cantidad_por_mes()
+        {
+            try{
+                $this->load->model('Solicitud_model');
+                $listadoSolicitudes = $this->Solicitud_model->obtener_cantidad_por_mes();
+                return $listadoSolicitudes;
+            }
+            catch(Exception $exception){
+                
+            }
+        }
+        
+        private function obtener_cantidad_por_dia()
+        {
+            try{
+                $this->load->model('Solicitud_model');
+                $listadoSolicitudes = $this->Solicitud_model->obtener_cantidad_por_dia();
                 return $listadoSolicitudes;
             }
             catch(Exception $exception){

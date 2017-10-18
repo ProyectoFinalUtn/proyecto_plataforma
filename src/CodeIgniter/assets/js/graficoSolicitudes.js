@@ -135,13 +135,16 @@ $(document).ready(function(){
 						var fecha = [];
 						var cantidad = [];
 						var maxValue = 0;
+						$('table').replaceWith('<table></table>');
 						for(var i in datos) {
+							$('table').append('<tr><td>'+datos[i].fecha_vuelo+'</td><td>'+datos[i].cantidad+'</td></tr>');
 							fecha.push(datos[i].fecha_vuelo);
 							cantidad.push(datos[i].cantidad);
 							if (maxValue < parseInt(datos[i].cantidad)) {
 											maxValue = parseInt(datos[i].cantidad);
 							}
 						}
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Fecha Solicitada</th><th>Cantidad de Solicitudes</th></tr></thead>');
 						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: fecha,
@@ -195,17 +198,209 @@ $(document).ready(function(){
 								}
 						});
 						break;
+					case 'mes':
+						var mes = [];
+						var cantidad = [];
+						var maxValue = 0;
+						$('table').replaceWith('<table></table>');
+						for(var i in datos) {
+							switch(datos[i].mes) {
+								case '1':
+									mes.push('Enero');
+									break;
+								case '2':
+									mes.push('Febrero');
+									break;
+								case '3':
+									mes.push('Marzo');
+									break;
+								case '4':
+									mes.push('Abril');
+									break;
+								case '5':
+									mes.push('Mayo');
+									break;
+								case '6':
+									mes.push('Junio');
+									break;
+								case '7':
+									mes.push('Julio');
+									break;
+								case '8':
+									mes.push('Agosto');
+									break;
+								case '9':
+									mes.push('Septiembre');
+									break;
+								case '10':
+									mes.push('Octubre');
+									break;
+								case '11':
+									mes.push('Noviembre');
+									break;
+								case '12':
+									mes.push('Diciembre');
+									break;
+							}
+							$('table').append('<tr><td>'+mes[i]+'</td><td>'+datos[i].cantidad+'</td></tr>');
+							cantidad.push(datos[i].cantidad);
+							if (maxValue < parseInt(datos[i].cantidad)) {
+											maxValue = parseInt(datos[i].cantidad);
+							}
+						}
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Mes del Año</th><th>Cantidad de Solicitudes</th></tr></thead>');
+						maxValue = maxValue + 2;
+						var chartdata = {
+							labels: mes,
+							datasets : [
+								{
+									label: 'Cantidad de solicitudes',
+									backgroundColor: bgColor,
+									borderColor: bdColor,
+									hoverBackgroundColor: hoverBgColor,
+									hoverBorderColor: hoverBdColor,
+									pointBackgroundColor: pointBgColor,
+									pointBorderColor: pointBdColor,
+									data: cantidad
+								}
+							]
+						};
+						
+						$('canvas').replaceWith('<canvas id="graficoMes" width="400" height="100"></canvas>');
+						
+						var ctx = $("#graficoMes");
+
+						var barGraph = new Chart(ctx, {
+							type: chartType,
+							data: chartdata,
+							options: {
+									scales: {
+										xAxes: [{
+											ticks: {
+												beginAtZero:true
+											}
+										}],
+										yAxes: [{
+											ticks: {
+												beginAtZero:true,
+												max: maxValue
+											}
+										}]
+									},
+									legend: {
+										labels: {
+											fontFamily: 'Montserrat'
+										}
+									},
+									title: {
+										display: true,
+										fontFamily: 'Montserrat',
+										text: 'Cantidad de Solicitudes por Mes del Año'
+									}
+								}
+						});
+						break;
+					case 'dia':
+						var dia = [];
+						var cantidad = [];
+						var maxValue = 0;
+						$('table').replaceWith('<table></table>');
+						for(var i in datos) {
+							switch(datos[i].dia) {
+								case '0':
+									dia.push('Domingo');
+									break;
+								case '1':
+									dia.push('Lunes');
+									break;
+								case '2':
+									dia.push('Martes');
+									break;
+								case '3':
+									dia.push('Miércoles');
+									break;
+								case '4':
+									dia.push('Jueves');
+									break;
+								case '5':
+									dia.push('Viernes');
+									break;
+								case '6':
+									dia.push('Sábado');
+									break;
+							}
+							cantidad.push(datos[i].cantidad);
+							$('table').append('<tr><td>'+dia[i]+'</td><td>'+datos[i].cantidad+'</td></tr>');
+							if (maxValue < parseInt(datos[i].cantidad)) {
+											maxValue = parseInt(datos[i].cantidad);
+							}
+						}
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Día de la Semana</th><th>Cantidad de Solicitudes</th></tr></thead>');
+						maxValue = maxValue + 2;
+						var chartdata = {
+							labels: dia,
+							datasets : [
+								{
+									label: 'Cantidad de solicitudes',
+									backgroundColor: bgColor,
+									borderColor: bdColor,
+									hoverBackgroundColor: hoverBgColor,
+									hoverBorderColor: hoverBdColor,
+									pointBackgroundColor: pointBgColor,
+									pointBorderColor: pointBdColor,
+									data: cantidad
+								}
+							]
+						};
+						
+						$('canvas').replaceWith('<canvas id="graficoDia" width="400" height="100"></canvas>');
+						
+						var ctx = $("#graficoDia");
+
+						var barGraph = new Chart(ctx, {
+							type: chartType,
+							data: chartdata,
+							options: {
+									scales: {
+										xAxes: [{
+											ticks: {
+												beginAtZero:true
+											}
+										}],
+										yAxes: [{
+											ticks: {
+												beginAtZero:true,
+												max: maxValue
+											}
+										}]
+									},
+									legend: {
+										labels: {
+											fontFamily: 'Montserrat'
+										}
+									},
+									title: {
+										display: true,
+										fontFamily: 'Montserrat',
+										text: 'Cantidad de Solicitudes por Día de la Semana'
+									}
+								}
+						});
+						break;
 					case 'horario':
 						var horario = [];
 						var cantidad = [];
 						var maxValue = 0;
+						$('table').replaceWith('<table></table>');
 						for(var i in datos) {
+							$('table').append('<tr><td>'+datos[i].rango+'</td><td>'+datos[i].cantidad+'</td></tr>');
 							horario.push(datos[i].rango);
 							cantidad.push(datos[i].cantidad);
 							if (maxValue < parseInt(datos[i].cantidad)) {
 											maxValue = parseInt(datos[i].cantidad);
 							}
 						}
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Horario</th><th>Cantidad de Solicitudes</th></tr></thead>');
 						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: horario,
@@ -261,13 +456,16 @@ $(document).ready(function(){
 						var marca = [];
 						var cantidad = [];
 						var maxValue = 0;
+						$('table').replaceWith('<table></table>');
 						for(var i in datos) {
+							$('table').append('<tr><td>'+datos[i].marca+'</td><td>'+datos[i].cantidad+'</td></tr>');
 							marca.push(datos[i].marca);
 							cantidad.push(datos[i].cantidad);
 							if (maxValue < parseInt(datos[i].cantidad)) {
 											maxValue = parseInt(datos[i].cantidad);
 							}
 						}
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Marca del VANT</th><th>Cantidad de Solicitudes</th></tr></thead>');
 						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: marca,
@@ -323,13 +521,16 @@ $(document).ready(function(){
 						var modelo = [];
 						var cantidad = [];
 						var maxValue = 0;
+						$('table').replaceWith('<table></table>');
 						for(var i in datos) {
+							$('table').append('<tr><td>'+datos[i].modelo+'</td><td>'+datos[i].cantidad+'</td></tr>');
 							modelo.push(datos[i].modelo);
 							cantidad.push(datos[i].cantidad);
 							if (maxValue < parseInt(datos[i].cantidad)) {
 											maxValue = parseInt(datos[i].cantidad);
 							}
 						}
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Modelo del VANT</th><th>Cantidad de Solicitudes</th></tr></thead>');
 						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: modelo,
@@ -385,13 +586,16 @@ $(document).ready(function(){
 						var estado = [];
 						var cantidad = [];
 						var maxValue = 0;
+						$('table').replaceWith('<table></table>');
 						for(var i in datos) {
+							$('table').append('<tr><td>'+datos[i].estado+'</td><td>'+datos[i].cantidad+'</td></tr>');
 							estado.push(datos[i].descripcion);
 							cantidad.push(datos[i].cantidad);
 							if (maxValue < parseInt(datos[i].cantidad)) {
 											maxValue = parseInt(datos[i].cantidad);
 							}
 						}
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Estado de la Solicitud</th><th>Cantidad de Solicitudes</th></tr></thead>');
 						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: estado,
@@ -447,13 +651,16 @@ $(document).ready(function(){
 						var momento = [];
 						var cantidad = [];
 						var maxValue = 0;
+						$('table').replaceWith('<table></table>');
 						for(var i in datos) {
+							$('table').append('<tr><td>'+datos[i].descripcion+'</td><td>'+datos[i].cantidad+'</td></tr>');
 							momento.push(datos[i].descripcion);
 							cantidad.push(datos[i].cantidad);
 							if (maxValue < parseInt(datos[i].cantidad)) {
 											maxValue = parseInt(datos[i].cantidad);
 							}
 						}
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Momento del Día</th><th>Cantidad de Solicitudes</th></tr></thead>');
 						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: momento,

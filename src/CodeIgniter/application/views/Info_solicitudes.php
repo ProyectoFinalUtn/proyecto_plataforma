@@ -38,7 +38,6 @@
                               <th>Horario solicitado</th>
                               <th>Usuario Controlador</th>
                               <th>Estado</th>
-                              <th></th>
                             </tr>
                         </thead>
                         <?php
@@ -81,6 +80,8 @@
                             <br>
                             <select name="ejeX">
                                 <option value="fecha" selected="selected">Fecha solicitada</option>
+                                <option value="mes">Mes del año</option>
+                                <option value="dia">Día de la semana</option>
                                 <option value="horario">Horario solicitado</option>
                                 <option value="momento">Momento del día</option>
                                 <option value="marca">Marca del VANT</option>
