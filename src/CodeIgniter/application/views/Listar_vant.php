@@ -121,7 +121,7 @@
                             </select>
                         </p>
                         <p><button type="button" class="btn btn-secondary" name="Calcular">Calcular</button></p>
-                        <p>Presione para exportar el cálculo de reporte a Excel</p>
+                        <p><i>Presione para exportar el cálculo de reporte a Excel</i></p>
                         <p><button type="button" class="btn btn-secondary" name="Exportar">Exportar reporte</button></p>
                     </div>
                     <div class="col-md-4 p-4" style="text-align: center;">
