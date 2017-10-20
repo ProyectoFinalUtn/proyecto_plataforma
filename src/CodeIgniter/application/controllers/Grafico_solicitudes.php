@@ -14,7 +14,7 @@ class Grafico_solicitudes extends MY_Controller
             $method = $_SERVER['REQUEST_METHOD'];
             switch ($method) {
                 case 'GET':
-                    $listadoSolicitudes = $this->obtener_cantidad_por_fecha();
+                    $listadoSolicitudes = $this->obtener_cantidad_por_zona_interes();
                     $data = array();
                     foreach ($listadoSolicitudes as $unaSolicitud) {
                         $data[] = $unaSolicitud;
@@ -81,6 +81,30 @@ class Grafico_solicitudes extends MY_Controller
                             break;
                         case 'dia':
                             $listadoSolicitudes = $this->obtener_cantidad_por_dia();
+                            $data = array();
+                            foreach ($listadoSolicitudes as $unaSolicitud) {
+                                $data[] = $unaSolicitud;
+                            }
+                            print json_encode($data);
+                            break;
+                        case 'provincia':
+                            $listadoSolicitudes = $this->obtener_cantidad_por_provincia();
+                            $data = array();
+                            foreach ($listadoSolicitudes as $unaSolicitud) {
+                                $data[] = $unaSolicitud;
+                            }
+                            print json_encode($data);
+                            break;
+                        case 'localidad':
+                            $listadoSolicitudes = $this->obtener_cantidad_por_localidad();
+                            $data = array();
+                            foreach ($listadoSolicitudes as $unaSolicitud) {
+                                $data[] = $unaSolicitud;
+                            }
+                            print json_encode($data);
+                            break;
+                        case 'zona_interes':
+                            $listadoSolicitudes = $this->obtener_cantidad_por_zona_interes();
                             $data = array();
                             foreach ($listadoSolicitudes as $unaSolicitud) {
                                 $data[] = $unaSolicitud;
@@ -181,6 +205,42 @@ class Grafico_solicitudes extends MY_Controller
             try{
                 $this->load->model('Solicitud_model');
                 $listadoSolicitudes = $this->Solicitud_model->obtener_cantidad_por_dia();
+                return $listadoSolicitudes;
+            }
+            catch(Exception $exception){
+                
+            }
+        }
+        
+        private function obtener_cantidad_por_provincia()
+        {
+            try{
+                $this->load->model('Solicitud_model');
+                $listadoSolicitudes = $this->Solicitud_model->obtener_cantidad_por_provincia();
+                return $listadoSolicitudes;
+            }
+            catch(Exception $exception){
+                
+            }
+        }
+        
+        private function obtener_cantidad_por_localidad()
+        {
+            try{
+                $this->load->model('Solicitud_model');
+                $listadoSolicitudes = $this->Solicitud_model->obtener_cantidad_por_localidad();
+                return $listadoSolicitudes;
+            }
+            catch(Exception $exception){
+                
+            }
+        }
+        
+        private function obtener_cantidad_por_zona_interes()
+        {
+            try{
+                $this->load->model('Solicitud_model');
+                $listadoSolicitudes = $this->Solicitud_model->obtener_cantidad_por_zona_interes();
                 return $listadoSolicitudes;
             }
             catch(Exception $exception){

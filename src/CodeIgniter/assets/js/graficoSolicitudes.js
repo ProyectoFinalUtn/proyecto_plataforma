@@ -4,11 +4,11 @@ $(document).ready(function(){
 		method: "GET",
 		success: function(data) {
 			var datos = JSON.parse(data);
-			var fecha = [];
+			var zona_interes = [];
 			var cantidad = [];
 			var maxValue = 0;
 			for(var i in datos) {
-				fecha.push(datos[i].fecha_vuelo);
+				zona_interes.push(datos[i].zona_interes);
 				cantidad.push(datos[i].cantidad);
 				if (maxValue < parseInt(datos[i].cantidad)) {
 								maxValue = parseInt(datos[i].cantidad);
@@ -16,7 +16,7 @@ $(document).ready(function(){
 			}
 			maxValue = maxValue + 2;
 			var chartdata = {
-				labels: fecha,
+				labels: zona_interes,
 				datasets : [
 					{
 						label: 'Cantidad de solicitudes',
@@ -29,7 +29,7 @@ $(document).ready(function(){
 				]
 			};
 
-			var ctx = $("#graficoFecha");
+			var ctx = $("#graficoZonainteres");
 
 			var barGraph = new Chart(ctx, {
 				type: 'line',
@@ -37,11 +37,9 @@ $(document).ready(function(){
 				options: {
 						scales: {
 							xAxes: [{
-									ticks: {
-										callback: function(value) { 
-											return new Date(value).toLocaleDateString('es-AR'); 
-										},
-									}
+								ticks: {
+									beginAtZero:true
+								}
 							}],
 							yAxes: [{
 								ticks: {
@@ -58,7 +56,7 @@ $(document).ready(function(){
 						title: {
 							display: true,
 							fontFamily: 'Montserrat',
-							text: 'Cantidad de Solicitudes por Fecha Solicitada'
+							text: 'Cantidad de Solicitudes por Zona de Interés'
 						}
 					}
 			});
@@ -712,6 +710,201 @@ $(document).ready(function(){
 								}
 						});
 						break;
+					case 'provincia':
+						var provincia = [];
+						var cantidad = [];
+						var maxValue = 0;
+						$('table').replaceWith('<table></table>');
+						for(var i in datos) {
+							$('table').append('<tr><td>'+datos[i].provincia+'</td><td>'+datos[i].cantidad+'</td></tr>');
+							provincia.push(datos[i].provincia);
+							cantidad.push(datos[i].cantidad);
+							if (maxValue < parseInt(datos[i].cantidad)) {
+											maxValue = parseInt(datos[i].cantidad);
+							}
+						}
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Provincia de la Ubicación Solicitada</th><th>Cantidad de Solicitudes</th></tr></thead>');
+						maxValue = maxValue + 2;
+						var chartdata = {
+							labels: provincia,
+							datasets : [
+								{
+									label: 'Cantidad de solicitudes',
+									backgroundColor: bgColor,
+									borderColor: bdColor,
+									hoverBackgroundColor: hoverBgColor,
+									hoverBorderColor: hoverBdColor,
+									pointBackgroundColor: pointBgColor,
+									pointBorderColor: pointBdColor,
+									data: cantidad
+								}
+							]
+						};
+						
+						$('canvas').replaceWith('<canvas id="graficoProvincia" width="400" height="100"></canvas>');
+						
+						var ctx = $("#graficoProvincia");
+
+						var barGraph = new Chart(ctx, {
+							type: chartType,
+							data: chartdata,
+							options: {
+									scales: {
+										xAxes: [{
+											ticks: {
+												beginAtZero:true
+											}
+										}],
+										yAxes: [{
+											ticks: {
+												beginAtZero:true,
+												max: maxValue
+											}
+										}]
+									},
+									legend: {
+										labels: {
+											fontFamily: 'Montserrat'
+										}
+									},
+									title: {
+										display: true,
+										fontFamily: 'Montserrat',
+										text: 'Cantidad de Solicitudes por Provincia de la Ubicación Solicitada'
+									}
+								}
+						});
+						break;
+					case 'localidad':
+						var localidad = [];
+						var cantidad = [];
+						var maxValue = 0;
+						$('table').replaceWith('<table></table>');
+						for(var i in datos) {
+							$('table').append('<tr><td>'+datos[i].localidad+'</td><td>'+datos[i].cantidad+'</td></tr>');
+							localidad.push(datos[i].localidad);
+							cantidad.push(datos[i].cantidad);
+							if (maxValue < parseInt(datos[i].cantidad)) {
+											maxValue = parseInt(datos[i].cantidad);
+							}
+						}
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Localidad de la Ubicación Solicitada</th><th>Cantidad de Solicitudes</th></tr></thead>');
+						maxValue = maxValue + 2;
+						var chartdata = {
+							labels: localidad,
+							datasets : [
+								{
+									label: 'Cantidad de solicitudes',
+									backgroundColor: bgColor,
+									borderColor: bdColor,
+									hoverBackgroundColor: hoverBgColor,
+									hoverBorderColor: hoverBdColor,
+									pointBackgroundColor: pointBgColor,
+									pointBorderColor: pointBdColor,
+									data: cantidad
+								}
+							]
+						};
+						
+						$('canvas').replaceWith('<canvas id="graficoLocalidad" width="400" height="100"></canvas>');
+						
+						var ctx = $("#graficoLocalidad");
+
+						var barGraph = new Chart(ctx, {
+							type: chartType,
+							data: chartdata,
+							options: {
+									scales: {
+										xAxes: [{
+											ticks: {
+												beginAtZero:true
+											}
+										}],
+										yAxes: [{
+											ticks: {
+												beginAtZero:true,
+												max: maxValue
+											}
+										}]
+									},
+									legend: {
+										labels: {
+											fontFamily: 'Montserrat'
+										}
+									},
+									title: {
+										display: true,
+										fontFamily: 'Montserrat',
+										text: 'Cantidad de Solicitudes por Localidad de la Ubicación Solicitada'
+									}
+								}
+						});
+						break;
+					case 'zona_interes':
+						var zona_interes = [];
+						var cantidad = [];
+						var maxValue = 0;
+						$('table').replaceWith('<table></table>');
+						for(var i in datos) {
+							$('table').append('<tr><td>'+datos[i].zona_interes+'</td><td>'+datos[i].cantidad+'</td></tr>');
+							zona_interes.push(datos[i].zona_interes);
+							cantidad.push(datos[i].cantidad);
+							if (maxValue < parseInt(datos[i].cantidad)) {
+											maxValue = parseInt(datos[i].cantidad);
+							}
+						}
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Zona de Interés de la Ubicación Solicitada</th><th>Cantidad de Solicitudes</th></tr></thead>');
+						maxValue = maxValue + 2;
+						var chartdata = {
+							labels: zona_interes,
+							datasets : [
+								{
+									label: 'Cantidad de solicitudes',
+									backgroundColor: bgColor,
+									borderColor: bdColor,
+									hoverBackgroundColor: hoverBgColor,
+									hoverBorderColor: hoverBdColor,
+									pointBackgroundColor: pointBgColor,
+									pointBorderColor: pointBdColor,
+									data: cantidad
+								}
+							]
+						};
+						
+						$('canvas').replaceWith('<canvas id="graficoZonainteres" width="400" height="100"></canvas>');
+						
+						var ctx = $("#graficoZonainteres");
+
+						var barGraph = new Chart(ctx, {
+							type: chartType,
+							data: chartdata,
+							options: {
+									scales: {
+										xAxes: [{
+											ticks: {
+												beginAtZero:true
+											}
+										}],
+										yAxes: [{
+											ticks: {
+												beginAtZero:true,
+												max: maxValue
+											}
+										}]
+									},
+									legend: {
+										labels: {
+											fontFamily: 'Montserrat'
+										}
+									},
+									title: {
+										display: true,
+										fontFamily: 'Montserrat',
+										text: 'Cantidad de Solicitudes por Zona de Interés de la Ubicación Solicitada'
+									}
+								}
+						});
+						break;
 				}
 				
 			},
@@ -840,6 +1033,24 @@ $(document).ready(function(){
 						tab_text = tab_text+'<tr><td>Momento del Día</td><td>Cantidad de Solicitudes</td></tr>';
 						for(var i in datos) {
 							tab_text = tab_text+'<tr><td>'+datos[i].descripcion+'</td><td>'+datos[i].cantidad+'</td></tr>';
+						}
+						break;
+					case 'provincia':
+						tab_text = tab_text+'<tr><td>Provincia de la Ubicacion Solicitada</td><td>Cantidad de Solicitudes</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].provincia+'</td><td>'+datos[i].cantidad+'</td></tr>';
+						}
+						break;
+					case 'localidad':
+						tab_text = tab_text+'<tr><td>Localidad de la Ubicacion Solicitada</td><td>Cantidad de Solicitudes</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].localidad+'</td><td>'+datos[i].cantidad+'</td></tr>';
+						}
+						break;
+					case 'zona_interes':
+						tab_text = tab_text+'<tr><td>Zona de Interes de la Ubicacion Solicitada</td><td>Cantidad de Solicitudes</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].zona_interes+'</td><td>'+datos[i].cantidad+'</td></tr>';
 						}
 						break;
 				}

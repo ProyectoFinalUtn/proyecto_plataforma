@@ -357,5 +357,39 @@
             $query = $this->db->get();
             return $query->result_array();
         }
+        
+        public function obtener_cantidad_por_provincia()
+        {
+            $sql = 'provincia, count(*) cantidad';
+            $this->db->select($sql);
+            $this->db->from('solicitud');
+            $this->db->group_by('provincia');
+            $this->db->order_by('1', 'asc');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+        
+        public function obtener_cantidad_por_localidad()
+        {
+            $sql = 'localidad, count(*) cantidad';
+            $this->db->select($sql);
+            $this->db->from('solicitud');
+            $this->db->group_by('localidad');
+            $this->db->order_by('1', 'asc');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+        
+        public function obtener_cantidad_por_zona_interes()
+        {
+            $sql = 'zona_interes, count(*) cantidad';
+            $this->db->select($sql);
+            $this->db->from('solicitud');
+            $this->db->where('zona_interes is not null');
+            $this->db->group_by('zona_interes');
+            $this->db->order_by('1', 'asc');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
     }
 ?>

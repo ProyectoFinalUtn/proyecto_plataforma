@@ -65,7 +65,7 @@
                 </div>
                 <p></p>
                 <div id="chart-container">
-                    <canvas id="graficoFecha" width="400" height="100"></canvas>
+                    <canvas id="graficoZonainteres" width="400" height="100"></canvas>
                     <script src="<?php echo base_url(); ?>assets/js/graficoSolicitudes.js"></script>
                 </div>
                 <div class="row" id="graficos">
@@ -87,6 +87,9 @@
                                 <option value="marca">Marca del VANT</option>
                                 <option value="modelo">Modelo del VANT</option>
                                 <option value="estado">Estado de la Solicitud</option>
+                                <option value="provincia">Provincia de la Ubicación Solicitada</option>
+                                <option value="localidad">Localidad de la Ubicación Solicitada</option>
+                                <option value="zona_interes">Zona de Interés de la Ubicación Solicitada</option>
                             </select>
                         </p>
                         <p>
