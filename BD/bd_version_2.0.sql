@@ -2834,8 +2834,11 @@ CREATE TABLE public.solicitud
     longitud text COLLATE pg_catalog."default" NOT NULL,
     radio_vuelo text COLLATE pg_catalog."default" NOT NULL,
     fecha_vuelo date NOT NULL,
-	hora_vuelo_desde time without time zone NOT NULL,
-	hora_vuelo_hasta time without time zone NOT NULL,
+    hora_vuelo_desde time without time zone NOT NULL,
+    hora_vuelo_hasta time without time zone NOT NULL,
+    provincia text COLLATE pg_catalog."default",
+    localidad text COLLATE pg_catalog."default",
+    zona_interes text COLLATE pg_catalog."default",
     CONSTRAINT solicitud_pkey PRIMARY KEY (id_solicitud),
     CONSTRAINT id_estado_solicitud_solicitud FOREIGN KEY (id_estado_solicitud)
         REFERENCES public.estado_solicitud (id_estado_solicitud) MATCH SIMPLE
@@ -3048,12 +3051,19 @@ CREATE SEQUENCE public.vuelo_id_vuelo_seq
 ALTER SEQUENCE public.vuelo_id_vuelo_seq
     OWNER TO admin;
 	
+-- Table: public.vuelo
+
+-- DROP TABLE public.vuelo;
+
 CREATE TABLE public.vuelo
 (
     id_vuelo bigint NOT NULL DEFAULT nextval('vuelo_id_vuelo_seq'::regclass),
     id_usuario_vant bigint NOT NULL,
-    latitud text NOT NULL,
-    longitud text NOT NULL,
+    latitud text COLLATE pg_catalog."default" NOT NULL,
+    longitud text COLLATE pg_catalog."default" NOT NULL,
+    provincia text COLLATE pg_catalog."default",
+    localidad text COLLATE pg_catalog."default",
+    zona_interes text COLLATE pg_catalog."default",
     CONSTRAINT vuelo_pkey PRIMARY KEY (id_vuelo),
     CONSTRAINT usuariovant_fkey FOREIGN KEY (id_usuario_vant)
         REFERENCES public.usuario_vant (id_usuario) MATCH SIMPLE
@@ -3062,7 +3072,8 @@ CREATE TABLE public.vuelo
 )
 WITH (
     OIDS = FALSE
-);
+)
+TABLESPACE pg_default;
 
 ALTER TABLE public.vuelo
     OWNER to admin;
