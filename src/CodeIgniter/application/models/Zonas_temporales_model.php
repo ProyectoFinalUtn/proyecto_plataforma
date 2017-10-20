@@ -20,8 +20,22 @@ class Zonas_temporales_model extends CI_Model {
 
         public function get_zona_within_radius($punto)
         {
-            $query = $this->db->query('SELECT en_zona_temporal('.strval($punto["long"]).','.strval($punto["lat"]).','. strval($punto["rad"]).')');
-            return $query->result();
+           $columnas = 'id, nombre';
+            $this->db->select($columnas);
+            $this->db->from('zona_temporal');
+            $where = '( ST_DWithin( 
+                       ( ST_SetSRID(( ST_GeomFromGeoJSON (geometria::Text)),3857)),                  
+                       ( ST_SetSRID(ST_MakePoint('.strval($punto["long"]).','.strval($punto["lat"]).'),3857)),'.strval($punto["rad"]).'))';
+            $this->db->where($where);
+            $query = $this->db->get()->row();
+            return $query;  
+            // Produces: SELECT title, content, date FROM mytable   
+
+           
+  
+              
+
+
         }
 }
 ?>

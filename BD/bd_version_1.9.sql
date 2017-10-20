@@ -63,12 +63,17 @@ TABLESPACE pg_default;
 ALTER TABLE public.menus
     OWNER to admin;
 
+-- Table: public.zona_temporal
+
+-- DROP TABLE public.zona_temporal;
+
 CREATE TABLE public.zona_temporal
 (
     id bigint NOT NULL,
-    nombre "char" NOT NULL,
-    detalle "char",
-    geoJson "json" NOT NULL,
+    nombre text COLLATE pg_catalog."default" NOT NULL,
+    detalle text COLLATE pg_catalog."default",
+    geometria json,
+    propiedades json,
     CONSTRAINT zonas_temporales_pkey PRIMARY KEY (id)
 )
 WITH (
@@ -77,7 +82,7 @@ WITH (
 TABLESPACE pg_default;
 
 ALTER TABLE public.zona_temporal
-    OWNER to admin;
+    OWNER to postgres;
 
 GRANT ALL ON TABLE public.zona_temporal TO admin WITH GRANT OPTION;
 
@@ -2897,65 +2902,6 @@ INSERT INTO menus (id, parent, name, icono, slug, orden) VALUES
 (7, 2, 'Información', '', 'informacion', 2),
 (8, 3, 'Listar Solicitudes', '', 'listar_solicitudes', 2);
 
-
-
--------------------------------------------
---------TIPOS, FUNCIONES,SP, ETC.----------
--------------------------------------------
-
-
--- Type: zona_temporal_type
-
--- DROP TYPE public.zona_temporal_type;
-
-CREATE TYPE public.zona_temporal_type AS
-(
-  id bigint,
-  nombre character varying(32)
-);
-
-ALTER TYPE public.zona_temporal_type
-    OWNER TO admin;
-
-
--- FUNCTION: public.en_zona_temporal(numeric, numeric, numeric)
-
--- DROP FUNCTION public.en_zona_temporal(numeric, numeric, numeric);
-
-CREATE OR REPLACE FUNCTION public.en_zona_temporal(
-    coordx numeric,
-    coordy numeric,
-    radio numeric)
-    RETURNS zona_temporal_type
-    LANGUAGE 'plpgsql'
-
-    COST 100
-    VOLATILE 
-    ROWS 0
-AS $BODY$
-
-DECLARE
-  resultado zona_temporal_type;
-
-BEGIN
-  SELECT id, nombre
-  INTO resultado.id, resultado.nombre
-  FROM zona_temporal
-  WHERE 
-    (SELECT ST_DWithin( 
-        (SELECT ST_SetSRID((SELECT ST_GeomFromGeoJSON (geometria::Text)),3857)),                  
-        (SELECT ST_SetSRID(ST_MakePoint(coordx, coordy),3857)),
-         radio)
-    );
-    
-  RETURN resultado;
-
-END
-
-$BODY$;
-
-ALTER FUNCTION public.en_zona_temporal(numeric, numeric, numeric)
-    OWNER TO admin;
 	
 -- Table: public.horario
 
