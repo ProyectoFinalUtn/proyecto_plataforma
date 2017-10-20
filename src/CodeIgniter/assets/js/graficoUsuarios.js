@@ -133,13 +133,16 @@ $(document).ready(function(){
 						var sexo = [];
 						var vant = [];
 						var maxValue = 0;
+						$('table').replaceWith('<table></table>');
 						for(var i in datos) {
+							$('table').append('<tr><td>'+datos[i].sexo+'</td><td>'+datos[i].cantidadvant+'</td></tr>');
 							sexo.push(datos[i].sexo);
 							vant.push(datos[i].cantidadvant);
 							if (maxValue < parseInt(datos[i].cantidadvant)) {
 								maxValue = parseInt(datos[i].cantidadvant);
 							}
 						}
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Sexo</th><th>Cantidad de VANT</th></tr></thead>');
 						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: sexo,
@@ -195,13 +198,16 @@ $(document).ready(function(){
 						var localidad = [];
 						var vant = [];
 						var maxValue = 0;
+						$('table').replaceWith('<table></table>');
 						for(var i in datos) {
+							$('table').append('<tr><td>'+datos[i].localidad+'</td><td>'+datos[i].cantidadvant+'</td></tr>');
 							localidad.push(datos[i].localidad);
 							vant.push(datos[i].cantidadvant);
 							if (maxValue < parseInt(datos[i].cantidadvant)) {
 								maxValue = parseInt(datos[i].cantidadvant);
 							}
 						}
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Localidad</th><th>Cantidad de VANT</th></tr></thead>');
 						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: localidad,
@@ -257,13 +263,16 @@ $(document).ready(function(){
 						var provincia = [];
 						var vant = [];
 						var maxValue = 0;
+						$('table').replaceWith('<table></table>');
 						for(var i in datos) {
+							$('table').append('<tr><td>'+datos[i].provincia+'</td><td>'+datos[i].cantidadvant+'</td></tr>');
 							provincia.push(datos[i].provincia);
 							vant.push(datos[i].cantidadvant);
 							if (maxValue < parseInt(datos[i].cantidadvant)) {
 								maxValue = parseInt(datos[i].cantidadvant);
 							}
 						}
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Provincia</th><th>Cantidad de VANT</th></tr></thead>');
 						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: provincia,
@@ -319,13 +328,16 @@ $(document).ready(function(){
 						var edad = [];
 						var vant = [];
 						var maxValue = 0;
+						$('table').replaceWith('<table></table>');
 						for(var i in datos) {
+							$('table').append('<tr><td>'+datos[i].edad+'</td><td>'+datos[i].cantidadvant+'</td></tr>');
 							edad.push(datos[i].edad);
 							vant.push(datos[i].cantidadvant);
 							if (maxValue < parseInt(datos[i].cantidadvant)) {
 								maxValue = parseInt(datos[i].cantidadvant);
 							}
 						}
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Edad</th><th>Cantidad de VANT</th></tr></thead>');
 						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: edad,
@@ -386,4 +398,49 @@ $(document).ready(function(){
 			}
 		});
 	});
+	
+	$("button[name='Exportar']").click(function() {
+		var ejeX = $("select[name='ejeX']").val();
+		$.ajax({
+			url: "Grafico_usuarios",
+			method: "POST",
+			data: { ejeX: ejeX }, 
+			success: function(data) {
+				var datos = JSON.parse(data);
+				var tab_text = '<table>';
+				switch(ejeX) {
+					case 'edad':
+						tab_text = tab_text+'<tr><td>Edad</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].edad+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+					case 'sexo':
+						tab_text = tab_text+'<tr><td>Sexo</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].sexo+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+					case 'localidad':
+						tab_text = tab_text+'<tr><td>Localidad</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].localidad+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+					case 'provincia':
+						tab_text = tab_text+'<tr><td>Provincia</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].provincia+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+				}
+				tab_text = tab_text + '</table>';
+				sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+			},
+			error: function(data) {
+				console.log(data);
+			}
+		});
+	});
+	
 });

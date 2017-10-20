@@ -133,13 +133,16 @@ $(document).ready(function(){
 						var peso = [];
 						var vant = [];
 						var maxValue = 0;
+						$('table').replaceWith('<table></table>');
 						for(var i in datos) {
+							$('table').append('<tr><td>'+datos[i].peso+'</td><td>'+datos[i].cantidadvant+'</td></tr>');
 							peso.push(datos[i].peso);
 							vant.push(datos[i].cantidadvant);
 							if (maxValue < parseInt(datos[i].cantidadvant)) {
 								maxValue = parseInt(datos[i].cantidadvant);
 							}
 						}
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Peso</th><th>Cantidad de VANT</th></tr></thead>');
 						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: peso,
@@ -196,13 +199,16 @@ $(document).ready(function(){
 						var marca = [];
 						var vant = [];
 						var maxValue = 0;
+						$('table').replaceWith('<table></table>');
 						for(var i in datos) {
+							$('table').append('<tr><td>'+datos[i].marca+'</td><td>'+datos[i].cantidadvant+'</td></tr>');
 							marca.push(datos[i].marca);
 							vant.push(datos[i].cantidadvant);
 							if (maxValue < parseInt(datos[i].cantidadvant)) {
 								maxValue = parseInt(datos[i].cantidadvant);
 							}
 						}
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Marca</th><th>Cantidad de VANT</th></tr></thead>');
 						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: marca,
@@ -259,13 +265,16 @@ $(document).ready(function(){
 						var modelo = [];
 						var vant = [];
 						var maxValue = 0;
+						$('table').replaceWith('<table></table>');
 						for(var i in datos) {
+							$('table').append('<tr><td>'+datos[i].modelo+'</td><td>'+datos[i].cantidadvant+'</td></tr>');
 							modelo.push(datos[i].modelo);
 							vant.push(datos[i].cantidadvant);
 							if (maxValue < parseInt(datos[i].cantidadvant)) {
 								maxValue = parseInt(datos[i].cantidadvant);
 							}
 						}
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Modelo</th><th>Cantidad de VANT</th></tr></thead>');
 						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: modelo,
@@ -322,13 +331,16 @@ $(document).ready(function(){
 						var fabricante = [];
 						var vant = [];
 						var maxValue = 0;
+						$('table').replaceWith('<table></table>');
 						for(var i in datos) {
+							$('table').append('<tr><td>'+datos[i].fabricante+'</td><td>'+datos[i].cantidadvant+'</td></tr>');
 							fabricante.push(datos[i].fabricante);
 							vant.push(datos[i].cantidadvant);
 							if (maxValue < parseInt(datos[i].cantidadvant)) {
 								maxValue = parseInt(datos[i].cantidadvant);
 							}
 						}
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Fabricante</th><th>Cantidad de VANT</th></tr></thead>');
 						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: fabricante,
@@ -386,13 +398,16 @@ $(document).ready(function(){
 						var lugar_fabricacion = [];
 						var vant = [];
 						var maxValue = 0;
+						$('table').replaceWith('<table></table>');
 						for(var i in datos) {
+							$('table').append('<tr><td>'+datos[i].lugar_fabricacion+'</td><td>'+datos[i].cantidadvant+'</td></tr>');
 							lugar_fabricacion.push(datos[i].lugar_fabricacion);
 							vant.push(datos[i].cantidadvant);
 							if (maxValue < parseInt(datos[i].cantidadvant)) {
 								maxValue = parseInt(datos[i].cantidadvant);
 							}
 						}
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Lugar de Fabricación</th><th>Cantidad de VANT</th></tr></thead>');
 						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: lugar_fabricacion,
@@ -450,13 +465,16 @@ $(document).ready(function(){
 						var anio_fabricacion = [];
 						var vant = [];
 						var maxValue = 0;
+						$('table').replaceWith('<table></table>');
 						for(var i in datos) {
+							$('table').append('<tr><td>'+datos[i].anio_fabricacion+'</td><td>'+datos[i].cantidadvant+'</td></tr>');
 							anio_fabricacion.push(datos[i].anio_fabricacion);
 							vant.push(datos[i].cantidadvant);
 							if (maxValue < parseInt(datos[i].cantidadvant)) {
 								maxValue = parseInt(datos[i].cantidadvant);
 							}
 						}
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Año de Fabricación</th><th>Cantidad de VANT</th></tr></thead>');
 						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: anio_fabricacion,
@@ -514,13 +532,16 @@ $(document).ready(function(){
 						var alt_max = [];
 						var vant = [];
 						var maxValue = 0;
+						$('table').replaceWith('<table></table>');
 						for(var i in datos) {
+							$('table').append('<tr><td>'+datos[i].alt_max+'</td><td>'+datos[i].cantidadvant+'</td></tr>');
 							alt_max.push(datos[i].alt_max);
 							vant.push(datos[i].cantidadvant);
 							if (maxValue < parseInt(datos[i].cantidadvant)) {
 								maxValue = parseInt(datos[i].cantidadvant);
 							}
 						}
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Altura Máxima</th><th>Cantidad de VANT</th></tr></thead>');
 						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: alt_max,
@@ -578,13 +599,16 @@ $(document).ready(function(){
 						var vel_max = [];
 						var vant = [];
 						var maxValue = 0;
+						$('table').replaceWith('<table></table>');
 						for(var i in datos) {
+							$('table').append('<tr><td>'+datos[i].vel_max+'</td><td>'+datos[i].cantidadvant+'</td></tr>');
 							vel_max.push(datos[i].vel_max);
 							vant.push(datos[i].cantidadvant);
 							if (maxValue < parseInt(datos[i].cantidadvant)) {
 								maxValue = parseInt(datos[i].cantidadvant);
 							}
 						}
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Velocidad Máxima</th><th>Cantidad de VANT</th></tr></thead>');
 						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: vel_max,
@@ -642,13 +666,16 @@ $(document).ready(function(){
 						var alto = [];
 						var vant = [];
 						var maxValue = 0;
+						$('table').replaceWith('<table></table>');
 						for(var i in datos) {
+							$('table').append('<tr><td>'+datos[i].alto+'</td><td>'+datos[i].cantidadvant+'</td></tr>');
 							alto.push(datos[i].alto);
 							vant.push(datos[i].cantidadvant);
 							if (maxValue < parseInt(datos[i].cantidadvant)) {
 								maxValue = parseInt(datos[i].cantidadvant);
 							}
 						}
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Alto</th><th>Cantidad de VANT</th></tr></thead>');
 						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: alto,
@@ -706,13 +733,16 @@ $(document).ready(function(){
 						var ancho = [];
 						var vant = [];
 						var maxValue = 0;
+						$('table').replaceWith('<table></table>');
 						for(var i in datos) {
+							$('table').append('<tr><td>'+datos[i].ancho+'</td><td>'+datos[i].cantidadvant+'</td></tr>');
 							ancho.push(datos[i].ancho);
 							vant.push(datos[i].cantidadvant);
 							if (maxValue < parseInt(datos[i].cantidadvant)) {
 								maxValue = parseInt(datos[i].cantidadvant);
 							}
 						}
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Ancho</th><th>Cantidad de VANT</th></tr></thead>');
 						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: ancho,
@@ -770,13 +800,16 @@ $(document).ready(function(){
 						var largo = [];
 						var vant = [];
 						var maxValue = 0;
+						$('table').replaceWith('<table></table>');
 						for(var i in datos) {
+							$('table').append('<tr><td>'+datos[i].largo+'</td><td>'+datos[i].cantidadvant+'</td></tr>');
 							largo.push(datos[i].largo);
 							vant.push(datos[i].cantidadvant);
 							if (maxValue < parseInt(datos[i].cantidadvant)) {
 								maxValue = parseInt(datos[i].cantidadvant);
 							}
 						}
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Largo</th><th>Cantidad de VANT</th></tr></thead>');
 						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: largo,
@@ -834,13 +867,16 @@ $(document).ready(function(){
 						var color = [];
 						var vant = [];
 						var maxValue = 0;
+						$('table').replaceWith('<table></table>');
 						for(var i in datos) {
+							$('table').append('<tr><td>'+datos[i].color+'</td><td>'+datos[i].cantidadvant+'</td></tr>');
 							color.push(datos[i].color);
 							vant.push(datos[i].cantidadvant);
 							if (maxValue < parseInt(datos[i].cantidadvant)) {
 								maxValue = parseInt(datos[i].cantidadvant);
 							}
 						}
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Color</th><th>Cantidad de VANT</th></tr></thead>');
 						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: color,
@@ -901,4 +937,97 @@ $(document).ready(function(){
 			}
 		});
 	});
+	
+	$("button[name='Exportar']").click(function() {
+		var ejeX = $("select[name='ejeX']").val();
+		$.ajax({
+			url: "Grafico_vant",
+			method: "POST",
+			data: { ejeX: ejeX }, 
+			success: function(data) {
+				var datos = JSON.parse(data);
+				var tab_text = '<table>';
+				switch(ejeX) {
+					case 'peso':
+						tab_text = tab_text+'<tr><td>Peso</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].peso+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+					case 'marca':
+						tab_text = tab_text+'<tr><td>Marca</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].marca+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+					case 'modelo':
+						tab_text = tab_text+'<tr><td>Modelo</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].modelo+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+					case 'fabricante':
+						tab_text = tab_text+'<tr><td>Fabricante</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].fabricante+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+					case 'lFab':
+						tab_text = tab_text+'<tr><td>Origen</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].lugar_fabricacion+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+					case 'anioFab':
+						tab_text = tab_text+'<tr><td>Año de Fabricación</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].anio_fabricacion+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+					case 'altMax':
+						tab_text = tab_text+'<tr><td>Altura Máxima</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].alt_max+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+					case 'velMax':
+						tab_text = tab_text+'<tr><td>Velocidad Máxima</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].vel_max+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+					case 'alto':
+						tab_text = tab_text+'<tr><td>Alto</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].alto+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+					case 'ancho':
+						tab_text = tab_text+'<tr><td>Ancho</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].ancho+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+					case 'largo':
+						tab_text = tab_text+'<tr><td>Largo</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].largo+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+					case 'color':
+						tab_text = tab_text+'<tr><td>Color</td><td>Cantidad de VANT</td></tr>';
+						for(var i in datos) {
+							tab_text = tab_text+'<tr><td>'+datos[i].color+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
+						}
+						break;
+				}
+				tab_text = tab_text + '</table>';
+				sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+			},
+			error: function(data) {
+				console.log(data);
+			}
+		});
+	});
+	
 });

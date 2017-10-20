@@ -324,5 +324,72 @@
             $query = $this->db->get();
             return $query->result_array();
         }
+        
+        public function obtener_cantidad_por_momento()
+        {
+            $sql = 'momento.descripcion, sum(cant_por_rango(rango_desde, rango_hasta)) as cantidad';
+            $this->db->select($sql);
+            $this->db->from('horario');
+            $this->db->join('momento', 'momento.id_momento = horario.id_momento');
+            $this->db->group_by('momento.descripcion');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+        
+        public function obtener_cantidad_por_mes()
+        {
+            $sql = 'extract(MONTH FROM fecha_vuelo) mes, count(*) cantidad';
+            $this->db->select($sql);
+            $this->db->from('solicitud');
+            $this->db->group_by('extract(MONTH FROM fecha_vuelo)');
+            $this->db->order_by('1', 'asc');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+        
+        public function obtener_cantidad_por_dia()
+        {
+            $sql = 'extract(DOW FROM fecha_vuelo) dia, count(*) cantidad';
+            $this->db->select($sql);
+            $this->db->from('solicitud');
+            $this->db->group_by('extract(DOW FROM fecha_vuelo)');
+            $this->db->order_by('1', 'asc');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+        
+        public function obtener_cantidad_por_provincia()
+        {
+            $sql = 'provincia, count(*) cantidad';
+            $this->db->select($sql);
+            $this->db->from('solicitud');
+            $this->db->group_by('provincia');
+            $this->db->order_by('1', 'asc');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+        
+        public function obtener_cantidad_por_localidad()
+        {
+            $sql = 'localidad, count(*) cantidad';
+            $this->db->select($sql);
+            $this->db->from('solicitud');
+            $this->db->group_by('localidad');
+            $this->db->order_by('1', 'asc');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+        
+        public function obtener_cantidad_por_zona_interes()
+        {
+            $sql = 'zona_interes, count(*) cantidad';
+            $this->db->select($sql);
+            $this->db->from('solicitud');
+            $this->db->where('zona_interes is not null');
+            $this->db->group_by('zona_interes');
+            $this->db->order_by('1', 'asc');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
     }
 ?>

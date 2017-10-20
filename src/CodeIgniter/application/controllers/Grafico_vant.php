@@ -236,7 +236,7 @@ class Grafico_vant extends MY_Controller
         {
             try{                
                 $this->load->model('Vant_model');
-                $listadoVant = $this->Vant_model->obtener_cantidad_por_largo();
+                $listadoVant = $this->Vant_model->obtener_cantidad_por_ancho();
                 return $listadoVant;
             }
             catch(Exception $exception){

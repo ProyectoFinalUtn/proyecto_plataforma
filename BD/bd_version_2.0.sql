@@ -63,17 +63,12 @@ TABLESPACE pg_default;
 ALTER TABLE public.menus
     OWNER to admin;
 
--- Table: public.zona_temporal
-
--- DROP TABLE public.zona_temporal;
-
 CREATE TABLE public.zona_temporal
 (
     id bigint NOT NULL,
-    nombre text COLLATE pg_catalog."default" NOT NULL,
-    detalle text COLLATE pg_catalog."default",
-    geometria json,
-    propiedades json,
+    nombre "char" NOT NULL,
+    detalle "char",
+    geoJson "json" NOT NULL,
     CONSTRAINT zonas_temporales_pkey PRIMARY KEY (id)
 )
 WITH (
@@ -82,7 +77,7 @@ WITH (
 TABLESPACE pg_default;
 
 ALTER TABLE public.zona_temporal
-    OWNER to postgres;
+    OWNER to admin;
 
 GRANT ALL ON TABLE public.zona_temporal TO admin WITH GRANT OPTION;
 
@@ -99,7 +94,7 @@ CREATE TABLE public.normativa
     fecha_desde date NOT NULL,
     fecha_hasta date,
     contenido json,
-	contenido_html text COLLATE pg_catalog."default",
+    contenido_html text COLLATE pg_catalog."default",
     CONSTRAINT normativa_pkey PRIMARY KEY (id_normativa)
 )
 WITH (
@@ -160,7 +155,7 @@ INSERT INTO provincia (id_provincia, provincia) VALUES
 -- DROP TABLE public.localidad;
 
 CREATE TABLE public.localidad (
-  	id_localidad bigint NOT NULL,
+    id_localidad bigint NOT NULL,
     id_provincia bigint NOT NULL,
     localidad text COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT localidad_pkey PRIMARY KEY (id_localidad),
@@ -2561,8 +2556,8 @@ INSERT INTO localidad (id_localidad, id_provincia, localidad) VALUES
 (2379, 25, 'Villa Quinteros'),
 (2380, 25, 'Yánima'),
 (2381, 25, 'Yerba Buena'),
-(2382, 25, 'Yerba Buena (S)');	
-	
+(2382, 25, 'Yerba Buena (S)');  
+    
 -- Table: public.perfil
 
 -- DROP TABLE public.perfil;
@@ -2661,7 +2656,7 @@ CREATE TABLE public.usuario_vant
     usuario text COLLATE pg_catalog."default",
     pass text COLLATE pg_catalog."default",
     CONSTRAINT usuario_vant_pkey PRIMARY KEY (id_usuario),
-	CONSTRAINT id_perfil_perfil FOREIGN KEY (id_perfil)
+    CONSTRAINT id_perfil_perfil FOREIGN KEY (id_perfil)
         REFERENCES public.perfil (id_perfil) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION,
@@ -2684,7 +2679,7 @@ CREATE SEQUENCE public.usuario_admin_id_usuario_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-	
+    
 CREATE TABLE public.usuario_admin
 (
     id_usuario integer NOT NULL DEFAULT nextval('usuario_admin_id_usuario_seq'::regclass),
@@ -2709,7 +2704,7 @@ values    ('admin','202cb962ac59075b964b07152d234b70');
 
 ALTER TABLE public.usuario_admin
     OWNER to admin;
-	
+    
 -- Table: public.tipo_solicitud
 
 -- DROP TABLE public.tipo_solicitud;
@@ -2737,7 +2732,7 @@ TABLESPACE pg_default;
 
 ALTER TABLE public.tipo_solicitud
     OWNER to admin;
-	
+    
 -- Table: public.estado_solicitud
 
 -- DROP TABLE public.estado_solicitud;
@@ -2765,7 +2760,7 @@ TABLESPACE pg_default;
 
 ALTER TABLE public.estado_solicitud
     OWNER to admin;
-	
+    
 -- Table: public.vant
 
 -- DROP TABLE public.vant;
@@ -2793,7 +2788,7 @@ CREATE TABLE public.vant
     alto integer,
     ancho integer,
     largo integer,
-	peso smallint,
+    peso smallint,
     vel_max integer,
     alt_max integer,
     lugar_guardado text COLLATE pg_catalog."default",
@@ -2812,8 +2807,8 @@ TABLESPACE pg_default;
 
 ALTER TABLE public.vant
     OWNER to admin;
-	
-	
+    
+    
 -- Table: public.solicitud
 
 -- DROP TABLE public.solicitud;
@@ -2839,8 +2834,11 @@ CREATE TABLE public.solicitud
     longitud text COLLATE pg_catalog."default" NOT NULL,
     radio_vuelo text COLLATE pg_catalog."default" NOT NULL,
     fecha_vuelo date NOT NULL,
-	hora_vuelo_desde time without time zone NOT NULL,
-	hora_vuelo_hasta time without time zone NOT NULL,
+    hora_vuelo_desde time without time zone NOT NULL,
+    hora_vuelo_hasta time without time zone NOT NULL,
+    provincia text COLLATE pg_catalog."default",
+    localidad text COLLATE pg_catalog."default",
+    zona_interes text COLLATE pg_catalog."default",
     CONSTRAINT solicitud_pkey PRIMARY KEY (id_solicitud),
     CONSTRAINT id_estado_solicitud_solicitud FOREIGN KEY (id_estado_solicitud)
         REFERENCES public.estado_solicitud (id_estado_solicitud) MATCH SIMPLE
@@ -2862,7 +2860,7 @@ TABLESPACE pg_default;
 
 ALTER TABLE public.solicitud
     OWNER to admin;
-	
+    
 -- Table: public.vants_por_solicitud
 
 -- DROP TABLE public.vants_por_solicitud;
@@ -2902,7 +2900,90 @@ INSERT INTO menus (id, parent, name, icono, slug, orden) VALUES
 (7, 2, 'Información', '', 'informacion', 2),
 (8, 3, 'Listar Solicitudes', '', 'listar_solicitudes', 2);
 
-	
+
+
+-------------------------------------------
+--------TIPOS, FUNCIONES,SP, ETC.----------
+-------------------------------------------
+
+
+-- Type: zona_temporal_type
+
+-- DROP TYPE public.zona_temporal_type;
+
+CREATE TYPE public.zona_temporal_type AS
+(
+  id bigint,
+  nombre character varying(32)
+);
+
+ALTER TYPE public.zona_temporal_type
+    OWNER TO admin;
+
+
+-- FUNCTION: public.en_zona_temporal(numeric, numeric, numeric)
+
+-- DROP FUNCTION public.en_zona_temporal(numeric, numeric, numeric);
+
+CREATE OR REPLACE FUNCTION public.en_zona_temporal(
+    coordx numeric,
+    coordy numeric,
+    radio numeric)
+    RETURNS zona_temporal_type
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 0
+AS $BODY$
+
+DECLARE
+  resultado zona_temporal_type;
+
+BEGIN
+  SELECT id, nombre
+  INTO resultado.id, resultado.nombre
+  FROM zona_temporal
+  WHERE 
+    (SELECT ST_DWithin( 
+        (SELECT ST_SetSRID((SELECT ST_GeomFromGeoJSON (geometria::Text)),3857)),                  
+        (SELECT ST_SetSRID(ST_MakePoint(coordx, coordy),3857)),
+         radio)
+    );
+    
+  RETURN resultado;
+
+END
+
+$BODY$;
+
+ALTER FUNCTION public.en_zona_temporal(numeric, numeric, numeric)
+    OWNER TO admin;
+
+-- Table: public.momento
+
+-- DROP TABLE public.momento;
+
+CREATE TABLE public.momento
+(
+    id_momento bigint NOT NULL,
+    descripcion text COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT momento_pkey PRIMARY KEY (id_momento)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.momento
+    OWNER to admin;
+    
+INSERT INTO public.momento (id_momento, descripcion)
+values (1, 'Madrugada'),
+(2, 'Mañana'),
+(3, 'Tarde'),
+(4, 'Noche');
+    
 -- Table: public.horario
 
 -- DROP TABLE public.horario;
@@ -2913,7 +2994,12 @@ CREATE TABLE public.horario
     rango text COLLATE pg_catalog."default",
     rango_desde time without time zone,
     rango_hasta time without time zone,
-    CONSTRAINT horario_pkey PRIMARY KEY (id_horario)
+    id_momento bigint,
+    CONSTRAINT horario_pkey PRIMARY KEY (id_horario),
+    CONSTRAINT horario_momento_fkey FOREIGN KEY (id_momento)
+        REFERENCES public.momento (id_momento) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
 )
 WITH (
     OIDS = FALSE
@@ -2922,35 +3008,72 @@ TABLESPACE pg_default;
 
 ALTER TABLE public.horario
     OWNER to admin;
-	
-INSERT INTO public.horario(id_horario, rango, rango_desde, rango_hasta)
-values (0,'00 a 01','00:00:00','01:00:00'),
-(1,'01 a 02','01:00:00','02:00:00'),
-(2,'02 a 03','02:00:00','03:00:00'),
-(3,'03 a 04','03:00:00','04:00:00'),
-(4,'04 a 05','04:00:00','05:00:00'),
-(5,'05 a 06','05:00:00','06:00:00'),
-(6,'06 a 07','06:00:00','07:00:00'),
-(7,'07 a 08','07:00:00','08:00:00'),
-(8,'08 a 09','08:00:00','09:00:00'),
-(9,'09 a 10','09:00:00','10:00:00'),
-(10,'10 a 11','10:00:00','11:00:00'),
-(11,'11 a 12','11:00:00','12:00:00'),
-(12,'12 a 13','12:00:00','13:00:00'),
-(13,'13 a 14','13:00:00','14:00:00'),
-(14,'14 a 15','14:00:00','15:00:00'),
-(15,'15 a 16','15:00:00','16:00:00'),
-(16,'16 a 17','16:00:00','17:00:00'),
-(17,'17 a 18','17:00:00','18:00:00'),
-(18,'18 a 19','18:00:00','19:00:00'),
-(19,'19 a 20','19:00:00','20:00:00'),
-(20,'20 a 21','20:00:00','21:00:00'),
-(21,'21 a 22','21:00:00','22:00:00'),
-(22,'22 a 23','22:00:00','23:00:00'),
-(23,'23 a 00','23:00:00','23:59:59');
+
+INSERT INTO public.horario(id_horario, rango, rango_desde, rango_hasta, id_momento)
+values (0,'00 a 01','00:00:00','01:00:00', 1),
+(1,'01 a 02','01:00:00','02:00:00', 1),
+(2,'02 a 03','02:00:00','03:00:00', 1),
+(3,'03 a 04','03:00:00','04:00:00', 1),
+(4,'04 a 05','04:00:00','05:00:00', 1),
+(5,'05 a 06','05:00:00','06:00:00', 1),
+(6,'06 a 07','06:00:00','07:00:00', 2),
+(7,'07 a 08','07:00:00','08:00:00', 2),
+(8,'08 a 09','08:00:00','09:00:00', 2),
+(9,'09 a 10','09:00:00','10:00:00', 2),
+(10,'10 a 11','10:00:00','11:00:00', 2),
+(11,'11 a 12','11:00:00','12:00:00', 2),
+(12,'12 a 13','12:00:00','13:00:00', 2),
+(13,'13 a 14','13:00:00','14:00:00', 3),
+(14,'14 a 15','14:00:00','15:00:00', 3),
+(15,'15 a 16','15:00:00','16:00:00', 3),
+(16,'16 a 17','16:00:00','17:00:00', 3),
+(17,'17 a 18','17:00:00','18:00:00', 3),
+(18,'18 a 19','18:00:00','19:00:00', 3),
+(19,'19 a 20','19:00:00','20:00:00', 4),
+(20,'20 a 21','20:00:00','21:00:00', 4),
+(21,'21 a 22','21:00:00','22:00:00', 4),
+(22,'22 a 23','22:00:00','23:00:00', 4),
+(23,'23 a 00','23:00:00','23:59:59', 4);
 
 CREATE OR REPLACE FUNCTION cant_por_rango(desde time without time zone, hasta time without time zone) RETURNS INT AS $$
-	BEGIN
-		RETURN (select count(id_solicitud) cantidad from solicitud where hora_vuelo_desde between desde and hasta);
-	END;
-	$$ LANGUAGE plpgsql;
+    BEGIN
+        RETURN (select count(id_solicitud) cantidad from solicitud where hora_vuelo_desde between desde and hasta);
+    END;
+    $$ LANGUAGE plpgsql;
+
+CREATE SEQUENCE public.vuelo_id_vuelo_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    CACHE 1;
+
+ALTER SEQUENCE public.vuelo_id_vuelo_seq
+    OWNER TO admin;
+    
+-- Table: public.vuelo
+
+-- DROP TABLE public.vuelo;
+
+CREATE TABLE public.vuelo
+(
+    id_vuelo bigint NOT NULL DEFAULT nextval('vuelo_id_vuelo_seq'::regclass),
+    id_usuario_vant bigint NOT NULL,
+    latitud text COLLATE pg_catalog."default" NOT NULL,
+    longitud text COLLATE pg_catalog."default" NOT NULL,
+    provincia text COLLATE pg_catalog."default",
+    localidad text COLLATE pg_catalog."default",
+    zona_interes text COLLATE pg_catalog."default",
+    CONSTRAINT vuelo_pkey PRIMARY KEY (id_vuelo),
+    CONSTRAINT usuariovant_fkey FOREIGN KEY (id_usuario_vant)
+        REFERENCES public.usuario_vant (id_usuario) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.vuelo
+    OWNER to admin;

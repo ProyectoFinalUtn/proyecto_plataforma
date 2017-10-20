@@ -38,7 +38,6 @@
                               <th>Horario solicitado</th>
                               <th>Usuario Controlador</th>
                               <th>Estado</th>
-                              <th></th>
                             </tr>
                         </thead>
                         <?php
@@ -66,7 +65,7 @@
                 </div>
                 <p></p>
                 <div id="chart-container">
-                    <canvas id="graficoFecha" width="400" height="100"></canvas>
+                    <canvas id="graficoZonainteres" width="400" height="100"></canvas>
                     <script src="<?php echo base_url(); ?>assets/js/graficoSolicitudes.js"></script>
                 </div>
                 <div class="row" id="graficos">
@@ -81,10 +80,16 @@
                             <br>
                             <select name="ejeX">
                                 <option value="fecha" selected="selected">Fecha solicitada</option>
+                                <option value="mes">Mes del año</option>
+                                <option value="dia">Día de la semana</option>
                                 <option value="horario">Horario solicitado</option>
+                                <option value="momento">Momento del día</option>
                                 <option value="marca">Marca del VANT</option>
                                 <option value="modelo">Modelo del VANT</option>
                                 <option value="estado">Estado de la Solicitud</option>
+                                <option value="provincia">Provincia de la Ubicación Solicitada</option>
+                                <option value="localidad">Localidad de la Ubicación Solicitada</option>
+                                <option value="zona_interes">Zona de Interés de la Ubicación Solicitada</option>
                             </select>
                         </p>
                         <p>
@@ -104,6 +109,8 @@
                             </select>
                         </p>
                         <p><button type="button" class="btn btn-secondary" name="Calcular">Calcular</button></p>
+                        <p><i>Presione para exportar el cálculo de reporte a Excel</i></p>
+                        <p><button type="button" class="btn btn-secondary" name="Exportar">Exportar reporte</button></p>
                     </div>
                     <div class="col-md-4 p-4" style="text-align: center;">
                         <img class="img-fluid d-block rounded-circle mx-auto" src="./assets/img/info_chart_type.png"><br>
