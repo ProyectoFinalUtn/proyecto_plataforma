@@ -23,5 +23,5 @@ GRANT ALL ON TABLE public.zona_temporal TO admin WITH GRANT OPTION;
 
 GRANT ALL ON TABLE public.zona_temporal TO postgres;
 
-ALTER TABLE public.zonas_temporales
+ALTER TABLE public.zona_temporal
     OWNER to admin;
