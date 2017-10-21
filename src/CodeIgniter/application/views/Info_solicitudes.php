@@ -65,7 +65,7 @@
                 </div>
                 <p></p>
                 <div id="chart-container">
-                    <canvas id="graficoZonainteres" width="400" height="100"></canvas>
+                    <canvas id="graficoLocalidad" width="400" height="100"></canvas>
                     <script src="<?php echo base_url(); ?>assets/js/graficoSolicitudes.js"></script>
                 </div>
                 <div class="row" id="graficos">
@@ -74,40 +74,83 @@
                     </div>
                     <div class="col-md-4 p-4" style="text-align: center;">
                         <p><h2>Configuración de gráfico</h2></p>
-                        <p><i>Elija su configuración de ejes y tipo de gráfico<br>y presione Calcular para refrescar el gráfico</i></p>
-                        <p>
-                            <b>Eje X</b>
-                            <br>
-                            <select name="ejeX">
-                                <option value="fecha" selected="selected">Fecha solicitada</option>
-                                <option value="mes">Mes del año</option>
-                                <option value="dia">Día de la semana</option>
-                                <option value="horario">Horario solicitado</option>
-                                <option value="momento">Momento del día</option>
-                                <option value="marca">Marca del VANT</option>
-                                <option value="modelo">Modelo del VANT</option>
-                                <option value="estado">Estado de la Solicitud</option>
-                                <option value="provincia">Provincia de la Ubicación Solicitada</option>
-                                <option value="localidad">Localidad de la Ubicación Solicitada</option>
-                                <option value="zona_interes">Zona de Interés de la Ubicación Solicitada</option>
-                            </select>
-                        </p>
-                        <p>
-                            <b>Eje Y</b><br>
-                            <select name="ejeY">
-                                <option value="cantidad_sol" selected="selected">Cantidad de solicitudes</option>
-                            </select>
-                        </p>
+                        <p><i>Elija los datos junto con el tipo de gráfico<br>y presione Calcular para refrescar el gráfico</i></p>
+                        <div class="row">
+                            <div class="col-md-4 p-4" style="text-align: left;">
+                                <p>
+                                    <b>Dato 1</b><br>
+                                    <p>
+                                        <select name="ejeX">
+                                            <option value="fecha">Fecha solicitada</option>
+                                            <option value="mes">Mes del año</option>
+                                            <option value="dia">Día de la semana</option>
+                                            <option value="horario">Horario solicitado</option>
+                                            <option value="momento">Momento del día</option>
+                                            <option value="marca">Marca del VANT</option>
+                                            <option value="modelo">Modelo del VANT</option>
+                                            <option value="estado">Estado de la Solicitud</option>
+                                            <option value="provincia">Provincia</option>
+                                            <option value="localidad" selected="selected">Localidad</option>
+                                            <option value="zona_interes">Zona de Interés</option>
+                                        </select>
+                                    </p>
+                                </p>
+                                <p>
+                                    <b>Dato 2</b><br>
+                                    <p>
+                                        <select name="ejeY">
+                                            <option value="cantidad_sol" selected="selected">Cantidad de solicitudes</option>
+                                        </select>
+                                    </p>
+                                </p>  
+                            </div>                            
+                            <div class="col-md-4 p-4" style="text-align: left;">
+                                <p>
+                                    <b>Fecha Desde</b><br>
+                                    <p><input type="date" name="filtro_desde" value="2017-01-01"></input</p>
+                                </p>
+                                <p>
+                                    <b>Fecha Hasta</b><br>
+                                    <p><input type="date" name="filtro_hasta" value="2018-01-01"></input></p>
+                                </p>
+                            </div>
+                            <div class="col-md-4 p-4" style="text-align: left;">
+                                <p>
+                                    <b>Provincia</b><br>
+                                    <p>
+                                        <select name="filtro_provincia">
+                                            <option value="0" selected="selected">Todo el país</option>
+                                            <?php
+                                            foreach ($provincias as $provincia)
+                                            {
+                                                echo "<option value=\"".$provincia['id_provincia']."\">".$provincia['provincia']."</option>";
+                                            }
+                                            ?>
+                                        </select>
+                                    </p>
+                                </p>
+                                <p>
+                                    <b>Localidad</b><br>
+                                    <p>
+                                        <select name="filtro_localidad">
+                                            <option value="0" selected="selected">Toda la provincia</option>
+                                        </select>
+                                    </p>
+                                </p>
+                            </div>
+                        </div>
                         <p>
                             <b>Tipo de gráfico</b><br>
-                            <select name="tipoGrafico">
-                                <option value="bar" selected="selected">Barra</option>
-                                <option value="line">Lineal</option>
-                                <option value="radar">Radar</option>
-                                <option value="pie">Torta</option>
-                                <option value="doughnut">Dona</option>
-                            </select>
-                        </p>
+                            <p>
+                                <select name="tipoGrafico">
+                                    <option value="bar" >Barra</option>
+                                    <option value="line" selected="selected">Lineal</option>
+                                    <option value="radar">Radar</option>
+                                    <option value="pie">Torta</option>
+                                    <option value="doughnut">Dona</option>
+                                </select>
+                            </p>
+                        </p>  
                         <p><button type="button" class="btn btn-secondary" name="Calcular">Calcular</button></p>
                         <p><i>Presione para exportar el cálculo de reporte a Excel</i></p>
                         <p><button type="button" class="btn btn-secondary" name="Exportar">Exportar reporte</button></p>

@@ -4,11 +4,11 @@ $(document).ready(function(){
 		method: "GET",
 		success: function(data) {
 			var datos = JSON.parse(data);
-			var zona_interes = [];
+			var localidad = [];
 			var cantidad = [];
 			var maxValue = 0;
 			for(var i in datos) {
-				zona_interes.push(datos[i].zona_interes);
+				localidad.push(datos[i].localidad);
 				cantidad.push(datos[i].cantidad);
 				if (maxValue < parseInt(datos[i].cantidad)) {
 								maxValue = parseInt(datos[i].cantidad);
@@ -16,7 +16,7 @@ $(document).ready(function(){
 			}
 			maxValue = maxValue + 2;
 			var chartdata = {
-				labels: zona_interes,
+				labels: localidad,
 				datasets : [
 					{
 						label: 'Cantidad de solicitudes',
@@ -29,7 +29,7 @@ $(document).ready(function(){
 				]
 			};
 
-			var ctx = $("#graficoZonainteres");
+			var ctx = $("#graficoLocalidad");
 
 			var barGraph = new Chart(ctx, {
 				type: 'line',
@@ -56,7 +56,7 @@ $(document).ready(function(){
 						title: {
 							display: true,
 							fontFamily: 'Montserrat',
-							text: 'Cantidad de Solicitudes por Zona de Interés'
+							text: 'Cantidad de Solicitudes por Localidad de la Solicitud'
 						}
 					}
 			});
@@ -68,10 +68,14 @@ $(document).ready(function(){
 	
 	$("button[name='Calcular']").click(function() {
 		var ejeX = $("select[name='ejeX']").val();
+		var filtro_desde = $("input[name='filtro_desde']").val();
+		var filtro_hasta = $("input[name='filtro_hasta']").val();
+		var filtro_provincia = $("select[name='filtro_provincia']").val();
+		var filtro_localidad = $("select[name='filtro_localidad']").val();
 		$.ajax({
 			url: "Grafico_solicitudes",
 			method: "POST",
-			data: { ejeX: ejeX }, 
+			data: { ejeX: ejeX, filtro_desde: filtro_desde, filtro_hasta: filtro_hasta, filtro_provincia: filtro_provincia, filtro_localidad: filtro_localidad }, 
 			success: function(data) {
 				var datos = JSON.parse(data);
 				var chartType = $("select[name='tipoGrafico']").val();
@@ -171,9 +175,7 @@ $(document).ready(function(){
 									scales: {
 										xAxes: [{
 											ticks: {
-												callback: function(value) { 
-													return new Date(value).toLocaleDateString('es-AR'); 
-												},
+												beginAtZero:true
 											}
 										}],
 										yAxes: [{
@@ -1056,6 +1058,26 @@ $(document).ready(function(){
 				}
 				tab_text = tab_text + '</table>';
 				sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+			},
+			error: function(data) {
+				console.log(data);
+			}
+		});
+	});
+	
+	$("select[name='filtro_provincia']").change(function() {
+		var prov_elegida = $("select[name='filtro_provincia']").val();
+		$.ajax({
+			url: "Info_solicitudes/obtener_localidades",
+			method: "POST",
+			data: { provincia: prov_elegida }, 
+			success: function(data) {
+				var localidades = JSON.parse(data);
+				$("select[name='filtro_localidad']").replaceWith('<select name="filtro_localidad"><option value="0" selected="selected">Toda la provincia</option></select>');
+				for(var i in localidades) {
+					$("select[name='filtro_localidad']").append('<option value="'+localidades[i].id_localidad+'">'+localidades[i].localidad+'</option>');
+				}
+				$("select[name='filtro_localidad']").append('</select>');
 			},
 			error: function(data) {
 				console.log(data);

@@ -20,7 +20,7 @@
             $this->db->join('usuario_vant uv', 'sol.id_usuario_vant = uv.id_usuario');
             $this->db->join('persona pers', 'uv.id_persona = pers.id_persona');
             $this->db->join('usuario_admin adm', 'sol.id_usuario_aprobador = adm.id_usuario', 'left outer ');
-            $this->db->order_by('sol.id_solicitud');
+            $this->db->order_by('sol.id_solicitud', 'desc');
             $query = $this->db->get();
             return $query->result_array();
         }
@@ -266,126 +266,381 @@
             return $idSolicitud;  
         }
         
-        public function obtener_cantidad_por_fecha()
+        public function obtener_cantidad_por_fecha($fecha_desde, $fecha_hasta, $provincia, $localidad)
         {
+            if ($fecha_desde == '') {
+                $filtro_fecha_desde = '1=1';
+            } else {
+                $filtro_fecha_desde = "fecha_vuelo >= '".$fecha_desde."'";
+            }
+            if ($fecha_hasta == '') {
+                $filtro_fecha_hasta = '1=1';
+            } else {
+                $filtro_fecha_hasta = "fecha_vuelo <= '".$fecha_hasta."'";
+            }
+            
+            $filtro = $filtro_fecha_desde . " and " . $filtro_fecha_hasta;
+            
+            if ($provincia != '0') {
+                $filtro = $filtro . " and provincia = " . $provincia;
+            }
+            
+            if ($localidad != '0') {
+                $filtro = $filtro . " and localidad = " . $localidad;
+            }
+            
             $sql = 'fecha_vuelo, count(id_solicitud) cantidad';
             $this->db->select($sql);
             $this->db->from('solicitud');
+            $this->db->where($filtro);
             $this->db->group_by('fecha_vuelo');
             $this->db->order_by('fecha_vuelo', 'asc');
             $query = $this->db->get();
             return $query->result_array();
         }
         
-        public function obtener_cantidad_por_horario()
+        public function obtener_cantidad_por_horario($fecha_desde, $fecha_hasta, $provincia, $localidad)
         {
-            $sql = 'rango, rango_desde, rango_hasta, cant_por_rango(rango_desde, rango_hasta) as cantidad';
+            if ($fecha_desde == '') {
+                $filtro_fecha_desde = '1=1';
+            } else {
+                $filtro_fecha_desde = "solicitud.fecha_vuelo >= '".$fecha_desde."'";
+            }
+            if ($fecha_hasta == '') {
+                $filtro_fecha_hasta = '1=1';
+            } else {
+                $filtro_fecha_hasta = "solicitud.fecha_vuelo <= '".$fecha_hasta."'";
+            }
+            
+            $filtro = $filtro_fecha_desde . " and " . $filtro_fecha_hasta;
+            
+            if ($provincia != '0') {
+                $filtro = $filtro . " and solicitud.provincia = " . $provincia;
+            }
+            
+            if ($localidad != '0') {
+                $filtro = $filtro . " and solicitud.localidad = " . $localidad;
+            }
+            
+            $sql = 'horario.rango, count(id_solicitud) cantidad';
+            $innerjoin = "(solicitud.hora_vuelo_desde >= horario.rango_desde and solicitud.hora_vuelo_desde < horario.rango_hasta) "
+                ."or (solicitud.hora_vuelo_hasta > horario.rango_desde and solicitud.hora_vuelo_hasta <= horario.rango_hasta) "
+                ."or (solicitud.hora_vuelo_desde < horario.rango_desde and solicitud.hora_vuelo_hasta >= horario.rango_hasta)";
+            
             $this->db->select($sql);
             $this->db->from('horario');
-            $this->db->order_by('rango', 'asc');
+            $this->db->join('solicitud', $innerjoin);
+            $this->db->where($filtro);
+            $this->db->group_by('horario.rango');
+            $this->db->order_by('horario.rango', 'asc');
             $query = $this->db->get();
             return $query->result_array();
         }
         
-        public function obtener_cantidad_por_marca()
+        public function obtener_cantidad_por_marca($fecha_desde, $fecha_hasta, $provincia, $localidad)
         {
+            if ($fecha_desde == '') {
+                $filtro_fecha_desde = '1=1';
+            } else {
+                $filtro_fecha_desde = "sol.fecha_vuelo >= '".$fecha_desde."'";
+            }
+            if ($fecha_hasta == '') {
+                $filtro_fecha_hasta = '1=1';
+            } else {
+                $filtro_fecha_hasta = "sol.fecha_vuelo <= '".$fecha_hasta."'";
+            }
+            
+            $filtro = $filtro_fecha_desde . " and " . $filtro_fecha_hasta;
+            
+            if ($provincia != '0') {
+                $filtro = $filtro . " and sol.provincia = " . $provincia;
+            }
+            
+            if ($localidad != '0') {
+                $filtro = $filtro . " and sol.localidad = " . $localidad;
+            }
+            
             $sql = 'vant.marca, count(*) cantidad';
             $this->db->select($sql);
             $this->db->from('solicitud sol');
             $this->db->join('vants_por_solicitud vxs', 'vxs.id_solicitud = sol.id_solicitud');
             $this->db->join('vant', 'vant.id_vant = vxs.id_vant');
+            $this->db->where($filtro);
             $this->db->group_by('vant.marca');
             $this->db->order_by('vant.marca', 'asc');
             $query = $this->db->get();
             return $query->result_array();
         }
         
-        public function obtener_cantidad_por_modelo()
+        public function obtener_cantidad_por_modelo($fecha_desde, $fecha_hasta, $provincia, $localidad)
         {
+            if ($fecha_desde == '') {
+                $filtro_fecha_desde = '1=1';
+            } else {
+                $filtro_fecha_desde = "sol.fecha_vuelo >= '".$fecha_desde."'";
+            }
+            if ($fecha_hasta == '') {
+                $filtro_fecha_hasta = '1=1';
+            } else {
+                $filtro_fecha_hasta = "sol.fecha_vuelo <= '".$fecha_hasta."'";
+            }
+            
+            $filtro = $filtro_fecha_desde . " and " . $filtro_fecha_hasta;
+            
+            if ($provincia != '0') {
+                $filtro = $filtro . " and sol.provincia = " . $provincia;
+            }
+            
+            if ($localidad != '0') {
+                $filtro = $filtro . " and sol.localidad = " . $localidad;
+            }
+            
             $sql = "(vant.marca || ' ' || vant.modelo) as modelo, count(*) cantidad";
             $this->db->select($sql);
             $this->db->from('solicitud sol');
             $this->db->join('vants_por_solicitud vxs', 'vxs.id_solicitud = sol.id_solicitud');
             $this->db->join('vant', 'vant.id_vant = vxs.id_vant');
+            $this->db->where($filtro);
             $this->db->group_by('vant.marca, vant.modelo');
             $this->db->order_by('vant.marca', 'asc');
             $query = $this->db->get();
             return $query->result_array();
         }
         
-        public function obtener_cantidad_por_estado()
+        public function obtener_cantidad_por_estado($fecha_desde, $fecha_hasta, $provincia, $localidad)
         {
+            if ($fecha_desde == '') {
+                $filtro_fecha_desde = '1=1';
+            } else {
+                $filtro_fecha_desde = "sol.fecha_vuelo >= '".$fecha_desde."'";
+            }
+            if ($fecha_hasta == '') {
+                $filtro_fecha_hasta = '1=1';
+            } else {
+                $filtro_fecha_hasta = "sol.fecha_vuelo <= '".$fecha_hasta."'";
+            }
+            
+            $filtro = $filtro_fecha_desde . " and " . $filtro_fecha_hasta;
+            
+            if ($provincia != '0') {
+                $filtro = $filtro . " and sol.provincia = " . $provincia;
+            }
+            
+            if ($localidad != '0') {
+                $filtro = $filtro . " and sol.localidad = " . $localidad;
+            }
+            
             $sql = 'es.id_estado_solicitud, es.descripcion, count(*) cantidad';
             $this->db->select($sql);
             $this->db->from('solicitud sol');
             $this->db->join('estado_solicitud es', 'es.id_estado_solicitud = sol.id_estado_solicitud');
+            $this->db->where($filtro);
             $this->db->group_by('es.id_estado_solicitud, es.descripcion');
             $this->db->order_by('es.id_estado_solicitud', 'asc');
             $query = $this->db->get();
             return $query->result_array();
         }
         
-        public function obtener_cantidad_por_momento()
+        public function obtener_cantidad_por_momento($fecha_desde, $fecha_hasta, $provincia, $localidad)
         {
-            $sql = 'momento.descripcion, sum(cant_por_rango(rango_desde, rango_hasta)) as cantidad';
+            if ($fecha_desde == '') {
+                $filtro_fecha_desde = '1=1';
+            } else {
+                $filtro_fecha_desde = "solicitud.fecha_vuelo >= '".$fecha_desde."'";
+            }
+            if ($fecha_hasta == '') {
+                $filtro_fecha_hasta = '1=1';
+            } else {
+                $filtro_fecha_hasta = "solicitud.fecha_vuelo <= '".$fecha_hasta."'";
+            }
+            
+            $filtro = $filtro_fecha_desde . " and " . $filtro_fecha_hasta;
+            
+            if ($provincia != '0') {
+                $filtro = $filtro . " and solicitud.provincia = " . $provincia;
+            }
+            
+            if ($localidad != '0') {
+                $filtro = $filtro . " and solicitud.localidad = " . $localidad;
+            }
+            
+            $sql = 'momento.descripcion, count(id_solicitud) cantidad';
+            $innerjoin = "(solicitud.hora_vuelo_desde >= horario.rango_desde and solicitud.hora_vuelo_desde < horario.rango_hasta) "
+                ."or (solicitud.hora_vuelo_hasta > horario.rango_desde and solicitud.hora_vuelo_hasta <= horario.rango_hasta) "
+                ."or (solicitud.hora_vuelo_desde < horario.rango_desde and solicitud.hora_vuelo_hasta >= horario.rango_hasta)";
+            
             $this->db->select($sql);
             $this->db->from('horario');
+            $this->db->join('solicitud', $innerjoin);
             $this->db->join('momento', 'momento.id_momento = horario.id_momento');
+            $this->db->where($filtro);
             $this->db->group_by('momento.descripcion');
+            $this->db->order_by('momento.descripcion', 'asc');
             $query = $this->db->get();
             return $query->result_array();
         }
         
-        public function obtener_cantidad_por_mes()
+        public function obtener_cantidad_por_mes($fecha_desde, $fecha_hasta, $provincia, $localidad)
         {
+            if ($fecha_desde == '') {
+                $filtro_fecha_desde = '1=1';
+            } else {
+                $filtro_fecha_desde = "fecha_vuelo >= '".$fecha_desde."'";
+            }
+            if ($fecha_hasta == '') {
+                $filtro_fecha_hasta = '1=1';
+            } else {
+                $filtro_fecha_hasta = "fecha_vuelo <= '".$fecha_hasta."'";
+            }
+            
+            $filtro = $filtro_fecha_desde . " and " . $filtro_fecha_hasta;
+            
+            if ($provincia != '0') {
+                $filtro = $filtro . " and provincia = " . $provincia;
+            }
+            
+            if ($localidad != '0') {
+                $filtro = $filtro . " and localidad = " . $localidad;
+            }
+            
             $sql = 'extract(MONTH FROM fecha_vuelo) mes, count(*) cantidad';
             $this->db->select($sql);
             $this->db->from('solicitud');
+            $this->db->where($filtro);
             $this->db->group_by('extract(MONTH FROM fecha_vuelo)');
             $this->db->order_by('1', 'asc');
             $query = $this->db->get();
             return $query->result_array();
         }
         
-        public function obtener_cantidad_por_dia()
+        public function obtener_cantidad_por_dia($fecha_desde, $fecha_hasta, $provincia, $localidad)
         {
+            if ($fecha_desde == '') {
+                $filtro_fecha_desde = '1=1';
+            } else {
+                $filtro_fecha_desde = "fecha_vuelo >= '".$fecha_desde."'";
+            }
+            if ($fecha_hasta == '') {
+                $filtro_fecha_hasta = '1=1';
+            } else {
+                $filtro_fecha_hasta = "fecha_vuelo <= '".$fecha_hasta."'";
+            }
+            
+            $filtro = $filtro_fecha_desde . " and " . $filtro_fecha_hasta;
+            
+            if ($provincia != '0') {
+                $filtro = $filtro . " and provincia = " . $provincia;
+            }
+            
+            if ($localidad != '0') {
+                $filtro = $filtro . " and localidad = " . $localidad;
+            }
+            
             $sql = 'extract(DOW FROM fecha_vuelo) dia, count(*) cantidad';
             $this->db->select($sql);
             $this->db->from('solicitud');
+            $this->db->where($filtro);
             $this->db->group_by('extract(DOW FROM fecha_vuelo)');
             $this->db->order_by('1', 'asc');
             $query = $this->db->get();
             return $query->result_array();
         }
         
-        public function obtener_cantidad_por_provincia()
+        public function obtener_cantidad_por_provincia($fecha_desde, $fecha_hasta, $provincia, $localidad)
         {
-            $sql = 'provincia, count(*) cantidad';
+            if ($fecha_desde == '') {
+                $filtro_fecha_desde = '1=1';
+            } else {
+                $filtro_fecha_desde = "solicitud.fecha_vuelo >= '".$fecha_desde."'";
+            }
+            if ($fecha_hasta == '') {
+                $filtro_fecha_hasta = '1=1';
+            } else {
+                $filtro_fecha_hasta = "solicitud.fecha_vuelo <= '".$fecha_hasta."'";
+            }
+            
+            $filtro = $filtro_fecha_desde . " and " . $filtro_fecha_hasta;
+            
+            if ($provincia != '0') {
+                $filtro = $filtro . " and solicitud.provincia = " . $provincia;
+            }
+            
+            if ($localidad != '0') {
+                $filtro = $filtro . " and solicitud.localidad = " . $localidad;
+            }
+            
+            $sql = 'provincia.provincia, count(*) cantidad';
             $this->db->select($sql);
             $this->db->from('solicitud');
-            $this->db->group_by('provincia');
+            $this->db->join('provincia', 'provincia.id_provincia = solicitud.provincia');
+            $this->db->where($filtro);
+            $this->db->group_by('provincia.provincia');
             $this->db->order_by('1', 'asc');
             $query = $this->db->get();
             return $query->result_array();
         }
         
-        public function obtener_cantidad_por_localidad()
+        public function obtener_cantidad_por_localidad($fecha_desde, $fecha_hasta, $provincia, $localidad)
         {
-            $sql = 'localidad, count(*) cantidad';
+            if ($fecha_desde == '') {
+                $filtro_fecha_desde = '1=1';
+            } else {
+                $filtro_fecha_desde = "solicitud.fecha_vuelo >= '".$fecha_desde."'";
+            }
+            if ($fecha_hasta == '') {
+                $filtro_fecha_hasta = '1=1';
+            } else {
+                $filtro_fecha_hasta = "solicitud.fecha_vuelo <= '".$fecha_hasta."'";
+            }
+            
+            $filtro = $filtro_fecha_desde . " and " . $filtro_fecha_hasta;
+            
+            if ($provincia != '0') {
+                $filtro = $filtro . " and solicitud.provincia = " . $provincia;
+            }
+            
+            if ($localidad != '0') {
+                $filtro = $filtro . " and solicitud.localidad = " . $localidad;
+            }
+            
+            $sql = 'localidad.localidad, count(*) cantidad';
             $this->db->select($sql);
             $this->db->from('solicitud');
-            $this->db->group_by('localidad');
+            $this->db->join('localidad', 'localidad.id_localidad = solicitud.localidad');
+            $this->db->where($filtro);
+            $this->db->group_by('localidad.localidad');
             $this->db->order_by('1', 'asc');
             $query = $this->db->get();
             return $query->result_array();
         }
         
-        public function obtener_cantidad_por_zona_interes()
+        public function obtener_cantidad_por_zona_interes($fecha_desde, $fecha_hasta, $provincia, $localidad)
         {
+            if ($fecha_desde == '') {
+                $filtro_fecha_desde = '1=1';
+            } else {
+                $filtro_fecha_desde = "fecha_vuelo >= '".$fecha_desde."'";
+            }
+            if ($fecha_hasta == '') {
+                $filtro_fecha_hasta = '1=1';
+            } else {
+                $filtro_fecha_hasta = "fecha_vuelo <= '".$fecha_hasta."'";
+            }
+            
+            $filtro = $filtro_fecha_desde . " and " . $filtro_fecha_hasta;
+            
+            if ($provincia != '0') {
+                $filtro = $filtro . " and provincia = " . $provincia;
+            }
+            
+            if ($localidad != '0') {
+                $filtro = $filtro . " and localidad = " . $localidad;
+            }
+            
             $sql = 'zona_interes, count(*) cantidad';
             $this->db->select($sql);
             $this->db->from('solicitud');
-            $this->db->where('zona_interes is not null');
+            $this->db->where('zona_interes is not null and '.$filtro);
             $this->db->group_by('zona_interes');
             $this->db->order_by('1', 'asc');
             $query = $this->db->get();

@@ -1,3 +1,6 @@
+ALTER TABLE public.localidad
+    OWNER to admin;
+
 CREATE SEQUENCE public.vuelo_id_vuelo_seq
     INCREMENT 1
     START 1
@@ -34,3 +37,23 @@ TABLESPACE pg_default;
 
 ALTER TABLE public.vuelo
     OWNER to admin;
+	
+ALTER TABLE public.solicitud
+    ADD COLUMN provincia bigint;
+
+ALTER TABLE public.solicitud
+    ADD COLUMN localidad bigint;
+
+ALTER TABLE public.solicitud
+    ADD COLUMN zona_interes text;
+ALTER TABLE public.solicitud
+    ADD CONSTRAINT id_provincia_solicitud FOREIGN KEY (provincia)
+    REFERENCES public.provincia (id_provincia) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION;
+
+ALTER TABLE public.solicitud
+    ADD CONSTRAINT id_localidad_solicitud FOREIGN KEY (localidad)
+    REFERENCES public.localidad (id_localidad) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION;

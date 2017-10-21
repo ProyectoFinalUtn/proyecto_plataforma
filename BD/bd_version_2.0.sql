@@ -63,12 +63,17 @@ TABLESPACE pg_default;
 ALTER TABLE public.menus
     OWNER to admin;
 
+-- Table: public.zona_temporal
+
+-- DROP TABLE public.zona_temporal;
+
 CREATE TABLE public.zona_temporal
 (
     id bigint NOT NULL,
-    nombre "char" NOT NULL,
-    detalle "char",
-    geoJson "json" NOT NULL,
+    nombre text COLLATE pg_catalog."default" NOT NULL,
+    detalle text COLLATE pg_catalog."default",
+    geometria json,
+    propiedades json,
     CONSTRAINT zonas_temporales_pkey PRIMARY KEY (id)
 )
 WITH (
@@ -77,11 +82,14 @@ WITH (
 TABLESPACE pg_default;
 
 ALTER TABLE public.zona_temporal
-    OWNER to admin;
+    OWNER to postgres;
 
 GRANT ALL ON TABLE public.zona_temporal TO admin WITH GRANT OPTION;
 
-GRANT ALL ON TABLE public.zona_temporal TO admin;
+GRANT ALL ON TABLE public.zona_temporal TO postgres;
+
+ALTER TABLE public.zona_temporal
+    OWNER to admin;
 
 -- Table: public.normativa
 
@@ -169,7 +177,7 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE public.provincia
+ALTER TABLE public.localidad
     OWNER to admin;
 
 INSERT INTO localidad (id_localidad, id_provincia, localidad) VALUES
@@ -1683,7 +1691,7 @@ INSERT INTO localidad (id_localidad, id_provincia, localidad) VALUES
 (1508, 15, 'Loreto'),
 (1509, 15, 'Los Helechos'),
 (1510, 15, 'Mártires'),
-(1511, 15, '15'),
+(1511, 15, 'Misiones'),
 (1512, 15, 'Mojón Grande'),
 (1513, 15, 'Montecarlo'),
 (1514, 15, 'Nueve de Julio'),
@@ -2836,12 +2844,20 @@ CREATE TABLE public.solicitud
     fecha_vuelo date NOT NULL,
     hora_vuelo_desde time without time zone NOT NULL,
     hora_vuelo_hasta time without time zone NOT NULL,
-    provincia text COLLATE pg_catalog."default",
-    localidad text COLLATE pg_catalog."default",
+    provincia bigint,
+    localidad bigint,
     zona_interes text COLLATE pg_catalog."default",
     CONSTRAINT solicitud_pkey PRIMARY KEY (id_solicitud),
     CONSTRAINT id_estado_solicitud_solicitud FOREIGN KEY (id_estado_solicitud)
         REFERENCES public.estado_solicitud (id_estado_solicitud) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT id_localidad_solicitud FOREIGN KEY (localidad)
+        REFERENCES public.localidad (id_localidad) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT id_provincia_solicitud FOREIGN KEY (provincia)
+        REFERENCES public.provincia (id_provincia) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION,
     CONSTRAINT id_usuario_aprobador_usuario FOREIGN KEY (id_usuario_aprobador)
@@ -2899,66 +2915,6 @@ INSERT INTO menus (id, parent, name, icono, slug, orden) VALUES
 (6, 1, 'Zonas Temporales', '', 'zonas_temporales', 1),
 (7, 2, 'Información', '', 'informacion', 2),
 (8, 3, 'Listar Solicitudes', '', 'listar_solicitudes', 2);
-
-
-
--------------------------------------------
---------TIPOS, FUNCIONES,SP, ETC.----------
--------------------------------------------
-
-
--- Type: zona_temporal_type
-
--- DROP TYPE public.zona_temporal_type;
-
-CREATE TYPE public.zona_temporal_type AS
-(
-  id bigint,
-  nombre character varying(32)
-);
-
-ALTER TYPE public.zona_temporal_type
-    OWNER TO admin;
-
-
--- FUNCTION: public.en_zona_temporal(numeric, numeric, numeric)
-
--- DROP FUNCTION public.en_zona_temporal(numeric, numeric, numeric);
-
-CREATE OR REPLACE FUNCTION public.en_zona_temporal(
-    coordx numeric,
-    coordy numeric,
-    radio numeric)
-    RETURNS zona_temporal_type
-    LANGUAGE 'plpgsql'
-
-    COST 100
-    VOLATILE 
-    ROWS 0
-AS $BODY$
-
-DECLARE
-  resultado zona_temporal_type;
-
-BEGIN
-  SELECT id, nombre
-  INTO resultado.id, resultado.nombre
-  FROM zona_temporal
-  WHERE 
-    (SELECT ST_DWithin( 
-        (SELECT ST_SetSRID((SELECT ST_GeomFromGeoJSON (geometria::Text)),3857)),                  
-        (SELECT ST_SetSRID(ST_MakePoint(coordx, coordy),3857)),
-         radio)
-    );
-    
-  RETURN resultado;
-
-END
-
-$BODY$;
-
-ALTER FUNCTION public.en_zona_temporal(numeric, numeric, numeric)
-    OWNER TO admin;
 
 -- Table: public.momento
 
@@ -3035,12 +2991,6 @@ values (0,'00 a 01','00:00:00','01:00:00', 1),
 (22,'22 a 23','22:00:00','23:00:00', 4),
 (23,'23 a 00','23:00:00','23:59:59', 4);
 
-CREATE OR REPLACE FUNCTION cant_por_rango(desde time without time zone, hasta time without time zone) RETURNS INT AS $$
-    BEGIN
-        RETURN (select count(id_solicitud) cantidad from solicitud where hora_vuelo_desde between desde and hasta);
-    END;
-    $$ LANGUAGE plpgsql;
-
 CREATE SEQUENCE public.vuelo_id_vuelo_seq
     INCREMENT 1
     START 1
@@ -3077,3 +3027,62 @@ TABLESPACE pg_default;
 
 ALTER TABLE public.vuelo
     OWNER to admin;
+
+
+-------------------------------------------
+--------TIPOS, FUNCIONES,SP, ETC.----------
+-------------------------------------------
+
+
+-- Type: zona_temporal_type
+
+-- DROP TYPE public.zona_temporal_type;
+
+CREATE TYPE public.zona_temporal_type AS
+(
+  id bigint,
+  nombre character varying(32)
+);
+
+ALTER TYPE public.zona_temporal_type
+    OWNER TO admin;
+
+
+-- FUNCTION: public.en_zona_temporal(numeric, numeric, numeric)
+
+-- DROP FUNCTION public.en_zona_temporal(numeric, numeric, numeric);
+
+CREATE OR REPLACE FUNCTION public.en_zona_temporal(
+    coordx numeric,
+    coordy numeric,
+    radio numeric)
+    RETURNS zona_temporal_type
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 0
+AS $BODY$
+
+DECLARE
+  resultado zona_temporal_type;
+
+BEGIN
+  SELECT id, nombre
+  INTO resultado.id, resultado.nombre
+  FROM zona_temporal
+  WHERE 
+    (SELECT ST_DWithin( 
+        (SELECT ST_SetSRID((SELECT ST_GeomFromGeoJSON (geometria::Text)),3857)),                  
+        (SELECT ST_SetSRID(ST_MakePoint(coordx, coordy),3857)),
+         radio)
+    );
+    
+  RETURN resultado;
+
+END
+
+$BODY$;
+
+ALTER FUNCTION public.en_zona_temporal(numeric, numeric, numeric)
+    OWNER TO admin;
