@@ -272,11 +272,16 @@ function handleFeatureContexMenuEvent2(option, feature, ModelName, x, y) {
          console.log('view');
     } else if (option == 'GuardaArea') {
         var format = new ol.format.GeoJSON();
-        var geoJson = format.writeFeature(feature); 
-        console.log(geoJson);  
-        var zona = { id:feature.get('ID'), nombre:ModelName,detalle:'A IMPLEMENTAR',json: geoJson};                      
+        var geoJson = format.writeFeature(feature);
+        var parsedGeoJson = JSON.parse(geoJson);
+        var geometria = parsedGeoJson.geometry;
+        geometria = JSON.stringify(geometria);        
+        var propiedades = parsedGeoJson.properties;
+        propiedades = JSON.stringify(propiedades);
+        
+        var zona = { id:feature.get('ID'), nombre:ModelName,detalle:'A IMPLEMENTAR',geometria: geometria , propiedades: propiedades};                      
         zona = JSON.stringify(zona);
-
+        console.log(zona);
         $.ajax({
             type : 'POST',
             data : 'data=' + zona,

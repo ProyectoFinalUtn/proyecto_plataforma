@@ -8,14 +8,14 @@ class Zonas_temporales_model extends CI_Model {
         }
 
         public function guardar_zona($zona)
-        {
+        {   
             $result = $this->db->insert('zona_temporal', [
-              'id' => $zona["id"],
-              'nombre'  => $zona["nombre"],    
-              'detalle' => $zona["detalle"],
-              'geoJson' => $zona["json"]
-            ]); 
-            
+            'id' => $zona["id"],
+            'nombre'  => $zona["nombre"],    
+            'detalle' => $zona["detalle"],
+            'geometria' => $zona["geometria"],
+            'propiedades' => $zona["propiedades"]
+            ]);            
         }
 
         public function get_zona_within_radius($punto)
@@ -28,14 +28,7 @@ class Zonas_temporales_model extends CI_Model {
                        ( ST_SetSRID(ST_MakePoint('.strval($punto["long"]).','.strval($punto["lat"]).'),3857)),'.strval($punto["rad"]).'))';
             $this->db->where($where);
             $query = $this->db->get()->row();
-            return $query;  
-            // Produces: SELECT title, content, date FROM mytable   
-
-           
-  
-              
-
-
-        }
+            return $query;                       
+          }
 }
 ?>

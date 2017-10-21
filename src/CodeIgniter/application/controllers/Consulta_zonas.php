@@ -31,7 +31,11 @@
             try{
                 $this->load->model('Zonas_temporales_model');                
                 $zona = $this->Zonas_temporales_model->get_zona_within_radius($area);
-                $zonaRta = '{"id":'.$zona->id.',"nombre":'.$zona->nombre.'}';
+                if ($zona != NULL){
+                    $zonaRta = '{"id":'.$zona->id.',"nombre":'.$zona->nombre.'}';
+                } else {
+                    $zonaRta = '{"id":0,"nombre":NULL}';                    
+                }                
                 $this->set_respuesta($zonaRta);
                 $this->set_response($this->responseOk, REST_Controller::HTTP_OK);
             }
