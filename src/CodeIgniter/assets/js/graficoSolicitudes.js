@@ -918,10 +918,14 @@ $(document).ready(function(){
 	
 	$("button[name='Exportar']").click(function() {
 		var ejeX = $("select[name='ejeX']").val();
+		var filtro_desde = $("input[name='filtro_desde']").val();
+		var filtro_hasta = $("input[name='filtro_hasta']").val();
+		var filtro_provincia = $("select[name='filtro_provincia']").val();
+		var filtro_localidad = $("select[name='filtro_localidad']").val();
 		$.ajax({
 			url: "Grafico_solicitudes",
 			method: "POST",
-			data: { ejeX: ejeX }, 
+			data: { ejeX: ejeX, filtro_desde: filtro_desde, filtro_hasta: filtro_hasta, filtro_provincia: filtro_provincia, filtro_localidad: filtro_localidad },
 			success: function(data) {
 				var datos = JSON.parse(data);
 				var tab_text = '<table>';

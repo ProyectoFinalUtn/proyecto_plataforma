@@ -223,8 +223,29 @@
             
         }
         
-        public function obtener_vants_por_edad()
-        {        
+        public function obtener_vants_por_edad($fecha_desde, $fecha_hasta, $provincia, $localidad)
+        {
+            if ($fecha_desde == '') {
+                $filtro_fecha_desde = '1=1';
+            } else {
+                $filtro_fecha_desde = "perf.fecha_registro >= '".$fecha_desde."'";
+            }
+            if ($fecha_hasta == '') {
+                $filtro_fecha_hasta = '1=1';
+            } else {
+                $filtro_fecha_hasta = "perf.fecha_registro <= '".$fecha_hasta."'";
+            }
+            
+            $filtro = $filtro_fecha_desde . " and " . $filtro_fecha_hasta;
+            
+            if ($provincia != '0') {
+                $filtro = $filtro . " and pers.provincia = " . $provincia;
+            }
+            
+            if ($localidad != '0') {
+                $filtro = $filtro . " and pers.localidad = " . $localidad;
+            }
+            
             $sql = 'pers.edad, count(vant.id_usuario_vant) cantidadvant';
             $by = 'pers.edad';
             $this->db->select($sql);
@@ -232,14 +253,36 @@
             $this->db->join('persona pers', 'usuario_vant.id_persona = pers.id_persona');
             $this->db->join('perfil perf', 'usuario_vant.id_perfil = perf.id_perfil');
             $this->db->join('vant', 'vant.id_usuario_vant = usuario_vant.id_usuario', 'left outer ');
+            $this->db->where($filtro);
             $this->db->group_by($by);
             $this->db->order_by('pers.edad', 'asc');
             $query = $this->db->get()->result_array();
             return $query;
         }
 
-        public function obtener_vants_por_sexo()
-        {        
+        public function obtener_vants_por_sexo($fecha_desde, $fecha_hasta, $provincia, $localidad)
+        {
+            if ($fecha_desde == '') {
+                $filtro_fecha_desde = '1=1';
+            } else {
+                $filtro_fecha_desde = "perf.fecha_registro >= '".$fecha_desde."'";
+            }
+            if ($fecha_hasta == '') {
+                $filtro_fecha_hasta = '1=1';
+            } else {
+                $filtro_fecha_hasta = "perf.fecha_registro <= '".$fecha_hasta."'";
+            }
+            
+            $filtro = $filtro_fecha_desde . " and " . $filtro_fecha_hasta;
+            
+            if ($provincia != '0') {
+                $filtro = $filtro . " and pers.provincia = " . $provincia;
+            }
+            
+            if ($localidad != '0') {
+                $filtro = $filtro . " and pers.localidad = " . $localidad;
+            }
+            
             $sql = 'pers.sexo, count(vant.id_usuario_vant) cantidadvant';
             $by = 'pers.sexo';
             $this->db->select($sql);
@@ -247,34 +290,81 @@
             $this->db->join('persona pers', 'usuario_vant.id_persona = pers.id_persona');
             $this->db->join('perfil perf', 'usuario_vant.id_perfil = perf.id_perfil');
             $this->db->join('vant', 'vant.id_usuario_vant = usuario_vant.id_usuario', 'left outer ');
+            $this->db->where($filtro);
             $this->db->group_by($by);
             $query = $this->db->get()->result_array();
             return $query;
         }
  
-        public function obtener_vants_por_localidad()
-        {        
-            $sql = 'pers.localidad, count(vant.id_usuario_vant) cantidadvant';
-            $by = 'pers.localidad';
+        public function obtener_vants_por_localidad($fecha_desde, $fecha_hasta, $provincia, $localidad)
+        {
+            if ($fecha_desde == '') {
+                $filtro_fecha_desde = '1=1';
+            } else {
+                $filtro_fecha_desde = "perf.fecha_registro >= '".$fecha_desde."'";
+            }
+            if ($fecha_hasta == '') {
+                $filtro_fecha_hasta = '1=1';
+            } else {
+                $filtro_fecha_hasta = "perf.fecha_registro <= '".$fecha_hasta."'";
+            }
+            
+            $filtro = $filtro_fecha_desde . " and " . $filtro_fecha_hasta;
+            
+            if ($provincia != '0') {
+                $filtro = $filtro . " and pers.provincia = " . $provincia;
+            }
+            
+            if ($localidad != '0') {
+                $filtro = $filtro . " and pers.localidad = " . $localidad;
+            }
+            
+            $sql = 'localidad.localidad, count(vant.id_usuario_vant) cantidadvant';
+            $by = 'localidad.localidad';
             $this->db->select($sql);
             $this->db->from('usuario_vant');
             $this->db->join('persona pers', 'usuario_vant.id_persona = pers.id_persona');
             $this->db->join('perfil perf', 'usuario_vant.id_perfil = perf.id_perfil');
             $this->db->join('vant', 'vant.id_usuario_vant = usuario_vant.id_usuario', 'left outer ');
+            $this->db->join('localidad', 'localidad.id_localidad = pers.localidad');
+            $this->db->where($filtro);
             $this->db->group_by($by);
             $query = $this->db->get()->result_array();
             return $query;
         }
         
-        public function obtener_vants_por_provincia()
-        {        
-            $sql = 'pers.provincia, count(vant.id_usuario_vant) cantidadvant';
-            $by = 'pers.provincia';
+        public function obtener_vants_por_provincia($fecha_desde, $fecha_hasta, $provincia, $localidad)
+        {
+            if ($fecha_desde == '') {
+                $filtro_fecha_desde = '1=1';
+            } else {
+                $filtro_fecha_desde = "perf.fecha_registro >= '".$fecha_desde."'";
+            }
+            if ($fecha_hasta == '') {
+                $filtro_fecha_hasta = '1=1';
+            } else {
+                $filtro_fecha_hasta = "perf.fecha_registro <= '".$fecha_hasta."'";
+            }
+            
+            $filtro = $filtro_fecha_desde . " and " . $filtro_fecha_hasta;
+            
+            if ($provincia != '0') {
+                $filtro = $filtro . " and pers.provincia = " . $provincia;
+            }
+            
+            if ($localidad != '0') {
+                $filtro = $filtro . " and pers.localidad = " . $localidad;
+            }
+            
+            $sql = 'provincia.provincia, count(vant.id_usuario_vant) cantidadvant';
+            $by = 'provincia.provincia';
             $this->db->select($sql);
             $this->db->from('usuario_vant');
             $this->db->join('persona pers', 'usuario_vant.id_persona = pers.id_persona');
             $this->db->join('perfil perf', 'usuario_vant.id_perfil = perf.id_perfil');
             $this->db->join('vant', 'vant.id_usuario_vant = usuario_vant.id_usuario', 'left outer ');
+            $this->db->join('provincia', 'provincia.id_provincia = pers.provincia');
+            $this->db->where($filtro);
             $this->db->group_by($by);
             $query = $this->db->get()->result_array();
             return $query;

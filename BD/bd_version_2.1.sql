@@ -2580,16 +2580,13 @@ CREATE SEQUENCE public.perfil_id_perfil_seq
 ALTER SEQUENCE public.perfil_id_perfil_seq
     OWNER TO admin;
 
--- Table: public.perfil
-
--- DROP TABLE public.perfil;
-
 CREATE TABLE public.perfil
 (
     id_perfil bigint NOT NULL DEFAULT nextval('perfil_id_perfil_seq'::regclass),
     foto text COLLATE pg_catalog."default",
     logueado_en_cad boolean NOT NULL,
     nombre_de_perfil text COLLATE pg_catalog."default" NOT NULL,
+    fecha_registro date,
     CONSTRAINT perfil_pkey PRIMARY KEY (id_perfil)
 )
 WITH (
@@ -2627,12 +2624,20 @@ CREATE TABLE public.persona
     numero text COLLATE pg_catalog."default",
     piso text COLLATE pg_catalog."default",
     dpto text COLLATE pg_catalog."default",
-    provincia text COLLATE pg_catalog."default",
-    localidad text COLLATE pg_catalog."default",
     telefono text COLLATE pg_catalog."default",
     email text COLLATE pg_catalog."default",
+    provincia bigint,
+    localidad bigint,
     CONSTRAINT persona_pkey PRIMARY KEY (id_persona),
-    CONSTRAINT email_unique UNIQUE (email)
+    CONSTRAINT email_unique UNIQUE (email),
+    CONSTRAINT localidad_fkey FOREIGN KEY (localidad)
+        REFERENCES public.localidad (id_localidad) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT provincia_fkey FOREIGN KEY (provincia)
+        REFERENCES public.provincia (id_provincia) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
 )
 WITH (
     OIDS = FALSE
@@ -2640,7 +2645,7 @@ WITH (
 TABLESPACE pg_default;
 
 ALTER TABLE public.persona
-    OWNER to admin;
+    OWNER to admin;s
 
 -- Table: public.usuario_vant
 

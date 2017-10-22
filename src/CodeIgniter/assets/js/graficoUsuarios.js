@@ -68,10 +68,15 @@ $(document).ready(function(){
 	
 	$("button[name='Calcular']").click(function() {
 		var ejeX = $("select[name='ejeX']").val();
+		var ejeY = $("select[name='ejeY']").val();
+		var filtro_desde = $("input[name='filtro_desde']").val();
+		var filtro_hasta = $("input[name='filtro_hasta']").val();
+		var filtro_provincia = $("select[name='filtro_provincia']").val();
+		var filtro_localidad = $("select[name='filtro_localidad']").val();
 		$.ajax({
 			url: "Grafico_usuarios",
 			method: "POST",
-			data: { ejeX: ejeX }, 
+			data: { ejeX: ejeX, ejeY: ejeY, filtro_desde: filtro_desde, filtro_hasta: filtro_hasta, filtro_provincia: filtro_provincia, filtro_localidad: filtro_localidad },
 			success: function(data) {
 				var datos = JSON.parse(data);
 				var chartType = $("select[name='tipoGrafico']").val();
@@ -401,10 +406,15 @@ $(document).ready(function(){
 	
 	$("button[name='Exportar']").click(function() {
 		var ejeX = $("select[name='ejeX']").val();
+		var ejeY = $("select[name='ejeY']").val();
+		var filtro_desde = $("input[name='filtro_desde']").val();
+		var filtro_hasta = $("input[name='filtro_hasta']").val();
+		var filtro_provincia = $("select[name='filtro_provincia']").val();
+		var filtro_localidad = $("select[name='filtro_localidad']").val();
 		$.ajax({
 			url: "Grafico_usuarios",
 			method: "POST",
-			data: { ejeX: ejeX }, 
+			data: { ejeX: ejeX, ejeY: ejeY, filtro_desde: filtro_desde, filtro_hasta: filtro_hasta, filtro_provincia: filtro_provincia, filtro_localidad: filtro_localidad },
 			success: function(data) {
 				var datos = JSON.parse(data);
 				var tab_text = '<table>';
@@ -436,6 +446,26 @@ $(document).ready(function(){
 				}
 				tab_text = tab_text + '</table>';
 				sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+			},
+			error: function(data) {
+				console.log(data);
+			}
+		});
+	});
+	
+	$("select[name='filtro_provincia']").change(function() {
+		var prov_elegida = $("select[name='filtro_provincia']").val();
+		$.ajax({
+			url: "Listar_usuarios/obtener_localidades",
+			method: "POST",
+			data: { provincia: prov_elegida }, 
+			success: function(data) {
+				var localidades = JSON.parse(data);
+				$("select[name='filtro_localidad']").replaceWith('<select name="filtro_localidad"><option value="0" selected="selected">Toda la provincia</option></select>');
+				for(var i in localidades) {
+					$("select[name='filtro_localidad']").append('<option value="'+localidades[i].id_localidad+'">'+localidades[i].localidad+'</option>');
+				}
+				$("select[name='filtro_localidad']").append('</select>');
 			},
 			error: function(data) {
 				console.log(data);

@@ -13,6 +13,8 @@ class Listar_usuarios extends MY_Controller
 	{	           
             $usuariosVant = $this->obtener_usuarios_vant();
             $data['usuariosVant'] = $usuariosVant;
+            $provincias = $this->obtener_provincias();
+            $data['provincias'] = $provincias;
             $this->load->view('Listar_usuarios', $data);
             
 	}
@@ -23,6 +25,33 @@ class Listar_usuarios extends MY_Controller
                 $this->load->model('Usuariovant_model');
                 $listadoUsuariosVant = $this->Usuariovant_model->obtener_perfiles();
                 return $listadoUsuariosVant;
+            }
+            catch(Exception $exception){
+                
+            }
+        }
+        
+        private function obtener_provincias()
+        {
+            try
+            {
+                $this->load->model('Provincia_model');
+                $provincias = $this->Provincia_model->obtener_provincias();
+                return $provincias;
+            }
+            catch(Exception $exception){
+                
+            }
+        }
+        
+        public function obtener_localidades()
+        {
+            try
+            {
+                $provincia = $_POST['provincia'];
+                $this->load->model('Provincia_model');
+                $localidades = $this->Provincia_model->obtener_localidades($provincia);
+                print json_encode($localidades);
             }
             catch(Exception $exception){
                 
