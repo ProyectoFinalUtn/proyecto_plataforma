@@ -161,7 +161,7 @@
         private function guardar_solicitud($solicitud)
         {
             $direccion = $this->osm_nominatim($solicitud['latitud'], $solicitud['longitud']);
-            if ($direccion->state == 'Ciudad Autónoma de Buenos Aires') {
+            if ($direccion['state'] == 'Ciudad Autónoma de Buenos Aires') {
                 $provincia = 3;
             } else {
                 $provincia = 1;
