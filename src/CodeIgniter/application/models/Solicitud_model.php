@@ -147,7 +147,7 @@
         }
         
         private function guardar_solicitud($solicitud)
-        {z
+        {
             $result = $this->db->insert('solicitud', [
                 'id_usuario_vant' => $solicitud["idUsuarioVant"],
                 'id_tipo_solicitud' => $solicitud['idTipoSolicitud'],     
