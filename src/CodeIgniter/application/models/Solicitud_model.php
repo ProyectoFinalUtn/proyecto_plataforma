@@ -99,18 +99,6 @@
             return $query->result_array();
         }
         
-        public function osm_nominatim($latitud, $longitud)
-        {
-            $uri = 'http://nominatim.openstreetmap.org/reverse?format=json&lat='.$latitud.'&lon='.$longitud.'&zoom=18&addressdetails=1';
-            $nominatim = json_decode(
-                file_get_contents($uri)
-            );
-
-            $address = $nominatim->address;
-            
-            return $address;
-        }
-        
         public function crear_solicitud($solicitud)
         {        
             $this->db->trans_begin();  
@@ -159,7 +147,7 @@
         }
         
         private function guardar_solicitud($solicitud)
-        {
+        {z
             $result = $this->db->insert('solicitud', [
                 'id_usuario_vant' => $solicitud["idUsuarioVant"],
                 'id_tipo_solicitud' => $solicitud['idTipoSolicitud'],     
@@ -169,8 +157,7 @@
                 'radio_vuelo' => $solicitud['radioVuelo'],
                 'fecha_vuelo' => $solicitud['fecha'],
                 'hora_vuelo_desde' => $solicitud['horaVueloDesde'],
-                'hora_vuelo_hasta' => $solicitud['horaVueloHasta'],
-                'provincia' => $provincia
+                'hora_vuelo_hasta' => $solicitud['horaVueloHasta']
             ]);
             if(!$result){
                 $db_error = $this->db->error();
@@ -659,6 +646,5 @@
             $query = $this->db->get();
             return $query->result_array();
         }
-        
     }
 ?>
