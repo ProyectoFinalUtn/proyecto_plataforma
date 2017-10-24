@@ -48,6 +48,10 @@
         {
             $this->vencer_solicitudes();
             $estadoVencida = 4;
+            date_default_timezone_set('America/Argentina/Buenos_Aires');
+            $fechaLimite = date('Y-m-d', time());
+            $filtro = "sol.id_estado_solicitud <> ".$estadoVencida." and sol.fecha_vuelo >= '".$fechaLimite."'";
+            
             $sql = 'sol.id_solicitud idSolicitud, id_usuario_vant idUsuarioVant, pers.nombre nombre, pers.apellido apellido, pers.nro_documento documento, '. 
                    'pers.edad edad, pers.email email, id_tipo_solicitud idTipoSolicitud, '.
                    'id_usuario_aprobador idUsuarioAprobador, adm.usuario usuarioAprobador, sol.id_estado_solicitud idEstadoSolicitud, '.
@@ -59,7 +63,7 @@
             $this->db->join('usuario_vant uv', 'sol.id_usuario_vant = uv.id_usuario');
             $this->db->join('persona pers', 'uv.id_persona = pers.id_persona');
             $this->db->join('usuario_admin adm', 'sol.id_usuario_aprobador = adm.id_usuario', 'left outer ');
-            $this->db->where('sol.id_estado_solicitud <> ', $estadoVencida);
+            $this->db->where($filtro);
             $this->db->order_by('sol.id_solicitud', 'desc');
             $query = $this->db->get();
             return $query->result_array();
