@@ -48,7 +48,7 @@
                                 echo "<td>".$solicitud['fecha']."</td>";
                                 echo "<td>".$solicitud['horaVueloDesde']." - ".$solicitud['horaVueloHasta']."</td>";
                                 echo "<td>".$solicitud['usuarioAprobador']."</td>";
-                                echo "<td><select name=\"estados\">"."<option value=\"".$solicitud['idEstadoSolicitud']."\" selected=\"selected\">" . 
+                                echo "<td><select name=\"estados\" disabled>"."<option value=\"".$solicitud['idEstadoSolicitud']."\" selected=\"selected\">" . 
                                     $solicitud['descripcionEstadoSolicitud']."</option>";
                                 foreach ($estadosPosibles as $estado => $estadoPosible)
                                 {

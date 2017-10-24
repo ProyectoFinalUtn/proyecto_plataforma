@@ -37,53 +37,17 @@ class Listar_solicitudes extends MY_Controller
              * Por ejemplo para solicitudes de excepcion todo lo que se le pegue a la base de datos iria en solicitud model
              */
             
-            $solicitudes = $this->obtener_solicitudes();
+            $solicitudes = $this->obtener_solicitudes_actualizadas();
             $data['solicitudes'] = $solicitudes;
             $this->load->view('Listar_solicitudes', $data);
             
 	}
-        
-        private function obtener_solicitudes_por_usuario($id_usuario)
-        {   
-            try{
-                $this->load->model('Solicitud_model');
-                $solicitudes = $this->Solicitud_model->obtener_solicitud_por_usuario($id_usuario);
-                return $solicitudes ;
-            }
-            catch(Exception $exception){
-                //$exception->getMessage()
-            }
-        }
-        
-        private function obtener_solicitud_por_estado($idEstadoSolicitud)
+               
+        private function obtener_solicitudes_actualizadas()
         {
             try{                
                 $this->load->model('Solicitud_model');
-                $solicitud = $this->Solicitud_model->obtener_solicitud_por_id($idEstadoSolicitud);
-                return $solicitud;
-            }
-            catch(Exception $exception){
-                
-            }
-        }
-        
-        private function obtener_solicitud_por_id($id_solicitud)
-        {
-            try{                
-                $this->load->model('Solicitud_model');
-                $solicitud = $this->Solicitud_model->obtener_solicitud_por_id($id_solicitud);
-                return $solicitud;
-            }
-            catch(Exception $exception){
-                
-            }
-        }
-        
-        private function obtener_solicitudes()
-        {
-            try{                
-                $this->load->model('Solicitud_model');
-                $solicitud = $this->Solicitud_model->obtener_solicitudes();
+                $solicitud = $this->Solicitud_model->obtener_solicitudes_actualizadas();
                 return $solicitud;
             }
             catch(Exception $exception){

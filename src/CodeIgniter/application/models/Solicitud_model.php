@@ -25,6 +25,46 @@
             return $query->result_array();
         }
         
+        public function vencer_solicitudes()
+        {
+            $estadoPendiente = 1;
+            $estadoVencida = 4;
+            date_default_timezone_set('America/Argentina/Buenos_Aires');
+            $fechaLimite = date('Y-m-d', time());
+            $filtro = "id_estado_solicitud = ".$estadoPendiente." and fecha_vuelo <= '".$fechaLimite."'";
+            $this->db->where($filtro);
+            $result = $this->db->update('solicitud', [
+                'id_estado_solicitud' => $estadoVencida
+            ]);
+            
+            if(!$result){
+                $db_error = $this->db->error();
+                throw new Exception($db_error);
+            }
+            return $result;
+        }
+        
+        public function obtener_solicitudes_actualizadas()
+        {
+            $this->vencer_solicitudes();
+            $estadoVencida = 4;
+            $sql = 'sol.id_solicitud idSolicitud, id_usuario_vant idUsuarioVant, pers.nombre nombre, pers.apellido apellido, pers.nro_documento documento, '. 
+                   'pers.edad edad, pers.email email, id_tipo_solicitud idTipoSolicitud, '.
+                   'id_usuario_aprobador idUsuarioAprobador, adm.usuario usuarioAprobador, sol.id_estado_solicitud idEstadoSolicitud, '.
+                   'es.descripcion descripcionEstadoSolicitud, latitud, longitud, radio_vuelo radioVuelo, '.
+                   "to_char(fecha_vuelo, 'YYYY-MM-DD') fecha, hora_vuelo_desde horaVueloDesde, hora_vuelo_hasta horaVueloHasta";
+            $this->db->select($sql);
+            $this->db->from('solicitud sol');
+            $this->db->join('estado_solicitud es', 'sol.id_estado_solicitud = es.id_estado_solicitud');
+            $this->db->join('usuario_vant uv', 'sol.id_usuario_vant = uv.id_usuario');
+            $this->db->join('persona pers', 'uv.id_persona = pers.id_persona');
+            $this->db->join('usuario_admin adm', 'sol.id_usuario_aprobador = adm.id_usuario', 'left outer ');
+            $this->db->where('sol.id_estado_solicitud <> ', $estadoVencida);
+            $this->db->order_by('sol.id_solicitud', 'desc');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+        
         public function obtener_solicitud_por_estado($idEstadoSolicitud)
         {        
             $sql = 'sol.id_solicitud idSolicitud, id_usuario_vant idUsuarioVant, id_tipo_solicitud idTipoSolicitud, '. 
