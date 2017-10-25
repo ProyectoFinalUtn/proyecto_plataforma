@@ -57,5 +57,33 @@ class Info_solicitudes extends MY_Controller
                 
             }
         }
-        
+        /*
+        public function test_direccion()
+        {
+            try
+            {
+            $solicitud = ['idSolicitud' => 0,
+                'idUsuarioVant' => 5, 
+                'idTipoSolicitud' => 1,
+                'idEstadoSolicitud' => 1,
+                'latitud' => '-32.947671',
+                'longitud' => '-60.630457',
+                'radioVuelo' => 600,
+                'fecha' => '2017-12-17',
+                'horaVueloDesde' => '21:00:00',
+                'horaVueloHasta' => '23:00:00',
+                'provincia' => null,
+                'localidad' => null,
+                'zona_interes' => null,
+                'vants' => null];
+            $this->load->model('Solicitud_model');
+            $id_solicitud = $this->Solicitud_model->crear_solicitud($solicitud);
+            $solicitud['idSolicitud'] = $id_solicitud;
+            print json_encode($solicitud['idSolicitud']);
+            }
+            catch(Exception $exception){
+                
+            }
+        }
+        */
 }

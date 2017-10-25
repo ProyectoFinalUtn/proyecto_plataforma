@@ -146,7 +146,7 @@
                     'idTipoSolicitud' => $this->post("idTipoSolicitud"), 'idEstadoSolicitud' => $this->post("idEstadoSolicitud"),
                     'latitud' => $this->post("latitud"), 'longitud' => $this->post("longitud"), 'radioVuelo' => $this->post("radioVuelo"),
                     'fecha' => $this->post("fecha"), 'horaVueloDesde' => $this->post("horaVueloDesde"),
-                    'horaVueloHasta' => $this->post("horaVueloHasta"), 'vants' => $this->post("vants")];
+                    'horaVueloHasta' => $this->post("horaVueloHasta"), 'provincia' => null, 'localidad' => null, 'zona_interes' => null, 'vants' => $this->post("vants")];
         }
         
         private function valida_obligatorios_solicitud(){

@@ -21,7 +21,7 @@ class Llamadasrest_model extends CI_Model {
     }
     
     public function obtener_direccion_lon_lat($lat, $lon, $email){
-        $request = "http://nominatim.openstreetmap.org/reverse?email=".$email."&format=json&lat=".$lat."&lon=".$lon."&zoom=18&addressdetails=1";
+        $request = "http://nominatim.openstreetmap.org/reverse?email=".$email."&format=json&lat=".$lat."&lon=".$lon."&zoom=18&addressdetails=1&accept-language=es";
         $json = file_get_contents($request, false);
         
         //decode JSON to array

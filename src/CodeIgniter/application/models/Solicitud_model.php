@@ -144,7 +144,22 @@
         }
         
         public function crear_solicitud($solicitud)
-        {        
+        {
+            try {
+                $this->load->model('Llamadasrest_model');
+                $direccion = $this->Llamadasrest_model->obtener_direccion_lon_lat($solicitud['latitud'], $solicitud['longitud'], 'g.o.guide.project@gmail.com');
+                $this->load->model('Provincia_model');
+                $provincia = $this->Provincia_model->obtener_id_provincia_y_loc($direccion);
+                $solicitud['provincia'] = $provincia['provincia'];
+                $solicitud['localidad'] = $provincia['localidad'];
+                $solicitud['zona_interes'] = $provincia['zona_interes'];
+            }
+            catch(Exception $exception){
+                $solicitud['provincia'] = null;
+                $solicitud['localidad'] = null;
+                $solicitud['zona_interes'] = null;
+            }
+            
             $this->db->trans_begin();  
             $id_solicitud = $this->guardar_solicitud($solicitud);
             $solicitud["idSolicitud"] = $id_solicitud;
@@ -201,7 +216,10 @@
                 'radio_vuelo' => $solicitud['radioVuelo'],
                 'fecha_vuelo' => $solicitud['fecha'],
                 'hora_vuelo_desde' => $solicitud['horaVueloDesde'],
-                'hora_vuelo_hasta' => $solicitud['horaVueloHasta']
+                'hora_vuelo_hasta' => $solicitud['horaVueloHasta'],
+                'provincia' => $solicitud['provincia'],
+                'localidad' => $solicitud['localidad'],
+                'zona_interes' => $solicitud['zona_interes']
             ]);
             if(!$result){
                 $db_error = $this->db->error();
