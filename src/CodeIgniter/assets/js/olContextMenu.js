@@ -7,7 +7,7 @@
           },
           '-', // this is a separator,
         {
-            text: 'Definir Zona Temporal',
+            text: 'Definir Zona',
             classname: 'some-style-class', // you can add this icon with a CSS class
             // instead of `icon` property (see next line)
             items: [{
@@ -32,7 +32,7 @@
                 // instead of `icon` property (see next line)
                 
                 callback: function (obj, map) {
-                    addInteraction('Circle');
+                    addInteraction('Circle');                    
                 }
             }, {
                 text: 'Limpiar',

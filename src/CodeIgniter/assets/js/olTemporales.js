@@ -1,16 +1,37 @@
 // Code goes here
 var map;
 var contextmenu;
+var centroXY; 
+var poligonXY;
 var source = new ol.source.Vector({ wrapX: false });
 var view = new ol.View({
     center: ol.proj.transform([-58.39, -34.63], 'EPSG:4326', 'EPSG:3857'),
     zoom: 10
 });
 
+/**
+* Currently drawn feature.
+* @type {ol.Feature}
+*/
+var sketch;
 
-  var attribution = new ol.control.Attribution({
-        collapsible: false
-    });
+/**
+* The measure tooltip element.
+* @type {Element}
+*/
+var measureTooltipElement;
+
+
+/**
+* Overlay to show the measurement.
+* @type {ol.Overlay}
+*/
+var measureTooltip;      
+
+
+var attribution = new ol.control.Attribution({
+      collapsible: false
+});
 // create a vector layer used for editing
   var stroke = new ol.style.Stroke({
                 color: 'red'
@@ -134,7 +155,7 @@ var view = new ol.View({
 
   map.addControl(contextmenu);
    
-    var selectedFt;
+    
     map.getViewport().addEventListener('contextmenu', function (e) {
         e.preventDefault();
         var offset = $(this).offset();
@@ -207,7 +228,7 @@ geocoder.on('addresschosen', function(evt){
 });
 
 var mousePositionControl = new ol.control.MousePosition({
-        coordinateFormat: ol.coordinate.createStringXY(2),
+        coordinateFormat: ol.coordinate.createStringXY(6),
         projection: 'EPSG:4326',        
         undefinedHTML: '&nbsp;'
 });
@@ -217,44 +238,72 @@ function addInteraction(value) {
     if (value)
         map.removeInteraction(draw);
     if (value !== 'None') {
-        var geometryFunction, maxPoints;        
+        var geometryFunction;        
+        
+        if (value==='Circle'){
+          geometryFunction = ol.interaction.Draw.createRegularPolygon(40);
+        }        
 
         draw = new ol.interaction.Draw({
             source: source,
             type: /** @type {ol.geom.GeometryType} */ (value),
-            geometryFunction: geometryFunction,
-            maxPoints: maxPoints
+            geometryFunction: geometryFunction                         
+        });        
+        //if (value ==='Circle'){
+          var listener;
+          draw.on('drawstart',
+              function(evt){
+              // set sketch
+              sketch = evt.feature;
+              var geometry = sketch.getGeometry();              
+              centroXY = geometry.getFirstCoordinate();              
+              //centroXY = ol.proj.transform(centroXY,'EPSG:3857','EPSG:4326');
+              createMeasureTooltip();              
+              listener = sketch.getGeometry().on('change', function(evt) {
+                var geom = evt.target;  
+                var tooltipCoord = geom.getLastCoordinate();
+                //var bordeCirculo = ol.proj.transform(tooltipCoord,'EPSG:3857','EPSG:4326');
+                
+                if (value ==='Polygon'){
+                  polyCoord = geometry.getCoordinates()[0];
+                  tooltipCoord = polyCoord[polyCoord.length-2];
+                  centroXY = polyCoord[polyCoord.length-3];
+                  console.log(centroXY);
+                }
+                var coordinates = [centroXY,tooltipCoord];                
+                var output;
+                output = formatLength( /** @type {ol.geom.LineString} */ (new ol.geom.LineString(coordinates)));                    
+                measureTooltipElement.innerHTML = output;
+                measureTooltip.setPosition(tooltipCoord);                
+                });
+              },this);
+        //}  
+        draw.on('drawend', function(event) {
+          
+          map.removeInteraction(draw);
+          //if(value==='Circle'){
+            //measureTooltipElement.className = 'tooltip tooltip-static';
+            measureTooltip.setOffset([0, -7]);
+            // unset sketch
+            sketch = null;
+            // unset tooltip so that a new one can be created
+            measureTooltipElement = null;
+            createMeasureTooltip();              
+          //}       
+          var title = prompt( "Please provide the Area Title:", "untitled" );            
+          event.feature.setProperties({
+            'ID': GetID(),
+            'name': title,        
+            'MapMarkerTitle': title,
+            'Display': title,
+            'ModelName': title,
+            'MapAreaLabelText': title
+          });
         });
         map.addInteraction(draw);
-    
-    draw.on('drawend', function(event) {
-          map.removeInteraction(draw);
-       
-          var title = prompt( "Please provide the Area Title:", "untitled" );
-          if (value === 'Point') {           
-            var center = event.feature.getGeometry().getCoordinates();
-            var radius = prompt( "Ingrese el radio en Km:", "10" );
-            var radius = (radius*1000 / ol.proj.METERS_PER_UNIT.m) ;
-            var circle = new ol.geom.Circle(center, radius);
-            var circleFeature = new ol.Feature(circle);
-            source.addFeature(circleFeature);          
-          }  
-            
-      event.feature.setProperties({
-        'ID': GetID(),
-        'name': title,        
-        'MapMarkerTitle': title,
-        'Display': title,
-        'ModelName': title,
-        'MapAreaLabelText': title
-      });
-    });
     }
 }
 
-function getLongLatFromPoint(loc) {
-    return ol.proj.transform(loc, 'EPSG:3857', 'EPSG:4326')
-}
 
 function getAreaLabel(feature) {
     if(typeof feature.get('ModelName') !== 'undefined') {
@@ -289,3 +338,42 @@ function handleFeatureContexMenuEvent2(option, feature, ModelName, x, y) {
         });
     }
 }
+      /**
+       * Format length output.
+       * @param {ol.geom.LineString} line The line.
+       * @return {string} The formatted length.
+       */
+      var formatLength = function(line) {
+        var length = Math.round(line.getLength() * 100) / 100;
+        var output;
+        if (length > 100) {
+          output = (Math.round(length / 1000 * 100) / 100) +
+              ' ' + 'km';
+        } else {
+          output = (Math.round(length * 100) / 100) +
+              ' ' + 'm';
+        }
+        return output;
+      };      
+
+      /**
+       * Creates a new measure tooltip
+       */
+      function createMeasureTooltip() {
+        if (measureTooltipElement) {
+          measureTooltipElement.parentNode.removeChild(measureTooltipElement);
+        }
+        measureTooltipElement = document.createElement('div');
+        measureTooltipElement.dataToggle = 'tooltip';
+        //measureTooltipElement.className = 'tooltip tooltip-measure';
+        measureTooltip = new ol.Overlay({
+          element: measureTooltipElement,
+          offset: [0, -15],         
+          positioning: 'top-center',
+          visible: true
+        });
+        map.addOverlay(measureTooltip);        
+      }
+
+
+
