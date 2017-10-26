@@ -14,7 +14,9 @@ class Zonas_temporales_model extends CI_Model {
             'nombre'  => $zona["nombre"],    
             'detalle' => $zona["detalle"],
             'geometria' => $zona["geometria"],
-            'propiedades' => $zona["propiedades"]
+            'propiedades' => $zona["propiedades"],
+            'fecha_inicio' => $zona["fecha_inicio"],
+            'fecha_fin' => $zona["fecha_fin"]
             ]);            
         }
 
