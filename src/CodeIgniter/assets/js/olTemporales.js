@@ -165,12 +165,7 @@ map.getViewport().addEventListener('contextmenu', function(e) {
         }
     });
     console.log('length : ' + clkfeatures.length);
-    if (clkfeatures.length > 1) {
-        contextmenu.clear();
-        contextmenu.extend(SelectorContextMenu);
-    } else if (clkfeatures.length == 1) {
-        contextmenu.clear();
-        var FeatureContextMenu = [{
+    var FeatureContextMenu = [{
             text: 'Editar Area',
             callback: function(obj, map) {
                 handleFeatureContexMenuEvent2('EditarArea', feature, ModelName, mapX, mapY);
@@ -181,6 +176,20 @@ map.getViewport().addEventListener('contextmenu', function(e) {
                 handleFeatureContexMenuEvent2('EliminarArea', feature, ModelName, mapX, mapY);
             }
         }];
+    var SelectorContextMenu = [];
+    if (clkfeatures.length > 1) {
+        contextmenu.clear();        
+        var arrayLength = clkfeatures.length;
+        for (var i = 0; i < arrayLength; i++) {
+            console.log(clkfeatures[i].get('ModelName'));
+            menuFt = {text:clkfeatures[i].get('ModelName'),
+                        items: FeatureContextMenu
+                     };
+            SelectorContextMenu.push(menuFt);
+        }
+        contextmenu.extend(SelectorContextMenu);
+    } else if (clkfeatures.length == 1) {
+        contextmenu.clear();        
         contextmenu.extend(FeatureContextMenu);
     } else {
         contextmenu.clear();
@@ -349,6 +358,7 @@ function abmZonaPrompt(ft) {
     var detalle = "";
     var fecha_inicio = fechaActual();
     var fecha_fin = fechaActual();
+    var guardada = false;
 
     if (feature.get('ID') == null) {
         //es un nuevo feature
@@ -371,14 +381,15 @@ function abmZonaPrompt(ft) {
             guardar: {
                 label: 'Guardar',
                 callback: function() {
-
+                    guardada = true;
                     feature.setProperties({
                         'ID': id,
                         'Display': mensage.find('input[name=nombre_zona]').val(),
                         'ModelName': mensage.find('input[name=nombre_zona]').val(),
                         'fecha_inicio': mensage.find('input[name=fecha_inicio]').val(),
                         'fecha_fin': mensage.find('input[name=fecha_fin]').val(),
-                        'detalle': mensage.find('input[name=detalle_zona]').val()
+                        'detalle': mensage.find('input[name=detalle_zona]').val(),
+                        'guardada': guardada
                     });
 
                     var format = new ol.format.GeoJSON();
@@ -413,7 +424,10 @@ function abmZonaPrompt(ft) {
             cancelar: {
                 label: 'Cancelar',
                 callback: function (){
-                    source.removeFeature(feature);
+                    //console.log(feature.get('guardada')!== null);
+                    if (feature.get('guardada')== null){
+                       source.removeFeature(feature);    
+                    }
                 }
                 //className: 'btn-danger'
             }

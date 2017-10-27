@@ -74,35 +74,7 @@
         },
         ];
 
-
- var SelectorContextMenu = [{
-        text: 'FeatureA',
-      
-        callback: function (obj, map) {
-            var ID = feature.get('ID');
-            var ModelName = feature.get('ModelName')
-            handleFeatureContexMenuEvent('view', ID, ModelName);
-        }
-    },
-    {
-        text: 'FeatureB',
-
-        callback: function (obj, map) {
-            var ID = feature.get('ID');
-            var ModelName = feature.get('ModelName')
-            handleFeatureContexMenuEvent('view', ID, ModelName);
-        }
-    },
-    {
-        text: 'FeatureC',
-        callback: function (obj, map) {
-            var ID = feature.get('ID');
-            var ModelName = feature.get('ModelName')
-            handleFeatureContexMenuEvent('view', ID, ModelName);
-        }
-    }];
-
-
+ 
 function clearDraw() {
     map.removeInteraction(draw);
     if (source) {
