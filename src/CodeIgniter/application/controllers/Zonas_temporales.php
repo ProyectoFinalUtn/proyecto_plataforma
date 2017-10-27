@@ -21,4 +21,10 @@ class Zonas_temporales extends MY_Controller
 	  $this->Zonas_temporales_model->guardar_zona($zona);	  
 	}
 
+	public function eliminar_zona_temporal()
+	{
+	  $zona = json_decode($_POST['data'], true);
+	  $this->Zonas_temporales_model->eliminar_zona($zona);	  
+	}
+
 }

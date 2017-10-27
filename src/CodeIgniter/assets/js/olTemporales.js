@@ -171,19 +171,14 @@ map.getViewport().addEventListener('contextmenu', function(e) {
     } else if (clkfeatures.length == 1) {
         contextmenu.clear();
         var FeatureContextMenu = [{
-            text: 'View',
+            text: 'Editar Area',
             callback: function(obj, map) {
-                handleFeatureContexMenuEvent2('view', feature, ModelName);
+                handleFeatureContexMenuEvent2('EditarArea', feature, ModelName, mapX, mapY);
             }
         }, {
-            text: 'Edit',
+            text: 'Eliminar Area',
             callback: function(obj, map) {
-                handleFeatureContexMenuEvent2('edit', feature, ModelName);
-            }
-        }, {
-            text: 'Guardar Area',
-            callback: function(obj, map) {
-                handleFeatureContexMenuEvent2('GuardaArea', feature, ModelName, mapX, mapY);
+                handleFeatureContexMenuEvent2('EliminarArea', feature, ModelName, mapX, mapY);
             }
         }];
         contextmenu.extend(FeatureContextMenu);
@@ -268,12 +263,11 @@ function addInteraction(value) {
 }
 
 function buscaZonas(value) {
+    source.clear();
+    var fechaInicio = fechaActual();
+    var fechaFin = fechaActual();
+    var filtro;    
 
-    var fechaInicio = fechaActual();    
-    var fechaFin = fechaActual();        
-    var filtro;
-    console.log("BUSCA ZONAS");
-    
     switch (value) {
         case 'ACTIVAS':
             filtro = 'ACTIVAS';
@@ -284,40 +278,35 @@ function buscaZonas(value) {
         case 'TODAS':
             filtro = 'TODAS';
             break;
-    }
-    console.log("carga Data");
+    }    
     var param = {
         filtro: filtro,
         fecha_inicio: fechaInicio,
         fecha_fin: fechaFin
     };
     param = JSON.stringify(param);
-    console.log(param);
     $.ajax({
         type: 'POST',
         data: 'data=' + param,
         url: 'Consulta_zonas/buscar_zonas_temporales',
-        success: function(response)  {
-            cargaZonas(response); 
+        success: function(response) {
+            cargaZonas(response);
         }
-    });
-    console.log("paso el AJAX");
+    });    
 }
 
-function cargaZonas(data) {
-    console.log("carga Zonas");
+function cargaZonas(data) {    
     var arrayLength = data.response.length;
     var format = new ol.format.GeoJSON();
     for (var i = 0; i < arrayLength; i++) {
         //data.response[i]; //un json con geometria y propiedades
-        ft = "{\"type\":\"Feature\",\"geometry\":"+data.response[i].geometria+",\"properties\":"+data.response[i].propiedades+"}";
-        ft = format.readFeature(ft);
-        console.log(ft);
-        source.addFeature( ft );
-    //Do something
+        ft = "{\"type\":\"Feature\",\"geometry\":" + data.response[i].geometria + ",\"properties\":" + data.response[i].propiedades + "}";
+        ft = format.readFeature(ft);        
+        source.addFeature(ft);
+        //Do something
     }
-    
-} 
+
+}
 
 function getAreaLabel(feature) {
     if (typeof feature.get('ModelName') !== 'undefined') {
@@ -328,13 +317,29 @@ function getAreaLabel(feature) {
 
 function handleFeatureContexMenuEvent2(option, feature, ModelName, x, y) {
     contextmenu.clear();
-    if (option == 'edit') {
-
-    } else if (option == 'view') {
-
-    } else if (option == 'GuardaArea') {
+    if (option == 'EliminarArea') {
+        eliminarArea(feature);
+    } else if (option == 'EditarArea') {
         abmZonaPrompt(feature);
     }
+}
+
+function eliminarArea(ft) {
+    bootbox.confirm("Se eliminará la Zona Temporal '" + ft.get('ModelName') + "'", function(result) {
+        if (result) {            
+            var zona = {
+                id: ft.get('ID')
+            };
+            zona = JSON.stringify(zona);
+            $.ajax({
+                type: 'POST',
+                data: 'data=' + zona,
+                url: 'zonas_temporales/eliminar_zona_temporal'
+            });
+            source.removeFeature(ft);
+        }
+
+    })
 }
 
 function abmZonaPrompt(ft) {
@@ -342,8 +347,8 @@ function abmZonaPrompt(ft) {
     var id;
     var nombre = "";
     var detalle = "";
-    var fecha_inicio = "";
-    var fecha_fin = "";
+    var fecha_inicio = fechaActual();
+    var fecha_fin = fechaActual();
 
     if (feature.get('ID') == null) {
         //es un nuevo feature
@@ -351,19 +356,13 @@ function abmZonaPrompt(ft) {
     } else {
         //es un feature existente
         id = feature.get('ID');
-        nombre = feature.get('ModelName');
+        nombre = feature.get('ModelName');        
         detalle = feature.get('detalle');
         fecha_inicio = feature.get('fecha_inicio');
         fecha_fin = feature.get('fecha_fin');
     };
 
-    mensage = $("<form id='infZona' action=''>\
-    ID Zona:<input type='number' name='id_zona' value=" + id + " readonly/>\
-    Nombre Zona:<input type='text' name='nombre_zona' value=" + nombre + "/><br/>\
-    Fecha Inicio:<input type='date' name='fecha_inicio' value=" + fecha_inicio + " />\
-    Fecha Fin:<input type='date' name='fecha_fin' value=" + fecha_fin + " /><br/>\
-    Descripcion:<input type='text' name='detalle_zona' value=" + detalle + " />\
-    </form>");
+    mensage = $("<form id='infZona' action=''>ID Zona:<input type='number' name='id_zona' value=" + id + " readonly>Nombre Zona:<input type='text' name='nombre_zona' value=" + "'" + nombre + "'" + "><br/>Fecha Inicio:<input type='date' name='fecha_inicio' value=" + fecha_inicio + ">Fecha Fin:<input type='date' name='fecha_fin' value=" + fecha_fin + "><br/>Descripcion:<input type='text' name='detalle_zona' value=" + "'" + detalle + "'" + "></form>");
 
     bootbox.dialog({
         title: "Datos Zona Temporal",
@@ -384,8 +383,7 @@ function abmZonaPrompt(ft) {
 
                     var format = new ol.format.GeoJSON();
 
-                    var geoJson = format.writeFeature(feature);
-                    console.log(geoJson);
+                    var geoJson = format.writeFeature(feature);                    
 
                     var parsedGeoJson = JSON.parse(geoJson);
                     var geometria = parsedGeoJson.geometry;
@@ -413,7 +411,10 @@ function abmZonaPrompt(ft) {
                 //className: 'btn-success'
             },
             cancelar: {
-                label: 'Cancelar'
+                label: 'Cancelar',
+                callback: function (){
+                    source.removeFeature(feature);
+                }
                 //className: 'btn-danger'
             }
         },

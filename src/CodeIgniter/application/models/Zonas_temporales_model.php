@@ -41,7 +41,7 @@ class Zonas_temporales_model extends CI_Model {
             $this->db->from('zona_temporal');
             $where = '( ST_DWithin( 
                        ( ST_SetSRID(( ST_GeomFromGeoJSON (geometria::Text)),3857)),                  
-                       ( ST_SetSRID(ST_MakePoint('.strval($punto["long"]).','.strval($punto["lat"]).'),3857)),'.strval($punto["rad"]).'))';
+                       ( ST_SetSRID(ST_MakePoint('.strval($punto["long"]).','.strval($punto["lat"]).'),3857)),'.strval($punto["rad"]).')) AND '."'".strval($punto["fecha_inicio"])."'".' BETWEEN fecha_inicio AND fecha_fin';
             $this->db->where($where);
             $query = $this->db->get()->row();
             return $query;                       
@@ -53,20 +53,27 @@ class Zonas_temporales_model extends CI_Model {
           $this->db->select($columnas);
           $this->db->from('zona_temporal');
 
-          switch ($data["filtro"]) {
+          switch (strval($data["filtro"])) {
                 case "ACTIVAS":
-                    $where = '('."'".$data["fecha_inicio"]."'".' BETWEEN fecha_inicio AND fecha_fin)';
+                    $where = '('."'".strval($data["fecha_inicio"])."'".' BETWEEN fecha_inicio AND fecha_fin)';
+                    $this->db->where($where);           
                     break;
                 case "FUTURAS":
                     $where = '('."'".strval($data["fecha_inicio"])."'".'< fecha_inicio)';
+                    $this->db->where($where);           
                     break;
                 case "TODAS":
-                    $where = '(TRUE)' ;
                     break;
-           }                    
-          $this->db->where($where);           
+          }                    
+          
           $query = $this->db->get();
           return $query->result_array();
+        }
+
+        public function eliminar_zona($data)
+        {
+          $id = strval($data["id"]);
+          $this->db->delete('zona_temporal', array('id' => $id));
         }
 }
 ?>
