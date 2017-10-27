@@ -9,20 +9,34 @@ class Zonas_temporales_model extends CI_Model {
 
         public function guardar_zona($zona)
         {   
-            $result = $this->db->insert('zona_temporal', [
-            'id' => $zona["id"],
-            'nombre'  => $zona["nombre"],    
-            'detalle' => $zona["detalle"],
-            'geometria' => $zona["geometria"],
-            'propiedades' => $zona["propiedades"],
-            'fecha_inicio' => $zona["fecha_inicio"],
-            'fecha_fin' => $zona["fecha_fin"]
-            ]);            
+            $query = $this->db->query("SELECT id FROM zona_temporal WHERE id = ".$zona["id"]." limit 1");
+
+            $dataInsert = array('id' => $zona["id"],
+                          'nombre'  => $zona["nombre"],    
+                          'detalle' => $zona["detalle"],
+                          'geometria' => $zona["geometria"],
+                          'propiedades' => $zona["propiedades"],
+                          'fecha_inicio' => $zona["fecha_inicio"],
+                          'fecha_fin' => $zona["fecha_fin"]);
+
+            $dataUpdate = array('nombre'  => $zona["nombre"],    
+                          'detalle' => $zona["detalle"],
+                          'geometria' => $zona["geometria"],
+                          'propiedades' => $zona["propiedades"],
+                          'fecha_inicio' => $zona["fecha_inicio"],
+                          'fecha_fin' => $zona["fecha_fin"]);
+
+            if ($query->num_rows() == 0){
+                return $this->db->insert('zona_temporal', $dataInsert);
+            }else { 
+                $this->db->where('id', $zona["id"]);
+                return $this->db->update('zona_temporal', $dataUpdate);
+            };                        
         }
 
         public function get_zona_within_radius($punto)
         {
-           $columnas = 'id, nombre';
+            $columnas = 'id, nombre';
             $this->db->select($columnas);
             $this->db->from('zona_temporal');
             $where = '( ST_DWithin( 
@@ -31,6 +45,28 @@ class Zonas_temporales_model extends CI_Model {
             $this->db->where($where);
             $query = $this->db->get()->row();
             return $query;                       
-          }
+        }
+
+        public function buscar_zonas($data)
+        {          
+          $columnas = 'geometria, propiedades';
+          $this->db->select($columnas);
+          $this->db->from('zona_temporal');
+
+          switch ($data["filtro"]) {
+                case "ACTIVAS":
+                    $where = '('."'".$data["fecha_inicio"]."'".' BETWEEN fecha_inicio AND fecha_fin)';
+                    break;
+                case "FUTURAS":
+                    $where = '('."'".strval($data["fecha_inicio"])."'".'< fecha_inicio)';
+                    break;
+                case "TODAS":
+                    $where = '(TRUE)' ;
+                    break;
+           }                    
+          $this->db->where($where);           
+          $query = $this->db->get();
+          return $query->result_array();
+        }
 }
 ?>

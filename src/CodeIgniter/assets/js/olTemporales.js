@@ -261,13 +261,63 @@ function addInteraction(value) {
             // unset tooltip so that a new one can be created
             measureTooltipElement = null;
             createMeasureTooltip();
-            console.log("EN drawend")
-            console.log(evt.feature);
             abmZonaPrompt(evt.feature);
         });
         map.addInteraction(draw);
     }
 }
+
+function buscaZonas(value) {
+
+    var fechaInicio = fechaActual();    
+    var fechaFin = fechaActual();        
+    var filtro;
+    console.log("BUSCA ZONAS");
+    
+    switch (value) {
+        case 'ACTIVAS':
+            filtro = 'ACTIVAS';
+            break;
+        case 'FUTURAS':
+            filtro = 'FUTURAS';
+            break;
+        case 'TODAS':
+            filtro = 'TODAS';
+            break;
+    }
+    console.log("carga Data");
+    var param = {
+        filtro: filtro,
+        fecha_inicio: fechaInicio,
+        fecha_fin: fechaFin
+    };
+    param = JSON.stringify(param);
+    console.log(param);
+    $.ajax({
+        type: 'POST',
+        data: 'data=' + param,
+        url: 'Consulta_zonas/buscar_zonas_temporales',
+        success: function(response)  {
+            cargaZonas(response); 
+        }
+    });
+    console.log("paso el AJAX");
+}
+
+function cargaZonas(data) {
+    console.log("carga Zonas");
+    var arrayLength = data.response.length;
+    var format = new ol.format.GeoJSON();
+    for (var i = 0; i < arrayLength; i++) {
+        //data.response[i]; //un json con geometria y propiedades
+        ft = "{\"type\":\"Feature\",\"geometry\":"+data.response[i].geometria+",\"properties\":"+data.response[i].propiedades+"}";
+        ft = format.readFeature(ft);
+        console.log(ft);
+        source.addFeature( ft );
+    //Do something
+    }
+    
+} 
 
 function getAreaLabel(feature) {
     if (typeof feature.get('ModelName') !== 'undefined') {
@@ -279,9 +329,9 @@ function getAreaLabel(feature) {
 function handleFeatureContexMenuEvent2(option, feature, ModelName, x, y) {
     contextmenu.clear();
     if (option == 'edit') {
-        console.log('edit');
+
     } else if (option == 'view') {
-        console.log('view');
+
     } else if (option == 'GuardaArea') {
         abmZonaPrompt(feature);
     }
@@ -289,13 +339,30 @@ function handleFeatureContexMenuEvent2(option, feature, ModelName, x, y) {
 
 function abmZonaPrompt(ft) {
     var feature = ft;
-    
+    var id;
+    var nombre = "";
+    var detalle = "";
+    var fecha_inicio = "";
+    var fecha_fin = "";
+
+    if (feature.get('ID') == null) {
+        //es un nuevo feature
+        id = GetID();
+    } else {
+        //es un feature existente
+        id = feature.get('ID');
+        nombre = feature.get('ModelName');
+        detalle = feature.get('detalle');
+        fecha_inicio = feature.get('fecha_inicio');
+        fecha_fin = feature.get('fecha_fin');
+    };
+
     mensage = $("<form id='infZona' action=''>\
-    ID Zona:<input type='number' name='id_zona' value=" + GetID() + " readonly/>\
-    Nombre Zona:<input type='text' name='nombre_zona' /><br/>\
-    Fecha Inicio:<input type='datetime-local' name='fecha_inicio' />\
-    Fecha Fin:<input type='datetime-local' name='fecha_fin' /><br/>\
-    Descripcion:<input type='text' name='detalle_zona' />\
+    ID Zona:<input type='number' name='id_zona' value=" + id + " readonly/>\
+    Nombre Zona:<input type='text' name='nombre_zona' value=" + nombre + "/><br/>\
+    Fecha Inicio:<input type='date' name='fecha_inicio' value=" + fecha_inicio + " />\
+    Fecha Fin:<input type='date' name='fecha_fin' value=" + fecha_fin + " /><br/>\
+    Descripcion:<input type='text' name='detalle_zona' value=" + detalle + " />\
     </form>");
 
     bootbox.dialog({
@@ -304,23 +371,29 @@ function abmZonaPrompt(ft) {
         buttons: {
             guardar: {
                 label: 'Guardar',
-                callback: function() {                    
-                    feature.setProperties({                    
-                    'Display': mensage.find('input[name=nombre_zona]').val(),
-                    'ModelName': mensage.find('input[name=nombre_zona]').val()                    
+                callback: function() {
+
+                    feature.setProperties({
+                        'ID': id,
+                        'Display': mensage.find('input[name=nombre_zona]').val(),
+                        'ModelName': mensage.find('input[name=nombre_zona]').val(),
+                        'fecha_inicio': mensage.find('input[name=fecha_inicio]').val(),
+                        'fecha_fin': mensage.find('input[name=fecha_fin]').val(),
+                        'detalle': mensage.find('input[name=detalle_zona]').val()
                     });
-                    console.log(mensage.find('input[name=nombre_zona]').val());
+
                     var format = new ol.format.GeoJSON();
-                    console.log(format);
+
                     var geoJson = format.writeFeature(feature);
-                    console.log("dos");
+                    console.log(geoJson);
+
                     var parsedGeoJson = JSON.parse(geoJson);
                     var geometria = parsedGeoJson.geometry;
                     geometria = JSON.stringify(geometria);
                     var propiedades = parsedGeoJson.properties;
                     propiedades = JSON.stringify(propiedades);
                     var zona = {
-                        id: GetID(),
+                        id: id,
                         nombre: mensage.find('input[name=nombre_zona]').val(),
                         detalle: mensage.find('input[name=detalle_zona]').val(),
                         fecha_inicio: mensage.find('input[name=fecha_inicio]').val(),
@@ -329,13 +402,13 @@ function abmZonaPrompt(ft) {
                         propiedades: propiedades
                     };
                     zona = JSON.stringify(zona);
-                    console.log(zona);
+
                     $.ajax({
                         type: 'POST',
                         data: 'data=' + zona,
                         url: 'zonas_temporales/guardar_zona_temporal'
                     });
-                    console.log("tre");
+
                 }
                 //className: 'btn-success'
             },
@@ -381,4 +454,23 @@ function createMeasureTooltip() {
         visible: true
     });
     map.addOverlay(measureTooltip);
+}
+
+
+function fechaActual() {
+    d = new Date();
+    n = d.toISOString();
+    date = new Date(n);
+    year = date.getFullYear();
+    month = date.getMonth() + 1;
+    dt = date.getDate();
+
+    if (dt < 10) {
+        dt = '0' + dt;
+    }
+    if (month < 10) {
+        month = '0' + month;
+    }
+
+    return year + '-' + month + '-' + dt;
 }

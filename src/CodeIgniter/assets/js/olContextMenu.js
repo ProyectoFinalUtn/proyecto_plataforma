@@ -11,14 +11,6 @@
             classname: 'some-style-class', // you can add this icon with a CSS class
             // instead of `icon` property (see next line)
             items: [{
-                text: 'None',
-                classname: 'some-style-class', // you can add this icon with a CSS class
-                // instead of `icon` property (see next line)
-           
-                callback: function (obj, map) {
-                    addInteraction('None');
-                }
-            }, {
                 text: 'Poligono',
                 classname: 'some-style-class', // you can add this icon with a CSS class
                 // instead of `icon` property (see next line)
@@ -34,7 +26,44 @@
                 callback: function (obj, map) {
                     addInteraction('Circle');                    
                 }
+            },
+            ]
+
+        },
+        {
+            text: 'Mostrar Zonas',
+            classname: 'some-style-class', // you can add this icon with a CSS class
+            // instead of `icon` property (see next line)
+            items: [{
+                text: 'Activas',
+                classname: 'some-style-class', // you can add this icon with a CSS class
+                // instead of `icon` property (see next line)
+               
+                callback: function (obj, map) {
+                    buscaZonas('ACTIVAS');
+                }
             }, {
+                text: 'Futuras',
+                classname: 'some-style-class', // you can add this icon with a CSS class
+                // instead of `icon` property (see next line)
+                
+                callback: function (obj, map) {
+                    buscaZonas('FUTURAS');
+                }
+            }, {
+                text: 'Todas',
+                classname: 'some-style-class', // you can add this icon with a CSS class
+                // instead of `icon` property (see next line)
+                                
+                callback: function (obj, map) {
+                    buscaZonas('TODAS');
+                }
+            },
+            ]
+
+        },
+        '-',
+        {
                 text: 'Limpiar',
                 classname: 'some-style-class', // you can add this icon with a CSS class
                 // instead of `icon` property (see next line)
@@ -42,9 +71,6 @@
                 callback: function (obj, map) {
                     clearDraw();
                 }
-            },
-            ]
-
         },
         ];
 

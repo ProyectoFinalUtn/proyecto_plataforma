@@ -13,7 +13,8 @@
 
             // Configure limits on our controller methods
             // Ensure you have created the 'limits' table and enabled 'limits' within application/config/rest.php
-            $this->methods['en_zona_temporal_get']['limit'] = 500; // 500 requests per hour per user/key            
+            $this->methods['en_zona_temporal_post']['limit'] = 500; // 500 requests per hour per user/key            
+            $this->methods['buscar_zonas_temporales_post']['limit'] = 500; // 500 requests per hour per user/key            
             $this->responseError = ['status' => FALSE, 'message' => ''];
             $this->responseOk = ['status' => TRUE, 'response' => NULL, 'message' => ''];
             //$this->inicializa_controller();
@@ -26,8 +27,8 @@
             //Recibe lat, long y una radio, de estar en una zona retorna su ID y nombre caso contrario NULL.
                    
             $area = file_get_contents('php://input');
-            $area = json_decode($area, TRUE);
-            $zona = NULL;
+            $area = json_decode($area, TRUE);            
+            $zona = NULL;            
             try{
                 $this->load->model('Zonas_temporales_model');                
                 $zona = $this->Zonas_temporales_model->get_zona_within_radius($area);
@@ -37,6 +38,22 @@
                     $zonaRta = '{"id":0,"nombre":NULL}';                    
                 }                
                 $this->set_respuesta($zonaRta);
+                $this->set_response($this->responseOk, REST_Controller::HTTP_OK);
+            }
+            catch(Exception $exception){
+                $this->set_mensaje_error($exception->getMessage());
+                $this->response($this->responseError, REST_Controller::HTTP_BAD_REQUEST);
+            }
+        }
+
+        public function buscar_zonas_temporales_post()
+        {
+            $data = json_decode($_POST['data'], true);                        
+            $zonas = NULL;
+            try{
+                $this->load->model('Zonas_temporales_model');                
+                $zonas = $this->Zonas_temporales_model->buscar_zonas($data);
+                $this->set_respuesta($zonas);
                 $this->set_response($this->responseOk, REST_Controller::HTTP_OK);
             }
             catch(Exception $exception){
