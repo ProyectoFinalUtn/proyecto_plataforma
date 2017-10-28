@@ -297,6 +297,8 @@ function buscaZonas(value) {
     $.ajax({
         type: 'POST',
         data: 'data=' + param,
+        username: "admin",
+        password: "1234",
         url: 'Consulta_zonas/buscar_zonas_temporales',
         success: function(response) {
             cargaZonas(response);
