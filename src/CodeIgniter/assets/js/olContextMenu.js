@@ -1,7 +1,7 @@
 
  var StandardContextItems = [
           {
-              text: 'Centrar el mapa aqui',
+              text: 'Centrar el mapa aquí',
               classname: 'some-style-class', // add some CSS rules,
               callback: center
           },
@@ -11,7 +11,7 @@
             classname: 'some-style-class', // you can add this icon with a CSS class
             // instead of `icon` property (see next line)
             items: [{
-                text: 'Poligono',
+                text: 'Polígono',
                 classname: 'some-style-class', // you can add this icon with a CSS class
                 // instead of `icon` property (see next line)
                
@@ -19,7 +19,7 @@
                     addInteraction('Polygon');
                 }
             }, {
-                text: 'Circulo con radio',
+                text: 'Círculo con radio',
                 classname: 'some-style-class', // you can add this icon with a CSS class
                 // instead of `icon` property (see next line)
                 

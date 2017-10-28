@@ -336,7 +336,7 @@ function handleFeatureContexMenuEvent2(option, feature, ModelName, x, y) {
 }
 
 function eliminarArea(ft) {
-    bootbox.confirm("Se eliminará la Zona Temporal '" + ft.get('ModelName') + "'", function(result) {
+    bootbox.confirm("¿Confirma que desea eliminar la Zona '" + ft.get('ModelName') + "' ?", function(result) {
         if (result) {            
             var zona = {
                 id: ft.get('ID')
@@ -374,51 +374,73 @@ function abmZonaPrompt(ft) {
         fecha_fin = feature.get('fecha_fin');
     };
 
-    mensage = $("<form id='infZona' action=''>ID Zona:<input type='number' name='id_zona' value=" + id + " readonly>Nombre Zona:<input type='text' name='nombre_zona' value=" + "'" + nombre + "'" + "><br/>Fecha Inicio:<input type='date' name='fecha_inicio' value=" + fecha_inicio + ">Fecha Fin:<input type='date' name='fecha_fin' value=" + fecha_fin + "><br/>Descripcion:<input type='text' name='detalle_zona' value=" + "'" + detalle + "'" + "></form>");
+    mensage = $("<form id='infZona' style='padding:8px;' action=''><div id='id_zona' style='padding-bottom:8px;display:none;'><h5>ID Zona:</h5><input style='width:100%;padding:8px;font-size:10px; type='number' name='id_zona' value=" + id + " readonly></div><div id='nombre_zona' style='padding-bottom:8px;'><h5>Nombre de la Zona:</h5><input style='width:100%;padding:8px;font-size:10px;border: 0.5px solid' type='text' name='nombre_zona' value=" + "'" + nombre + "'" + "></div><div id='fecha_inicio' style='padding-bottom:8px;'><h5>Fecha de Vigencia Desde:</h5><input style='width:100%;padding:8px;font-size:10px;border: 0.5px solid' type='date' name='fecha_inicio' value=" + fecha_inicio + "></div><div id='fecha_fin' style='padding-bottom:8px;'><h5>Fecha de Vigencia Hasta:</h5><input style='width:100%;padding:8px;font-size:10px;border: 0.5px solid' type='date' name='fecha_fin' value=" + fecha_fin + "></div><div style='padding-bottom:8px;'><h5>Descripción:</h5><textarea style='height:80px;width:100%;padding-top:8px;padding-left:8px;font-size:10px;border: 0.5px solid' type='text' name='detalle_zona'>" + detalle + "</textarea></div></form>");
 
     bootbox.dialog({
-        title: "Datos Zona Temporal",
+        title: '<p>Guardar una Zona Restringida Temporal</p>',
         message: mensage,
         buttons: {
             guardar: {
                 label: 'Guardar',
                 callback: function() {
-                    guardada = true;
-                    feature.setProperties({
-                        'ID': id,
-                        'Display': mensage.find('input[name=nombre_zona]').val(),
-                        'ModelName': mensage.find('input[name=nombre_zona]').val(),
-                        'fecha_inicio': mensage.find('input[name=fecha_inicio]').val(),
-                        'fecha_fin': mensage.find('input[name=fecha_fin]').val(),
-                        'detalle': mensage.find('input[name=detalle_zona]').val(),
-                        'guardada': guardada
-                    });
+					$("div.errorMsg").remove();
+					var ok = true;
+					if (mensage.find('input[name=nombre_zona]').val() == '') {
+						$("div[id='nombre_zona']").append('<div class="errorMsg" style="color:red;"><b>Este campo es obligatorio</b></div>');
+						ok = false;
+					}
+					if (mensage.find('input[name=fecha_inicio]').val() == '') {
+						$("div[id='fecha_inicio']").append('<div class="errorMsg" style="color:red;"><b>Este campo es obligatorio</b></div>');
+						ok = false;
+					}
+					if (mensage.find('input[name=fecha_fin]').val() == '') {
+						$("div[id='fecha_fin']").append('<div class="errorMsg" style="color:red;"><b>Este campo es obligatorio</b></div>');
+						ok = false;
+					}
+					if (mensage.find('input[name=fecha_inicio]').val() > mensage.find('input[name=fecha_fin]').val()) {
+						$("div[id='fecha_inicio']").append('<div class="errorMsg" style="color:red;"><b>La fecha de inicio debe ser anterior a la de fin</b></div>');
+						ok = false;
+					}
+					if (ok) {
+						guardada = true;
+						feature.setProperties({
+							'ID': id,
+							'Display': mensage.find('input[name=nombre_zona]').val(),
+							'ModelName': mensage.find('input[name=nombre_zona]').val(),
+							'fecha_inicio': mensage.find('input[name=fecha_inicio]').val(),
+							'fecha_fin': mensage.find('input[name=fecha_fin]').val(),
+							'detalle': mensage.find('textarea[name=detalle_zona]').val(),
+							'guardada': guardada
+						});
+						
+						var format = new ol.format.GeoJSON();
 
-                    var format = new ol.format.GeoJSON();
+						var geoJson = format.writeFeature(feature);                    
 
-                    var geoJson = format.writeFeature(feature);                    
+						var parsedGeoJson = JSON.parse(geoJson);
+						var geometria = parsedGeoJson.geometry;
+						geometria = JSON.stringify(geometria);
+						var propiedades = parsedGeoJson.properties;
+						propiedades = JSON.stringify(propiedades);
+						var zona = {
+							id: id,
+							nombre: mensage.find('input[name=nombre_zona]').val(),
+							detalle: mensage.find('textarea[name=detalle_zona]').val(),
+							fecha_inicio: mensage.find('input[name=fecha_inicio]').val(),
+							fecha_fin: mensage.find('input[name=fecha_fin]').val(),
+							geometria: geometria,
+							propiedades: propiedades
+						};
+						zona = JSON.stringify(zona);
 
-                    var parsedGeoJson = JSON.parse(geoJson);
-                    var geometria = parsedGeoJson.geometry;
-                    geometria = JSON.stringify(geometria);
-                    var propiedades = parsedGeoJson.properties;
-                    propiedades = JSON.stringify(propiedades);
-                    var zona = {
-                        id: id,
-                        nombre: mensage.find('input[name=nombre_zona]').val(),
-                        detalle: mensage.find('input[name=detalle_zona]').val(),
-                        fecha_inicio: mensage.find('input[name=fecha_inicio]').val(),
-                        fecha_fin: mensage.find('input[name=fecha_fin]').val(),
-                        geometria: geometria,
-                        propiedades: propiedades
-                    };
-                    zona = JSON.stringify(zona);
-
-                    $.ajax({
-                        type: 'POST',
-                        data: 'data=' + zona,
-                        url: 'zonas_temporales/guardar_zona_temporal'
-                    });
+						$.ajax({
+							type: 'POST',
+							data: 'data=' + zona,
+							url: 'zonas_temporales/guardar_zona_temporal'
+						});
+					} else {
+						return false;
+					}
 
                 }
                 //className: 'btn-success'
