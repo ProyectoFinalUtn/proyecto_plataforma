@@ -13,9 +13,8 @@ $(document).ready(function() {
 					var posting = $.post( URL_POST, { usuario: USER } );
 					posting.done(function() {
 						alert("Usuario <"+USER+"> dado de baja");
-						$(".main").empty();
 						var URL = "Usuarios_admin";
-						$(".main").load(URL);
+						$(location).attr('href', URL);
 					});
 				}
 		} else {

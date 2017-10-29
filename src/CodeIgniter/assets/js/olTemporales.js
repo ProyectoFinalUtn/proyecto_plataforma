@@ -378,6 +378,7 @@ function abmZonaPrompt(ft) {
 
     bootbox.dialog({
         title: '<p>Guardar una Zona Restringida Temporal</p>',
+		backdrop: false,
         message: mensage,
         buttons: {
             guardar: {

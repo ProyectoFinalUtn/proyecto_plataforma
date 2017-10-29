@@ -32,9 +32,8 @@ $(document).ready(function() {
 				var posting = $.post( URL_POST, { descripcion: RESOLUCION, fecha_desde: DESDE, fecha_hasta: HASTA, contenido: CONTENT, contenido_html: CONTENT_HTML, Guardar: 1 } );
 				posting.done(function() {
 					alert("Normativa creada con éxito");
-					$(".main").empty();
 					var URL = "Normativas";
-					$(".main").load(URL);
+					$(location).attr('href', URL);
 				});
 			}
 		}

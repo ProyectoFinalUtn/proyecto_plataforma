@@ -57,9 +57,8 @@ $(document).ready(function() {
 								var posting = $.post( URL_POST, { id_usuario: ID, password: PSWD, id_persona: PERSONA, nombre: NOMBRE, apellido: APELLIDO, documento: DOCUMENTO, email: EMAIL, Guardar: 1 } );
 								posting.done(function() {
 									alert("Cambios realizados con éxito");
-									$(".main").empty();
 									var URL = "Usuarios_admin";
-									$(".main").load(URL);
+									$(location).attr('href', URL);
 								});
 							}
 						}
@@ -78,9 +77,8 @@ $(document).ready(function() {
 						var posting = $.post( URL_POST, { id_usuario: ID, password: PSWD, id_persona: PERSONA, nombre: NOMBRE, apellido: APELLIDO, documento: DOCUMENTO, email: EMAIL, Guardar: 1 } );
 						posting.done(function() {
 							alert("Cambios realizados con éxito");
-							$(".main").empty();
 							var URL = "Usuarios_admin";
-							$(".main").load(URL);
+							$(location).attr('href', URL);
 						});
 					}
 				}

@@ -9,7 +9,9 @@
    </style>
    <title>Plataforma de Administración de Normativa</title>
 
-<script src="<?php echo base_url(); ?>assets/js/jquery-2.1.1.min.js" defer></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
 
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css">
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap-submenu.min.css">
@@ -21,27 +23,30 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/ol3-layerswitcher.css">
 
 
-
-
-
-<script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js" defer></script>
 <script src="<?php echo base_url(); ?>assets/js/bootstrap-submenu.min.js" defer></script>
 <script src="<?php echo base_url(); ?>assets/js/docs.js" defer></script>
 <script src="<?php echo base_url(); ?>assets/js/global.js" defer></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/ol3/4.3.3/ol.js"></script>
-<script src="//cdn.jsdelivr.net/openlayers.geocoder/latest/ol3-geocoder.js"></script>
-<script src="//cdn.jsdelivr.net/openlayers.contextmenu/latest/ol3-contextmenu.js"></script>
-<script src="<?php echo base_url(); ?>assets/js/olContextMenu.js"></script>
-<script src="<?php echo base_url(); ?>assets/js/utility.js"></script>
-<script src="<?php echo base_url(); ?>assets/js/ol3-layerswitcher.js"></script>
+
 
 
 
 
 
    
-  </head>
-  <body>
-   <!-- depends on your template design -->
-   <div class="dashboard-wrapper">
+</head>
+<body>
+ <!-- depends on your template design -->
+ <div class="dashboard-wrapper">
     <div class="main-content">
+        <nav class="navbar navbar-expand-md bg-secondary navbar-dark" style="background-color: #00082c;">
+            <div class="container">
+              <a class="navbar-brand" href="Panel"><img src="assets/img/logo_menu.png" style="width:25%"></a>
+              <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <div class="collapse navbar-collapse" style="color:white;">
+                    <?php echo $menu;?>
+                </div>
+                <a class="btn navbar-btn ml-2 text-white btn-secondary" href="Mi_perfil"><i class="fa d-inline fa-lg fa-2x fa-user-circle-o"></i> <?php echo $_SESSION['usuario']; ?></a>
+              </div>
+            </div>
+        </nav>

@@ -34,9 +34,8 @@ $(document).ready(function() {
 				var posting = $.post( URL_POST, { id_normativa: ID, descripcion: RESOLUCION, fecha_desde: DESDE, fecha_hasta: HASTA, contenido: CONTENT, contenido_html: CONTENT_HTML, Guardar: 1 } );
 				posting.done(function() {
 					alert("Cambios realizados con éxito");
-					$(".main").empty();
 					var URL = "Normativas";
-					$(".main").load(URL);
+					$(location).attr('href', URL);
 				});
 			}
 		}

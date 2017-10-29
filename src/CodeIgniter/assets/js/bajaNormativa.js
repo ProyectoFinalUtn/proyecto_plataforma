@@ -12,10 +12,9 @@ $(document).ready(function() {
 					var URL_POST = 'Eliminar_normativa';
 					var posting = $.post( URL_POST, { id_normativa: ID } );
 					posting.done(function() {
-						alert("Normativa <"+NORM+"> dada de baja");
-						$(".main").empty();
+						alert("Normativa <"+NORM+"> dada de baja exitosamente. Fuera de vigencia.");
 						var URL = "Normativas";
-						$(".main").load(URL);
+						$(location).attr('href', URL);
 					});
 				}
 		} else {

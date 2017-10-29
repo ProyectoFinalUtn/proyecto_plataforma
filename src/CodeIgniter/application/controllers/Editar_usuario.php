@@ -4,9 +4,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Editar_usuario extends MY_Controller
 {
 
-	 public function __construct()
+    public function __construct()
     {
-        parent::__construct();        
+        parent::__construct();
+        $this->load->library('Multi_menu');
     }
 
 	public function index()
@@ -35,7 +36,14 @@ class Editar_usuario extends MY_Controller
                         $idUsuarioAdmin = $_GET['idUsuario'];
                         $perfil = $this->obtener_datos_admin($idUsuarioAdmin);
                         $data['perfil'] = $perfil;
+                        
+                        $this->load->model("Menu_model", "menu");
+                        $items = $this->menu->all();
+                        $this->multi_menu->set_items($items);
+                        $menu = array('menu' => $this->multi_menu->render());
+                        $this->load->view('Header', $menu);
                         $this->load->view('Editar_usuario', $data);
+                        $this->load->view('Footer');
                     }
             }
 	}

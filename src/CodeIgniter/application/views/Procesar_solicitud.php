@@ -1,5 +1,3 @@
-<html>
-    <title>Solicitud de Excepción</title>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,7 +8,6 @@
         <link rel="stylesheet" href="https://pingendo.com/assets/bootstrap/bootstrap-4.0.0-beta.1.css" type="text/css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
         
-        <script src="<?php echo base_url(); ?>assets/js/global.js" defer></script>
         <script src="<?php echo base_url(); ?>assets/js/solicitud.js" defer></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/ol3/4.3.3/ol.js"></script>
         <script src="//cdn.jsdelivr.net/openlayers.geocoder/latest/ol3-geocoder.js"></script>
@@ -108,4 +105,3 @@
             </div>
         </div>
     </body>
-</html>

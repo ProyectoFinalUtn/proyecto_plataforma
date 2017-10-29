@@ -4,9 +4,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Procesar_solicitud extends MY_Controller
 {
 
-	 public function __construct()
+    public function __construct()
     {
-        parent::__construct();        
+        parent::__construct();
+        $this->load->library('Multi_menu');
     }
 
 	public function index()
@@ -25,7 +26,14 @@ class Procesar_solicitud extends MY_Controller
             else {
                 $solicitud = $this->obtener_detalle_solicitud_por_id($_GET['idSolicitud']);
                 $data['solicitud'] = $solicitud;
+                
+                $this->load->model("Menu_model", "menu");
+                $items = $this->menu->all();
+                $this->multi_menu->set_items($items);
+                $menu = array('menu' => $this->multi_menu->render());
+                $this->load->view('Header', $menu);
                 $this->load->view('Procesar_solicitud', $data);
+                $this->load->view('Footer');
             }
 	}
         

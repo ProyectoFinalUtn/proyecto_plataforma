@@ -4,9 +4,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Info_solicitudes extends MY_Controller
 {
 
-	 public function __construct()
+    public function __construct()
     {
-        parent::__construct();        
+        parent::__construct();
+        $this->load->library('Multi_menu');
     }
 
 	public function index()
@@ -15,7 +16,14 @@ class Info_solicitudes extends MY_Controller
             $data['solicitudes'] = $solicitudes;
             $provincias = $this->obtener_provincias();
             $data['provincias'] = $provincias;
-            $this->load->view('Info_solicitudes', $data);   
+            
+            $this->load->model("Menu_model", "menu");
+            $items = $this->menu->all();
+            $this->multi_menu->set_items($items);
+            $menu = array('menu' => $this->multi_menu->render());
+            $this->load->view('Header', $menu);
+            $this->load->view('Info_solicitudes', $data);
+            $this->load->view('Footer');
 	}
                
         private function obtener_solicitudes()

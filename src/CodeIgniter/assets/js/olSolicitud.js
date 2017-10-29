@@ -1,4 +1,5 @@
 // Ubicar en un mapa los datos de la solicitud
+$(document).ready(function() {
 var radio_solicitud = parseInt($("input[id='radio']").val());
 var lati = parseFloat(readCookie('sol_latitud'));
 var longi = parseFloat(readCookie('sol_longitud'));
@@ -162,6 +163,8 @@ var mousePositionControl = new ol.control.MousePosition({
         undefinedHTML: '&nbsp;'
 });
 map.addControl(mousePositionControl);
+
+});
 
 function getLongLatFromPoint(loc) {
     return ol.proj.transform(loc, 'EPSG:3857', 'EPSG:4326')

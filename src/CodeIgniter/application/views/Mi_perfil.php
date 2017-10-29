@@ -1,5 +1,3 @@
-<html>
-    <title>Perfil de Usuario</title>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,7 +5,6 @@
         <link rel="stylesheet" href="https://pingendo.com/assets/bootstrap/bootstrap-4.0.0-beta.1.css" type="text/css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
         
-        <script src="<?php echo base_url(); ?>assets/js/global.js" defer></script>
         <script src="<?php echo base_url(); ?>assets/js/md5.js" defer></script>
         <script src="<?php echo base_url(); ?>assets/js/perfil.js" defer></script>
 
@@ -69,4 +66,3 @@
             </div>
         </div>
     </body>
-</html>

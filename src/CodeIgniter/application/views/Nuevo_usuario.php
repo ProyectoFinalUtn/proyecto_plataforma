@@ -1,5 +1,3 @@
-<html>
-    <title>Nuevo Usuario</title>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,7 +5,6 @@
         <link rel="stylesheet" href="https://pingendo.com/assets/bootstrap/bootstrap-4.0.0-beta.1.css" type="text/css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
         
-        <script src="<?php echo base_url(); ?>assets/js/global.js" defer></script>
         <script src="<?php echo base_url(); ?>assets/js/md5.js" defer></script>
         <script src="<?php echo base_url(); ?>assets/js/nuevoPerfil.js" defer></script>
 
@@ -43,7 +40,7 @@
                                 echo "<input type=\"text\" class=\"form-control\" name=\"apellido\" placeholder=\"Completa apellidos\"></div>";
                                 echo "<div class=\"form-group\" id=\"documento\"> <label>Número de Documento</label>";
                                 echo "<input type=\"number\" class=\"form-control\" name=\"documento\" placeholder=\"Completa número de documento\"></div>";
-                                echo "<div class=\"form-group\" id=\"email\"> <label>Correo Electrónico</label>";
+                                echo "<div class=\"form-group\" id=\"email\"> <label>Correo Electrónico *</label>";
                                 echo "<input type=\"text\" class=\"form-control\" name=\"email\" placeholder=\"Completa e-mail\"></div>";
                                 echo "<div class=\"form-group\" id=\"password\"> <label>Contraseña *</label>";
                                 echo "<input type=\"password\" class=\"form-control\" name=\"password\" placeholder=\"Completa contraseña\"></div>";
@@ -62,4 +59,3 @@
             </div>
         </div>
     </body>
-</html>

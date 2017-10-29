@@ -5,7 +5,7 @@ $(document).ready(function() {
 		var confirma = confirm("¿Desea cerrar la sesión? Deberá volver a ingresar sus credenciales para operar.")
 		if (confirma) {
 			var URL = "Sessions/logout";
-			$(".main").load(URL);
+			$(location).attr('href', URL);
 		}
 	});
 	
@@ -68,7 +68,7 @@ $(document).ready(function() {
 									alert("Cambios realizados con éxito");
 									$(".main").empty();
 									var URL = "Panel";
-									$(".main").load(URL);
+									$(location).attr('href', URL);
 								});
 							}
 						}
