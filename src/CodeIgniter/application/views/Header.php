@@ -9,7 +9,7 @@
    </style>
    <title>Plataforma de Administración de Normativa</title>
 
-<script src="http://code.jquery.com/jquery-2.1.1.min.js" defer></script>
+<script src="<?php echo base_url(); ?>assets/js/jquery-2.1.1.min.js" defer></script>
 
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css">
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap-submenu.min.css">
