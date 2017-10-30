@@ -264,7 +264,7 @@ function addInteraction(value) {
             sketch = null;
             // unset tooltip so that a new one can be created
             measureTooltipElement = null;
-            createMeasureTooltip();
+            map.removeOverlay(measureTooltip);
             abmZonaPrompt(evt.feature);
         });
         map.addInteraction(draw);
@@ -378,70 +378,70 @@ function abmZonaPrompt(ft) {
 
     bootbox.dialog({
         title: '<p>Guardar una Zona Restringida Temporal</p>',
-		backdrop: false,
+        backdrop: false,
         message: mensage,
         buttons: {
             guardar: {
                 label: 'Guardar',
                 callback: function() {
-					$("div.errorMsg").remove();
-					var ok = true;
-					if (mensage.find('input[name=nombre_zona]').val() == '') {
-						$("div[id='nombre_zona']").append('<div class="errorMsg" style="color:red;"><b>Este campo es obligatorio</b></div>');
-						ok = false;
-					}
-					if (mensage.find('input[name=fecha_inicio]').val() == '') {
-						$("div[id='fecha_inicio']").append('<div class="errorMsg" style="color:red;"><b>Este campo es obligatorio</b></div>');
-						ok = false;
-					}
-					if (mensage.find('input[name=fecha_fin]').val() == '') {
-						$("div[id='fecha_fin']").append('<div class="errorMsg" style="color:red;"><b>Este campo es obligatorio</b></div>');
-						ok = false;
-					}
-					if (mensage.find('input[name=fecha_inicio]').val() > mensage.find('input[name=fecha_fin]').val()) {
-						$("div[id='fecha_inicio']").append('<div class="errorMsg" style="color:red;"><b>La fecha de inicio debe ser anterior a la de fin</b></div>');
-						ok = false;
-					}
-					if (ok) {
-						guardada = true;
-						feature.setProperties({
-							'ID': id,
-							'Display': mensage.find('input[name=nombre_zona]').val(),
-							'ModelName': mensage.find('input[name=nombre_zona]').val(),
-							'fecha_inicio': mensage.find('input[name=fecha_inicio]').val(),
-							'fecha_fin': mensage.find('input[name=fecha_fin]').val(),
-							'detalle': mensage.find('textarea[name=detalle_zona]').val(),
-							'guardada': guardada
-						});
-						
-						var format = new ol.format.GeoJSON();
+                    $("div.errorMsg").remove();
+                    var ok = true;
+                    if (mensage.find('input[name=nombre_zona]').val() == '') {
+                        $("div[id='nombre_zona']").append('<div class="errorMsg" style="color:red;"><b>Este campo es obligatorio</b></div>');
+                        ok = false;
+                    }
+                    if (mensage.find('input[name=fecha_inicio]').val() == '') {
+                        $("div[id='fecha_inicio']").append('<div class="errorMsg" style="color:red;"><b>Este campo es obligatorio</b></div>');
+                        ok = false;
+                    }
+                    if (mensage.find('input[name=fecha_fin]').val() == '') {
+                        $("div[id='fecha_fin']").append('<div class="errorMsg" style="color:red;"><b>Este campo es obligatorio</b></div>');
+                        ok = false;
+                    }
+                    if (mensage.find('input[name=fecha_inicio]').val() > mensage.find('input[name=fecha_fin]').val()) {
+                        $("div[id='fecha_inicio']").append('<div class="errorMsg" style="color:red;"><b>La fecha de inicio debe ser anterior a la de fin</b></div>');
+                        ok = false;
+                    }
+                    if (ok) {
+                        guardada = true;
+                        feature.setProperties({
+                            'ID': id,
+                            'Display': mensage.find('input[name=nombre_zona]').val(),
+                            'ModelName': mensage.find('input[name=nombre_zona]').val(),
+                            'fecha_inicio': mensage.find('input[name=fecha_inicio]').val(),
+                            'fecha_fin': mensage.find('input[name=fecha_fin]').val(),
+                            'detalle': mensage.find('textarea[name=detalle_zona]').val(),
+                            'guardada': guardada
+                        });
+                        
+                        var format = new ol.format.GeoJSON();
 
-						var geoJson = format.writeFeature(feature);                    
+                        var geoJson = format.writeFeature(feature);                    
 
-						var parsedGeoJson = JSON.parse(geoJson);
-						var geometria = parsedGeoJson.geometry;
-						geometria = JSON.stringify(geometria);
-						var propiedades = parsedGeoJson.properties;
-						propiedades = JSON.stringify(propiedades);
-						var zona = {
-							id: id,
-							nombre: mensage.find('input[name=nombre_zona]').val(),
-							detalle: mensage.find('textarea[name=detalle_zona]').val(),
-							fecha_inicio: mensage.find('input[name=fecha_inicio]').val(),
-							fecha_fin: mensage.find('input[name=fecha_fin]').val(),
-							geometria: geometria,
-							propiedades: propiedades
-						};
-						zona = JSON.stringify(zona);
+                        var parsedGeoJson = JSON.parse(geoJson);
+                        var geometria = parsedGeoJson.geometry;
+                        geometria = JSON.stringify(geometria);
+                        var propiedades = parsedGeoJson.properties;
+                        propiedades = JSON.stringify(propiedades);
+                        var zona = {
+                            id: id,
+                            nombre: mensage.find('input[name=nombre_zona]').val(),
+                            detalle: mensage.find('textarea[name=detalle_zona]').val(),
+                            fecha_inicio: mensage.find('input[name=fecha_inicio]').val(),
+                            fecha_fin: mensage.find('input[name=fecha_fin]').val(),
+                            geometria: geometria,
+                            propiedades: propiedades
+                        };
+                        zona = JSON.stringify(zona);
 
-						$.ajax({
-							type: 'POST',
-							data: 'data=' + zona,
-							url: 'zonas_temporales/guardar_zona_temporal'
-						});
-					} else {
-						return false;
-					}
+                        $.ajax({
+                            type: 'POST',
+                            data: 'data=' + zona,
+                            url: 'zonas_temporales/guardar_zona_temporal'
+                        });
+                    } else {
+                        return false;
+                    }
 
                 }
                 //className: 'btn-success'
@@ -451,7 +451,8 @@ function abmZonaPrompt(ft) {
                 callback: function (){
                     //console.log(feature.get('guardada')!== null);
                     if (feature.get('guardada')== null){
-                       source.removeFeature(feature);    
+                       source.removeFeature(feature);
+                       map.removeOverlay(measureTooltip);    
                     }
                 }
                 //className: 'btn-danger'
