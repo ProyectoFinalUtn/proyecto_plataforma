@@ -15,6 +15,7 @@
             // Ensure you have created the 'limits' table and enabled 'limits' within application/config/rest.php
             $this->methods['perfiles_get']['limit'] = 500; // 500 requests per hour per user/key
             $this->methods['obtener_perfil_por_id_get']['limit'] = 500; // 500 requests per hour per user/key
+            $this->methods['obtener_perfil_usuario_post']['limit'] = 500; // 500 requests per hour per user/key
             $this->methods['crear_perfil_post']['limit'] = 100; // 100 requests per hour per user/key
             $this->methods['cambiar_perfil_post']['limit'] = 100; // 100 requests per hour per user/key
             $this->methods['login_perfil']['limit'] = 100; // 100 requests per hour per user/key
@@ -156,6 +157,29 @@
             catch(Exception $exception){
                 $this->set_mensaje_error($exception->getMessage());
                 $this->response($this->responseError, REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
+        
+        public function obtener_perfil_usuario_post(){
+            if(!$this->post("usuario") || !$this->post("pass"))
+            {   
+                $this->set_mensaje_error('El usuario o contraseña no pueden ser nulos');
+                $this->response($this->responseError, REST_Controller::HTTP_BAD_REQUEST); 
+
+            }
+            
+            $user = $this->post('usuario');
+            $pass = $this->post('pass');
+            
+            try{
+                $this->load->model('Usuariovant_model');
+                $usuario = $this->Usuariovant_model->login_perfil_encriptado($user, $pass);
+                $this->set_respuesta($usuario);
+                $this->set_response($this->responseOk, REST_Controller::HTTP_OK);
+            }
+            catch(Exception $exception){
+                $this->set_mensaje_error($exception->getMessage());
+                $this->response($this->responseError, REST_Controller::HTTP_BAD_REQUEST);
             }
         }
         
