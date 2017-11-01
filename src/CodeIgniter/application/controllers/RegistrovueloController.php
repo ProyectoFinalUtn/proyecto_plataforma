@@ -48,7 +48,7 @@
         
         private function genera_array_vuelo(){
             return ['idUsuarioVant' => $this->post("idUsuarioVant"), 'latitud' => $this->post("latitud"), 
-                    'longitud' => $this->post("longitud")];
+                    'longitud' => $this->post("longitud"), 'provincia' => null, 'localidad' => null, 'zona_interes' => null, 'fecha_vuelo' => null];
         }
         
         private function valida_obligatorios_vuelo(){
