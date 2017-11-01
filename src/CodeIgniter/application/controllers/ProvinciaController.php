@@ -65,16 +65,16 @@
             $this->Usuariovant_model->valida_usuario($id_usuario, $usuario);
         }
         
-        private function es_id_valido($id_vant){
-            if ($id_vant === NULL)
+        private function es_id_valido($id){
+            if ($id === NULL)
             {   
                 $this->set_mensaje_error('El id no puede ser nulo');
                 return false;
             }
 
-            $id_vant = (int) $id_vant;     
+            $id = (int) $id;     
             
-            if ($id_vant <= 0)
+            if ($id <= 0)
             {
                 $this->set_mensaje_error('El id es invalido');                
             }
