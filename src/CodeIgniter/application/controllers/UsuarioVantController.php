@@ -193,7 +193,7 @@
             'dpto' => $this->post("dpto"), 'provincia' => $this->post("provincia"), 
             'localidad' => $this->post("localidad"), 'telefono' => $this->post("telefono"), 
             //'idPersona' => $this->post("idPersona"),'idPerfil' => $this->post("idPersona"), 
-            'usuario' => $this->post("email"), 'pass' => $this->post("pass")];
+            'usuario' => $this->post("email"), 'pass' => $this->post("pass"), 'fecha_registro' => null];
         }
         
         private function valida_obligatorios_perfil(){

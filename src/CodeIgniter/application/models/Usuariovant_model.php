@@ -176,10 +176,14 @@
         
         private function guardar_perfil($perfil)
         {
+            date_default_timezone_set('America/Argentina/Buenos_Aires');
+            $perfil['fecha_registro'] = date('Y-m-d', time());
+            
             $result = $this->db->insert('perfil', [
                 'foto' => $perfil["fotoPerfil"],
                 'logueado_en_cad' => $perfil['logueadoEnCad'],     
-                'nombre_de_perfil' => $perfil["nombreDePerfil"]
+                'nombre_de_perfil' => $perfil["nombreDePerfil"],
+                'fecha_registro' => $perfil['fecha_registro']
             ]);
             if(!$result){
                 $db_error = $this->db->error();
