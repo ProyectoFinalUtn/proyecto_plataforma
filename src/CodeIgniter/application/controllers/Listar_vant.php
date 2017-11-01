@@ -14,6 +14,8 @@ class Listar_vant extends MY_Controller
 	{	           
             $vant = $this->obtener_datos_vant();
             $data['vant'] = $vant;
+            $provincias = $this->obtener_provincias();
+            $data['provincias'] = $provincias;
             
             $this->load->model("Menu_model", "menu");
             $items = $this->menu->all();
@@ -31,6 +33,33 @@ class Listar_vant extends MY_Controller
                 $this->load->model('Vant_model');
                 $listadoVant = $this->Vant_model->obtener_datos_vant();
                 return $listadoVant;
+            }
+            catch(Exception $exception){
+                
+            }
+        }
+        
+        private function obtener_provincias()
+        {
+            try
+            {
+                $this->load->model('Provincia_model');
+                $provincias = $this->Provincia_model->obtener_provincias();
+                return $provincias;
+            }
+            catch(Exception $exception){
+                
+            }
+        }
+        
+        public function obtener_localidades()
+        {
+            try
+            {
+                $provincia = $_POST['provincia'];
+                $this->load->model('Provincia_model');
+                $localidades = $this->Provincia_model->obtener_localidades($provincia);
+                print json_encode($localidades);
             }
             catch(Exception $exception){
                 
