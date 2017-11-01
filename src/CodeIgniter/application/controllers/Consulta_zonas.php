@@ -48,7 +48,7 @@
 
         public function buscar_zonas_temporales_post()
         {
-            $data = json_decode($_POST['data'], true);            
+            $data = json_decode($this->post("data"), true);            
             $zonas = NULL;
             try{
                 $this->load->model('Zonas_temporales_model');                
