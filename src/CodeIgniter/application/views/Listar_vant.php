@@ -82,31 +82,72 @@
                     </div>
                     <div class="col-md-4 p-4" style="text-align: center;">
                         <p><h2>Configuración de gráfico</h2></p>
-                        <p><i>Elija su configuración de ejes y tipo de gráfico<br>y presione Calcular para refrescar el gráfico</i></p>
-                        <p>
-                            <b>Eje X</b>
-                            <br>
-                            <select name="ejeX">
-                                <option value="marca">Marca</option>
-                                <option value="modelo">Modelo</option>
-                                <option value="fabricante">Fabricante</option>
-                                <option value="lFab">Origen</option>
-                                <option value="anioFab">Año Fabricación</option>
-                                <option value="peso" selected="selected">Peso</option>
-                                <option value="altMax">Altura Máx</option>
-                                <option value="velMax">Velocidad Máx</option>
-                                <option value="alto">Alto</option>
-                                <option value="ancho">Ancho</option>
-                                <option value="largo">Largo</option>
-                                <option value="color">Color</option>
-                            </select>
-                        </p>
-                        <p>
-                            <b>Eje Y</b><br>
-                            <select name="ejeY">
-                                <option value="cantidad" selected="selected">Cantidad de VANT</option>
-                            </select>
-                        </p>
+                        <p><i>Elija los datos junto con el tipo de gráfico<br>y presione Calcular para refrescar el gráfico</i></p>
+                        <div class="row">
+                            <div class="col-md-4 p-4" style="text-align: left;">
+                                <p>
+                                    <b>Dato 1</b><br>
+                                    <p>
+                                        <select name="ejeX">
+                                            <option value="marca">Marca</option>
+                                            <option value="modelo">Modelo</option>
+                                            <option value="fabricante">Fabricante</option>
+                                            <option value="lFab">Origen</option>
+                                            <option value="anioFab">Año Fabricación</option>
+                                            <option value="peso" selected="selected">Peso</option>
+                                            <option value="altMax">Altura Máx</option>
+                                            <option value="velMax">Velocidad Máx</option>
+                                            <option value="alto">Alto</option>
+                                            <option value="ancho">Ancho</option>
+                                            <option value="largo">Largo</option>
+                                            <option value="color">Color</option>
+                                        </select>
+                                    </p>
+                                </p>
+                                <p>
+                                    <b>Dato 2</b><br>
+                                    <p>
+                                        <select name="ejeY">
+                                            <option value="cantidad" selected="selected">Cantidad de VANT</option>
+                                        </select>
+                                    </p>
+                                </p>
+                            </div>
+                            <div class="col-md-4 p-4" style="text-align: left;">
+                                <p>
+                                    <b>Fecha Desde</b><br>
+                                    <p><input type="date" name="filtro_desde" value="2017-01-01"></input</p>
+                                </p>
+                                <p>
+                                    <b>Fecha Hasta</b><br>
+                                    <p><input type="date" name="filtro_hasta" value="2018-01-01"></input></p>
+                                </p>
+                            </div>
+                            <div class="col-md-4 p-4" style="text-align: left;">
+                                <p>
+                                    <b>Provincia</b><br>
+                                    <p>
+                                        <select name="filtro_provincia">
+                                            <option value="0" selected="selected">Todo el país</option>
+                                            <?php
+                                            foreach ($provincias as $provincia)
+                                            {
+                                                echo "<option value=\"".$provincia['id_provincia']."\">".$provincia['provincia']."</option>";
+                                            }
+                                            ?>
+                                        </select>
+                                    </p>
+                                </p>
+                                <p>
+                                    <b>Localidad</b><br>
+                                    <p>
+                                        <select name="filtro_localidad">
+                                            <option value="0" selected="selected">Toda la provincia</option>
+                                        </select>
+                                    </p>
+                                </p>
+                            </div>
+                        </div>
                         <p>
                             <b>Tipo de gráfico</b><br>
                             <select name="tipoGrafico">
