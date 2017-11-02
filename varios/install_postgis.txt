@@ -1,0 +1,3 @@
+ sudo apt-get install postgis*
+ sudo apt-get install postgis postgresql-9.5-postgis-scripts
+ En la base de datos CREATE EXTENSION postgis;
