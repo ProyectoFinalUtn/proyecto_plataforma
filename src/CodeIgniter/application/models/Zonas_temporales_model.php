@@ -36,7 +36,7 @@ class Zonas_temporales_model extends CI_Model {
 
         public function get_zona_within_radius($punto)
         {
-            $columnas = 'id, nombre';
+            /*$columnas = 'id, nombre';
             $this->db->select($columnas);
             $this->db->from('zona_temporal');
             $where = '( ST_DWithin( 
@@ -44,7 +44,26 @@ class Zonas_temporales_model extends CI_Model {
                        ( ST_SetSRID(ST_MakePoint('.strval($punto["long"]).','.strval($punto["lat"]).'),3857)),'.strval($punto["rad"]).')) AND '."'".strval($punto["fecha_inicio"])."'".' BETWEEN fecha_inicio AND fecha_fin';
             $this->db->where($where);
             $query = $this->db->get()->row();
-            return $query;                       
+            return $query;  */
+	    /*$columnas = 'id, nombre';
+            $this->db->select($columnas);
+            $this->db->from('zona_temporal');
+            $where = '( ST_DWithin( 
+                       ( ST_SetSRID(( ST_GeomFromGeoJSON (geometria::Text)),3857)),                  
+                       ( ST_SetSRID(ST_MakePoint('.strval($punto["long"]).','.strval($punto["lat"]).'),3857)),'.strval($punto["rad"]).')) AND '."'".strval($punto["fecha_inicio"])."'".' BETWEEN fecha_inicio AND fecha_fin';
+            $this->db->where($where);
+            $query = $this->db->get()->row();
+            return $query;*/
+            $columnas = 'id, nombre';
+            $this->db->select($columnas);
+            $this->db->from('zona_temporal');
+            $where = "( ST_DWithin( 
+                       ( ST_SetSRID(( ST_GeomFromGeoJSON (geometria::Text)),3857)),                  
+                       ( ST_SetSRID(ST_GeomFromText('POINT(".strval($punto["long"]).",".strval($punto["lat"]).")', 4326), 3857),3857)),".strval($punto["rad"]).')) AND '."'".strval($punto["fecha_inicio"])."'".' BETWEEN fecha_inicio AND fecha_fin';
+            $this->db->where($where);
+            $query = $this->db->get()->row();
+            //return  var_dump($this->db->last_query());
+            return $query;
         }
 
         public function buscar_zonas($data)
