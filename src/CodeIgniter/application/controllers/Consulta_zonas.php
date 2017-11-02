@@ -24,20 +24,13 @@
         {
             // Ejemplo de como llamarlo http://localhost/proyecto_plataforma_web/ConsultaZonas/en_zona_temporal/
             // parametros del post = {long:'-6498248.352740000',lat:'-4109603.99000000',rad:'1000'}
-            //Recibe lat, long y una radio, de estar en una zona retorna su ID y nombre caso contrario NULL.
-                   
+            //Recibe lat, long y una radio, de estar en una zona retorna las zonas intersectadas y nombre caso contrario NULL.                   
             $area = file_get_contents('php://input');
-            $area = json_decode($area, TRUE);            
-            $zona = NULL;            
+            $area = json_decode($area, TRUE);                     
             try{
                 $this->load->model('Zonas_temporales_model');                
-                $zona = $this->Zonas_temporales_model->get_zona_within_radius($area);
-                if ($zona != NULL){
-                    $zonaRta = '{"id":'.$zona->id.',"nombre":'.$zona->nombre.'}';
-                } else {
-                    $zonaRta = '{"id":0,"nombre":NULL}';                    
-                }                
-                $this->set_respuesta($zonaRta);
+                $zonas = $this->Zonas_temporales_model->get_zona_within_radius($area);
+                $this->set_respuesta($zonas);
                 $this->set_response($this->responseOk, REST_Controller::HTTP_OK);
             }
             catch(Exception $exception){
@@ -48,7 +41,10 @@
 
         public function buscar_zonas_temporales_post()
         {
-            $data = json_decode($this->post("data"), true);            
+            $data = array();          
+            $data["filtro"] = $this->post("filtro");
+            $data["fecha_inicio"] = $this->post("fecha_inicio");
+            $data["fecha_fin"] = $this->post("fecha_fin");
             $zonas = NULL;
             try{
                 $this->load->model('Zonas_temporales_model');                
