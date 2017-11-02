@@ -536,5 +536,39 @@
             $query = $this->db->get()->result_array();
             return $query;
         }
+        
+        public function obtener_vuelos_por_zona($fecha_desde, $fecha_hasta, $provincia, $localidad)
+        {
+            if ($fecha_desde == '') {
+                $filtro_fecha_desde = '1=1';
+            } else {
+                $filtro_fecha_desde = "vuelo.fecha_vuelo >= '".$fecha_desde."'";
+            }
+            if ($fecha_hasta == '') {
+                $filtro_fecha_hasta = '1=1';
+            } else {
+                $filtro_fecha_hasta = "vuelo.fecha_vuelo <= '".$fecha_hasta."'";
+            }
+            
+            $filtro = $filtro_fecha_desde . " and " . $filtro_fecha_hasta;
+            
+            if ($provincia != '0') {
+                $filtro = $filtro . " and vuelo.provincia = " . $provincia;
+            }
+            
+            if ($localidad != '0') {
+                $filtro = $filtro . " and vuelo.localidad = " . $localidad;
+            }
+            $filtro = $filtro . " and vuelo.zona_interes is not null";
+            $sql = 'vuelo.zona_interes, count(vuelo.id_vuelo) cantidadvant';
+            $by = 'vuelo.zona_interes';
+            $this->db->select($sql);
+            $this->db->from('vuelo');
+            $this->db->where($filtro);
+            $this->db->group_by($by);
+            $query = $this->db->get()->result_array();
+            return $query;
+        }
+        
     }
 ?>

@@ -46,6 +46,9 @@ class Grafico_usuarios extends MY_Controller
                             case 'edad':
                                 $usuariosVant = $this->obtener_grafico_por_edad($fecha_desde, $fecha_hasta, $provincia, $localidad, $ejeY);
                                 break;
+                            case 'zona_interes':
+                                $usuariosVant = $this->obtener_grafico_por_zona($fecha_desde, $fecha_hasta, $provincia, $localidad, $ejeY);
+                                break;
                         endswitch;
                         $data = array();
                         foreach ($usuariosVant as $usuarioVant) {
@@ -152,6 +155,22 @@ class Grafico_usuarios extends MY_Controller
                     try{                
                         $this->load->model('Usuariovant_model');
                         $listadoUsuariosVant = $this->Usuariovant_model->obtener_vuelos_por_provincia($fecha_desde, $fecha_hasta, $provincia, $localidad);
+                        return $listadoUsuariosVant;
+                    }
+                    catch(Exception $exception){
+
+                    }
+                    break;
+            }
+        }
+        
+        private function obtener_grafico_por_zona($fecha_desde, $fecha_hasta, $provincia, $localidad, $ejeY)
+        {
+            switch ($ejeY) {
+                case 'vuelos':
+                    try{                
+                        $this->load->model('Usuariovant_model');
+                        $listadoUsuariosVant = $this->Usuariovant_model->obtener_vuelos_por_zona($fecha_desde, $fecha_hasta, $provincia, $localidad);
                         return $listadoUsuariosVant;
                     }
                     catch(Exception $exception){

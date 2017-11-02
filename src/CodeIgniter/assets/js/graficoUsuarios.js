@@ -333,6 +333,71 @@ $(document).ready(function(){
 								}
 						});
 						break;
+					case 'zona_interes':
+						var zona_interes = [];
+						var vant = [];
+						var maxValue = 0;
+						$('table').replaceWith('<table></table>');
+						for(var i in datos) {
+							$('table').append('<tr><td>'+datos[i].zona_interes+'</td><td>'+datos[i].cantidadvant+'</td></tr>');
+							zona_interes.push(datos[i].zona_interes);
+							vant.push(datos[i].cantidadvant);
+							if (maxValue < parseInt(datos[i].cantidadvant)) {
+								maxValue = parseInt(datos[i].cantidadvant);
+							}
+						}
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Zona de Interés</th><th>Cantidad de '+titulo+'</th></tr></thead>');
+						maxValue = maxValue + 2;
+						var chartdata = {
+							labels: zona_interes,
+							datasets : [
+								{
+									label: 'Cantidad de '+titulo,
+									backgroundColor: bgColor,
+									borderColor: bdColor,
+									hoverBackgroundColor: hoverBgColor,
+									hoverBorderColor: hoverBdColor,
+									pointBackgroundColor: pointBgColor,
+									pointBorderColor: pointBdColor,
+									data: vant
+								}
+							]
+						};
+						
+						$('canvas').replaceWith('<canvas id="graficoZona" width="400" height="100"></canvas>');
+						
+						var ctx = $("#graficoZona");
+
+						var barGraph = new Chart(ctx, {
+							type: chartType,
+							data: chartdata,
+							options: {
+									scales: {
+										xAxes: [{
+											ticks: {
+												beginAtZero:true
+											}
+										}],
+										yAxes: [{
+											ticks: {
+												beginAtZero:true,
+												max: maxValue
+											}
+										}]
+									},
+									legend: {
+										labels: {
+											fontFamily: 'Montserrat'
+										}
+									},
+									title: {
+										display: true,
+										fontFamily: 'Montserrat',
+										text: 'Cantidad de '+titulo+' por Zona de Interés'
+									}
+								}
+						});
+						break;
 					case 'edad':
 						var edad = [];
 						var vant = [];
