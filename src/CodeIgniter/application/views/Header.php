@@ -25,12 +25,6 @@
 
 <script src="<?php echo base_url(); ?>assets/js/bootstrap-submenu.min.js" defer></script>
 <script src="<?php echo base_url(); ?>assets/js/docs.js" defer></script>
-<script src="<?php echo base_url(); ?>assets/js/global.js" defer></script>
-
-
-
-
-
 
    
 </head>
