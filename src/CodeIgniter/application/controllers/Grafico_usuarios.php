@@ -18,7 +18,8 @@ class Grafico_usuarios extends MY_Controller
                     $fecha_hasta = '';
                     $provincia = '0';
                     $localidad = '0';
-                    $usuariosVant = $this->obtener_vants_por_edad($fecha_desde, $fecha_hasta, $provincia, $localidad);
+                    $ejeY = 'cantidad';
+                    $usuariosVant = $this->obtener_grafico_por_edad($fecha_desde, $fecha_hasta, $provincia, $localidad, $ejeY);
                     $data = array();
                     foreach ($usuariosVant as $usuarioVant) {
                         $data[] = $usuarioVant;
@@ -31,18 +32,19 @@ class Grafico_usuarios extends MY_Controller
                         $fecha_hasta = $_POST['filtro_hasta'];
                         $provincia = $_POST['filtro_provincia'];
                         $localidad = $_POST['filtro_localidad'];
+                        $ejeY = $_POST['ejeY'];
                         switch ($_POST['ejeX']):
                             case 'sexo':
-                                $usuariosVant = $this->obtener_vants_por_sexo($fecha_desde, $fecha_hasta, $provincia, $localidad);
+                                $usuariosVant = $this->obtener_grafico_por_sexo($fecha_desde, $fecha_hasta, $provincia, $localidad, $ejeY);
                                 break;
                             case 'localidad':
-                                $usuariosVant = $this->obtener_vants_por_localidad($fecha_desde, $fecha_hasta, $provincia, $localidad);
+                                $usuariosVant = $this->obtener_grafico_por_localidad($fecha_desde, $fecha_hasta, $provincia, $localidad, $ejeY);
                                 break;
                             case 'provincia':
-                                $usuariosVant = $this->obtener_vants_por_provincia($fecha_desde, $fecha_hasta, $provincia, $localidad);
+                                $usuariosVant = $this->obtener_grafico_por_provincia($fecha_desde, $fecha_hasta, $provincia, $localidad, $ejeY);
                                 break;
                             case 'edad':
-                                $usuariosVant = $this->obtener_vants_por_edad($fecha_desde, $fecha_hasta, $provincia, $localidad);
+                                $usuariosVant = $this->obtener_grafico_por_edad($fecha_desde, $fecha_hasta, $provincia, $localidad, $ejeY);
                                 break;
                         endswitch;
                         $data = array();
@@ -55,51 +57,107 @@ class Grafico_usuarios extends MY_Controller
             }
 	}
       
-        private function obtener_vants_por_edad($fecha_desde, $fecha_hasta, $provincia, $localidad)
+        private function obtener_grafico_por_edad($fecha_desde, $fecha_hasta, $provincia, $localidad, $ejeY)
         {
-            try{                
-                $this->load->model('Usuariovant_model');
-                $listadoUsuariosVant = $this->Usuariovant_model->obtener_vants_por_edad($fecha_desde, $fecha_hasta, $provincia, $localidad);
-                return $listadoUsuariosVant;
-            }
-            catch(Exception $exception){
-                
-            }
+           switch ($ejeY) {
+                case 'cantidad':
+                    try{                
+                        $this->load->model('Usuariovant_model');
+                        $listadoUsuariosVant = $this->Usuariovant_model->obtener_vants_por_edad($fecha_desde, $fecha_hasta, $provincia, $localidad);
+                        return $listadoUsuariosVant;
+                    }
+                    catch(Exception $exception){
+
+                    }
+                    break;
+                case 'vuelos':
+                    try{                
+                        $this->load->model('Usuariovant_model');
+                        $listadoUsuariosVant = $this->Usuariovant_model->obtener_vuelos_por_edad($fecha_desde, $fecha_hasta, $provincia, $localidad);
+                        return $listadoUsuariosVant;
+                    }
+                    catch(Exception $exception){
+
+                    }
+                    break;
+           }
         }
 
-        private function obtener_vants_por_sexo($fecha_desde, $fecha_hasta, $provincia, $localidad)
+        private function obtener_grafico_por_sexo($fecha_desde, $fecha_hasta, $provincia, $localidad, $ejeY)
         {
-            try{                
-                $this->load->model('Usuariovant_model');
-                $listadoUsuariosVant = $this->Usuariovant_model->obtener_vants_por_sexo($fecha_desde, $fecha_hasta, $provincia, $localidad);
-                return $listadoUsuariosVant;
-            }
-            catch(Exception $exception){
-                
+            switch ($ejeY) {
+                case 'cantidad':
+                    try{                
+                        $this->load->model('Usuariovant_model');
+                        $listadoUsuariosVant = $this->Usuariovant_model->obtener_vants_por_sexo($fecha_desde, $fecha_hasta, $provincia, $localidad);
+                        return $listadoUsuariosVant;
+                    }
+                    catch(Exception $exception){
+
+                    }
+                    break;
+                case 'vuelos':
+                    try{                
+                        $this->load->model('Usuariovant_model');
+                        $listadoUsuariosVant = $this->Usuariovant_model->obtener_vuelos_por_sexo($fecha_desde, $fecha_hasta, $provincia, $localidad);
+                        return $listadoUsuariosVant;
+                    }
+                    catch(Exception $exception){
+
+                    }
+                    break;
             }
         }
         
-        private function obtener_vants_por_localidad($fecha_desde, $fecha_hasta, $provincia, $localidad)
+        private function obtener_grafico_por_localidad($fecha_desde, $fecha_hasta, $provincia, $localidad, $ejeY)
         {
-            try{                
-                $this->load->model('Usuariovant_model');
-                $listadoUsuariosVant = $this->Usuariovant_model->obtener_vants_por_localidad($fecha_desde, $fecha_hasta, $provincia, $localidad);
-                return $listadoUsuariosVant;
-            }
-            catch(Exception $exception){
-                
+            switch ($ejeY) {
+                case 'cantidad':
+                    try{                
+                        $this->load->model('Usuariovant_model');
+                        $listadoUsuariosVant = $this->Usuariovant_model->obtener_vants_por_localidad($fecha_desde, $fecha_hasta, $provincia, $localidad);
+                        return $listadoUsuariosVant;
+                    }
+                    catch(Exception $exception){
+
+                    }
+                    break;
+                case 'vuelos':
+                    try{                
+                        $this->load->model('Usuariovant_model');
+                        $listadoUsuariosVant = $this->Usuariovant_model->obtener_vuelos_por_localidad($fecha_desde, $fecha_hasta, $provincia, $localidad);
+                        return $listadoUsuariosVant;
+                    }
+                    catch(Exception $exception){
+
+                    }
+                    break;
             }
         }
         
-        private function obtener_vants_por_provincia($fecha_desde, $fecha_hasta, $provincia, $localidad)
+        private function obtener_grafico_por_provincia($fecha_desde, $fecha_hasta, $provincia, $localidad, $ejeY)
         {
-            try{                
-                $this->load->model('Usuariovant_model');
-                $listadoUsuariosVant = $this->Usuariovant_model->obtener_vants_por_provincia($fecha_desde, $fecha_hasta, $provincia, $localidad);
-                return $listadoUsuariosVant;
-            }
-            catch(Exception $exception){
-                
+            switch ($ejeY) {
+                case 'cantidad':
+                    try{                
+                        $this->load->model('Usuariovant_model');
+                        $listadoUsuariosVant = $this->Usuariovant_model->obtener_vants_por_provincia($fecha_desde, $fecha_hasta, $provincia, $localidad);
+                        return $listadoUsuariosVant;
+                    }
+                    catch(Exception $exception){
+
+                    }
+                    break;
+                case 'vuelos':
+                    try{                
+                        $this->load->model('Usuariovant_model');
+                        $listadoUsuariosVant = $this->Usuariovant_model->obtener_vuelos_por_provincia($fecha_desde, $fecha_hasta, $provincia, $localidad);
+                        return $listadoUsuariosVant;
+                    }
+                    catch(Exception $exception){
+
+                    }
+                    break;
             }
         }
 }

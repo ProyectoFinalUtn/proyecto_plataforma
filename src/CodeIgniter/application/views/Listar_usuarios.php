@@ -86,6 +86,7 @@
                                             <option value="sexo">Sexo</option>
                                             <option value="provincia">Provincia</option>
                                             <option value="localidad">Localidad</option>
+                                            <option value="zona_interes">Zona de Interés</option>
                                         </select>
                                     </p>
                                 </p>
@@ -94,6 +95,7 @@
                                     <p>
                                         <select name="ejeY">
                                             <option value="cantidad" selected="selected">Cantidad de VANT</option>
+                                            <option value="vuelos">Cantidad de Vuelos</option>
                                         </select>
                                     </p>
                                 </p>

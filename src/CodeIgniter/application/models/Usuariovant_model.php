@@ -286,6 +286,42 @@
             $query = $this->db->get()->result_array();
             return $query;
         }
+        
+        public function obtener_vuelos_por_edad($fecha_desde, $fecha_hasta, $provincia, $localidad)
+        {
+            if ($fecha_desde == '') {
+                $filtro_fecha_desde = '1=1';
+            } else {
+                $filtro_fecha_desde = "vuelo.fecha_vuelo >= '".$fecha_desde."'";
+            }
+            if ($fecha_hasta == '') {
+                $filtro_fecha_hasta = '1=1';
+            } else {
+                $filtro_fecha_hasta = "vuelo.fecha_vuelo <= '".$fecha_hasta."'";
+            }
+            
+            $filtro = $filtro_fecha_desde . " and " . $filtro_fecha_hasta;
+            
+            if ($provincia != '0') {
+                $filtro = $filtro . " and vuelo.provincia = " . $provincia;
+            }
+            
+            if ($localidad != '0') {
+                $filtro = $filtro . " and vuelo.localidad = " . $localidad;
+            }
+            
+            $sql = 'pers.edad, count(vuelo.id_vuelo) cantidadvant';
+            $by = 'pers.edad';
+            $this->db->select($sql);
+            $this->db->from('vuelo');
+            $this->db->join('usuario_vant', 'usuario_vant.id_usuario = vuelo.id_usuario_vant');
+            $this->db->join('persona pers', 'usuario_vant.id_persona = pers.id_persona');
+            $this->db->where($filtro);
+            $this->db->group_by($by);
+            $this->db->order_by('pers.edad', 'asc');
+            $query = $this->db->get()->result_array();
+            return $query;
+        }
 
         public function obtener_vants_por_sexo($fecha_desde, $fecha_hasta, $provincia, $localidad)
         {
@@ -319,6 +355,42 @@
             $this->db->join('vant', 'vant.id_usuario_vant = usuario_vant.id_usuario', 'left outer ');
             $this->db->where($filtro);
             $this->db->group_by($by);
+            $query = $this->db->get()->result_array();
+            return $query;
+        }
+        
+        public function obtener_vuelos_por_sexo($fecha_desde, $fecha_hasta, $provincia, $localidad)
+        {
+            if ($fecha_desde == '') {
+                $filtro_fecha_desde = '1=1';
+            } else {
+                $filtro_fecha_desde = "vuelo.fecha_vuelo >= '".$fecha_desde."'";
+            }
+            if ($fecha_hasta == '') {
+                $filtro_fecha_hasta = '1=1';
+            } else {
+                $filtro_fecha_hasta = "vuelo.fecha_vuelo <= '".$fecha_hasta."'";
+            }
+            
+            $filtro = $filtro_fecha_desde . " and " . $filtro_fecha_hasta;
+            
+            if ($provincia != '0') {
+                $filtro = $filtro . " and vuelo.provincia = " . $provincia;
+            }
+            
+            if ($localidad != '0') {
+                $filtro = $filtro . " and vuelo.localidad = " . $localidad;
+            }
+            
+            $sql = 'pers.sexo, count(vuelo.id_vuelo) cantidadvant';
+            $by = 'pers.sexo';
+            $this->db->select($sql);
+            $this->db->from('vuelo');
+            $this->db->join('usuario_vant', 'usuario_vant.id_usuario = vuelo.id_usuario_vant');
+            $this->db->join('persona pers', 'usuario_vant.id_persona = pers.id_persona');
+            $this->db->where($filtro);
+            $this->db->group_by($by);
+            $this->db->order_by('pers.sexo', 'asc');
             $query = $this->db->get()->result_array();
             return $query;
         }
@@ -360,6 +432,40 @@
             return $query;
         }
         
+        public function obtener_vuelos_por_localidad($fecha_desde, $fecha_hasta, $provincia, $localidad)
+        {
+            if ($fecha_desde == '') {
+                $filtro_fecha_desde = '1=1';
+            } else {
+                $filtro_fecha_desde = "vuelo.fecha_vuelo >= '".$fecha_desde."'";
+            }
+            if ($fecha_hasta == '') {
+                $filtro_fecha_hasta = '1=1';
+            } else {
+                $filtro_fecha_hasta = "vuelo.fecha_vuelo <= '".$fecha_hasta."'";
+            }
+            
+            $filtro = $filtro_fecha_desde . " and " . $filtro_fecha_hasta;
+            
+            if ($provincia != '0') {
+                $filtro = $filtro . " and vuelo.provincia = " . $provincia;
+            }
+            
+            if ($localidad != '0') {
+                $filtro = $filtro . " and vuelo.localidad = " . $localidad;
+            }
+            
+            $sql = 'localidad.localidad, count(vuelo.id_vuelo) cantidadvant';
+            $by = 'localidad.localidad';
+            $this->db->select($sql);
+            $this->db->from('vuelo');
+            $this->db->join('localidad', 'localidad.id_localidad = vuelo.localidad');
+            $this->db->where($filtro);
+            $this->db->group_by($by);
+            $query = $this->db->get()->result_array();
+            return $query;
+        }
+        
         public function obtener_vants_por_provincia($fecha_desde, $fecha_hasta, $provincia, $localidad)
         {
             if ($fecha_desde == '') {
@@ -391,6 +497,40 @@
             $this->db->join('perfil perf', 'usuario_vant.id_perfil = perf.id_perfil');
             $this->db->join('vant', 'vant.id_usuario_vant = usuario_vant.id_usuario', 'left outer ');
             $this->db->join('provincia', 'provincia.id_provincia = pers.provincia');
+            $this->db->where($filtro);
+            $this->db->group_by($by);
+            $query = $this->db->get()->result_array();
+            return $query;
+        }
+        
+        public function obtener_vuelos_por_provincia($fecha_desde, $fecha_hasta, $provincia, $localidad)
+        {
+            if ($fecha_desde == '') {
+                $filtro_fecha_desde = '1=1';
+            } else {
+                $filtro_fecha_desde = "vuelo.fecha_vuelo >= '".$fecha_desde."'";
+            }
+            if ($fecha_hasta == '') {
+                $filtro_fecha_hasta = '1=1';
+            } else {
+                $filtro_fecha_hasta = "vuelo.fecha_vuelo <= '".$fecha_hasta."'";
+            }
+            
+            $filtro = $filtro_fecha_desde . " and " . $filtro_fecha_hasta;
+            
+            if ($provincia != '0') {
+                $filtro = $filtro . " and vuelo.provincia = " . $provincia;
+            }
+            
+            if ($localidad != '0') {
+                $filtro = $filtro . " and vuelo.localidad = " . $localidad;
+            }
+            
+            $sql = 'provincia.provincia, count(vuelo.id_vuelo) cantidadvant';
+            $by = 'provincia.provincia';
+            $this->db->select($sql);
+            $this->db->from('vuelo');
+            $this->db->join('provincia', 'provincia.id_provincia = vuelo.provincia');
             $this->db->where($filtro);
             $this->db->group_by($by);
             $query = $this->db->get()->result_array();

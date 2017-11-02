@@ -73,6 +73,10 @@ $(document).ready(function(){
 		var filtro_hasta = $("input[name='filtro_hasta']").val();
 		var filtro_provincia = $("select[name='filtro_provincia']").val();
 		var filtro_localidad = $("select[name='filtro_localidad']").val();
+		var titulo = 'VANT';
+		if (ejeY == 'vuelos') {
+			var titulo = 'Vuelos';
+		}
 		$.ajax({
 			url: "Grafico_usuarios",
 			method: "POST",
@@ -147,13 +151,13 @@ $(document).ready(function(){
 								maxValue = parseInt(datos[i].cantidadvant);
 							}
 						}
-						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Sexo</th><th>Cantidad de VANT</th></tr></thead>');
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Sexo</th><th>Cantidad de '+titulo+'</th></tr></thead>');
 						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: sexo,
 							datasets : [
 								{
-									label: 'Cantidad de VANT',
+									label: 'Cantidad de '+titulo,
 									backgroundColor: bgColor,
 									borderColor: bdColor,
 									hoverBackgroundColor: hoverBgColor,
@@ -194,7 +198,7 @@ $(document).ready(function(){
 									title: {
 										display: true,
 										fontFamily: 'Montserrat',
-										text: 'Cantidad de VANT por Sexo'
+										text: 'Cantidad de '+titulo+' por Sexo'
 									}
 								}
 						});
@@ -212,13 +216,13 @@ $(document).ready(function(){
 								maxValue = parseInt(datos[i].cantidadvant);
 							}
 						}
-						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Localidad</th><th>Cantidad de VANT</th></tr></thead>');
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Localidad</th><th>Cantidad de '+titulo+'</th></tr></thead>');
 						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: localidad,
 							datasets : [
 								{
-									label: 'Cantidad de VANT',
+									label: 'Cantidad de '+titulo,
 									backgroundColor: bgColor,
 									borderColor: bdColor,
 									hoverBackgroundColor: hoverBgColor,
@@ -259,7 +263,7 @@ $(document).ready(function(){
 									title: {
 										display: true,
 										fontFamily: 'Montserrat',
-										text: 'Cantidad de VANT por Localidad'
+										text: 'Cantidad de '+titulo+' por Localidad'
 									}
 								}
 						});
@@ -277,13 +281,13 @@ $(document).ready(function(){
 								maxValue = parseInt(datos[i].cantidadvant);
 							}
 						}
-						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Provincia</th><th>Cantidad de VANT</th></tr></thead>');
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Provincia</th><th>Cantidad de '+titulo+'</th></tr></thead>');
 						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: provincia,
 							datasets : [
 								{
-									label: 'Cantidad de VANT',
+									label: 'Cantidad de '+titulo,
 									backgroundColor: bgColor,
 									borderColor: bdColor,
 									hoverBackgroundColor: hoverBgColor,
@@ -324,7 +328,7 @@ $(document).ready(function(){
 									title: {
 										display: true,
 										fontFamily: 'Montserrat',
-										text: 'Cantidad de VANT por Provincia'
+										text: 'Cantidad de '+titulo+' por Provincia'
 									}
 								}
 						});
@@ -342,13 +346,13 @@ $(document).ready(function(){
 								maxValue = parseInt(datos[i].cantidadvant);
 							}
 						}
-						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Edad</th><th>Cantidad de VANT</th></tr></thead>');
+						$('table').append('<thead id="header" style="background-color: #004ea2; color:#ffffff;"><tr id="headers"><th>Edad</th><th>Cantidad de '+titulo+'</th></tr></thead>');
 						maxValue = maxValue + 2;
 						var chartdata = {
 							labels: edad,
 							datasets : [
 								{
-									label: 'Cantidad de VANT',
+									label: 'Cantidad de '+titulo,
 									backgroundColor: bgColor,
 									borderColor: bdColor,
 									hoverBackgroundColor: hoverBgColor,
@@ -389,7 +393,7 @@ $(document).ready(function(){
 									title: {
 										display: true,
 										fontFamily: 'Montserrat',
-										text: 'Cantidad de VANT por Edad'
+										text: 'Cantidad de '+titulo+' por Edad'
 									}
 								}
 						});
@@ -411,6 +415,10 @@ $(document).ready(function(){
 		var filtro_hasta = $("input[name='filtro_hasta']").val();
 		var filtro_provincia = $("select[name='filtro_provincia']").val();
 		var filtro_localidad = $("select[name='filtro_localidad']").val();
+		var titulo = 'VANT';
+		if (ejeY == 'vuelos') {
+			var titulo = 'Vuelos';
+		}
 		$.ajax({
 			url: "Grafico_usuarios",
 			method: "POST",
@@ -420,25 +428,25 @@ $(document).ready(function(){
 				var tab_text = '<table>';
 				switch(ejeX) {
 					case 'edad':
-						tab_text = tab_text+'<tr><td>Edad</td><td>Cantidad de VANT</td></tr>';
+						tab_text = tab_text+'<tr><td>Edad</td><td>Cantidad de '+titulo+'</td></tr>';
 						for(var i in datos) {
 							tab_text = tab_text+'<tr><td>'+datos[i].edad+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
 						}
 						break;
 					case 'sexo':
-						tab_text = tab_text+'<tr><td>Sexo</td><td>Cantidad de VANT</td></tr>';
+						tab_text = tab_text+'<tr><td>Sexo</td><td>Cantidad de '+titulo+'</td></tr>';
 						for(var i in datos) {
 							tab_text = tab_text+'<tr><td>'+datos[i].sexo+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
 						}
 						break;
 					case 'localidad':
-						tab_text = tab_text+'<tr><td>Localidad</td><td>Cantidad de VANT</td></tr>';
+						tab_text = tab_text+'<tr><td>Localidad</td><td>Cantidad de '+titulo+'</td></tr>';
 						for(var i in datos) {
 							tab_text = tab_text+'<tr><td>'+datos[i].localidad+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
 						}
 						break;
 					case 'provincia':
-						tab_text = tab_text+'<tr><td>Provincia</td><td>Cantidad de VANT</td></tr>';
+						tab_text = tab_text+'<tr><td>Provincia</td><td>Cantidad de '+titulo+'</td></tr>';
 						for(var i in datos) {
 							tab_text = tab_text+'<tr><td>'+datos[i].provincia+'</td><td>'+datos[i].cantidadvant+'</td></tr>';
 						}
@@ -471,6 +479,16 @@ $(document).ready(function(){
 				console.log(data);
 			}
 		});
+	});
+	
+	$("select[name='ejeX']").change(function() {
+		var opcionElegida = $("select[name='ejeX']").val();
+		if (opcionElegida == 'zona_interes') {
+			$("option[value='cantidad']").prop('disabled', true);
+			$("option[value='vuelos']").prop('selected', true);
+		} else {
+			$("option[value='cantidad']").prop('disabled', false);
+		}
 	});
 	
 });
