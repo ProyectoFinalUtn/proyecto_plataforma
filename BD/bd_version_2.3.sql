@@ -2911,16 +2911,16 @@ INSERT INTO usuario_admin (usuario, password)
 values    ('admin','202cb962ac59075b964b07152d234b70');
 
 INSERT INTO menus (id, parent, name, icono, slug, orden) VALUES
-(1, NULL, 'Normativa', '', 'normativas', 1),
-(2, NULL, 'Usuarios VANT', '', 'usuarios_vant', 2),
-(3, NULL, 'Solicitudes de Excepción', '', 'solicitudes_excepcion', 3),
-(4, 1, 'Zonas de Influencia', '', 'zonas_influencia', 1),
-(5, 1, 'Contenidos', '', 'normativas', 2),
-(6, 1, 'Zonas Temporales', '', 'zonas_temporales', 1),
-(7, 2, 'Información', '', 'informacion', 2),
-(8, 3, 'Procesar Solicitudes', '', 'listar_solicitudes', 2),
-(9, null, 'Configuración', '', 'configuracion', 4),
-(10, 9, 'Usuarios Administradores', '', 'usuarios_admin', 1);
+(1, NULL, 'Normativa', 'fa d-inline fa-lg fa-2x fa-clone', 'normativas', 1),
+(2, NULL, 'Usuarios VANT', 'fa d-inline fa-lg fa-2x fa-address-book-o', 'usuarios_vant', 2),
+(3, NULL, 'Solicitudes de Excepción', 'fa d-inline fa-lg fa-2x fa-inbox', 'solicitudes_excepcion', 3),
+(4, 1, 'Zonas de Influencia', 'fa d-inline fa-lg fa-2x fa-map-o', 'zonas_influencia', 1),
+(5, 1, 'Contenidos', 'fa d-inline fa-lg fa-2x fa-file-text-o', 'normativas', 2),
+(6, 1, 'Zonas Temporales', 'fa d-inline fa-lg fa-2x fa-calendar-o', 'zonas_temporales', 1),
+(7, 2, 'Información', 'fa d-inline fa-lg fa-2x fa-area-chart', 'informacion', 2),
+(8, 3, 'Procesar Solicitudes', 'fa d-inline fa-lg fa-2x fa-retweet', 'listar_solicitudes', 2),
+(9, null, 'Configuración', 'fa d-inline fa-lg fa-2x fa-cog', 'configuracion', 4),
+(10, 9, 'Usuarios Administradores', 'fa d-inline fa-lg fa-2x fa-user', 'usuarios_admin', 1);
 
 -- Table: public.momento
 

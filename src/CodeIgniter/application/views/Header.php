@@ -32,7 +32,7 @@
  <!-- depends on your template design -->
  <div class="dashboard-wrapper">
     <div class="main-content">
-        <nav class="navbar navbar-expand-md bg-secondary navbar-dark" style="background-color: #00082c;">
+        <nav class="navbar navbar-expand-md bg-secondary navbar-dark">
             <div class="container">
               <a class="navbar-brand" href="Panel"><img src="assets/img/logo_menu.png" style="width:25%"></a>
               <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>

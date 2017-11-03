@@ -4,8 +4,8 @@
         <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/ol.css">
         <link href="//cdn.jsdelivr.net/openlayers.contextmenu/latest/ol3-contextmenu.min.css" rel="stylesheet">
         <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/ol3-layerswitcher.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
-        <link rel="stylesheet" href="https://pingendo.com/assets/bootstrap/bootstrap-4.0.0-beta.1.css" type="text/css">
+        <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/font-awesome.min.css" type="text/css">
+        <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap-4.0.0-beta.1.css" type="text/css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
         
         <script src="//cdnjs.cloudflare.com/ajax/libs/ol3/4.3.3/ol.js"></script>
