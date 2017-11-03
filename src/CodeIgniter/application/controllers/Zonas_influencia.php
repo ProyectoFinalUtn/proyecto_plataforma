@@ -22,18 +22,16 @@ class Zonas_influencia extends MY_Controller
             $this->load->view('Footer');
 	}
         
-        /*
+        
         public function guardar_zona_influencia()
 	{
-            $zona = json_decode($_POST['data'], true);
-            $this->Zonas_influencia_model->guardar_zona($zona);	  
+            //$this->Zonas_influencia_model->guardar_zona($zona);
 	}
 
 	public function eliminar_zona_influencia()
 	{
-            $zona = json_decode($_POST['data'], true);
-            $this->Zonas_influencia_model->eliminar_zona($zona);
+            //$this->Zonas_influencia_model->eliminar_zona($zona);
 	}
         
-        */
+        
 }

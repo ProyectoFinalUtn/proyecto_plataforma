@@ -32,10 +32,10 @@ $(document).ready(function() {
 				var DETALLE = $("textarea[name='detalle_zona']").val();
 				var URL_POST = 'Zonas_influencia/guardar_zona_influencia'
 				var posting = $.post( URL_POST, { nombre_zona: NOMBRE, radio_zona: RADIO, archivo: ARCHIVO, detalle_zona: DETALLE } );
-				posting.done(function() {
-					alert("Zona de influencia importada con éxito");
-					var URL = "Zonas_influencia";
-					$(location).attr('href', URL);
+				posting.done(function(data) {
+					alert(data);
+					//var URL = "Zonas_influencia";
+					//$(location).attr('href', URL);
 				});
 			}
 		}

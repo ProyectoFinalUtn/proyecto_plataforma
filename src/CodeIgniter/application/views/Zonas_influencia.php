@@ -25,21 +25,29 @@
             <div id="breadcrumb" style="padding-left:8px;">G.O. Guide > Normativa > Zonas de Influencia > Nueva Zona de Influencia</div>
             <div style="padding:16px;">
                 <div class="container">
-                    <?php
-                        echo "<p></p>";
-                        echo "<h1>Nueva Zona de Influencia de VANT</h1>";
-                        echo "<p>Elija un archivo <b>geojson</b> con la capa a importar y especifique el radio de influencia.</p>";
-                        echo "<div class=\"form-group\" id=\"nombre_zona\"> <label>Nombre de la Capa *</label>";
-                        echo "<input type=\"text\" class=\"form-control\" name=\"nombre_zona\" placeholder=\"Completa el nombre de la capa a importar\"></div>";
-                        echo "<div class=\"form-group\" id=\"radio_zona\"> <label>Radio de Influencia *</label>";
-                        echo "<input type=\"number\" class=\"form-control\" name=\"radio\" placeholder=\"Completa el radio de influencia\"></div>";
-                        echo "<div class=\"form-group\" id=\"archivo\"> <label>Archivo a importar</label>";
-                        echo "<input type=\"file\" class=\"form-control\" name=\"archivo\" placeholder=\"Elija el archivo geojson de su sistema\" accept=\".geojson\"></div>";
-                        echo "<div class=\"form-group\" id=\"detalle_zona\"> <label>Detalle</label>";
-                        echo "<textarea style=\"height:80px;width:100%;padding-top:8px;padding-left:8px;font-size:10px;border: 0.5px solid\" type=\"text\" name=\"detalle_zona\"></textarea>";
-                        echo "<p></p>";
-                        echo "<input type=\"submit\" class=\"btn btn-secondary\" name=\"Importar\" value=\"Importar\"></input><p></p>";
-                    ?>
+                    <table>
+                    <tr>
+                        <div class="row" style="border-collapse: collapse; width: 100%; border-spacing:0; box-shadow:0 4px 10px 0 rgba(0,0,0,0.2),0 4px 20px 0 rgba(0,0,0,0.19); padding:16px; ">
+                            <div class="col-md-6">
+                                <?php
+                                    echo "<p></p>";
+                                    echo "<h1>Nueva Zona de Influencia de VANT</h1>";
+                                    echo "<p>Elija un archivo <b>geojson</b> con la capa a importar y especifique el radio de influencia.</p>";
+                                    echo "<div class=\"form-group\" id=\"nombre_zona\"> <label>Nombre de la Capa *</label>";
+                                    echo "<input type=\"text\" class=\"form-control\" name=\"nombre_zona\" placeholder=\"Completa el nombre de la capa a importar\"></div>";
+                                    echo "<div class=\"form-group\" id=\"radio_zona\"> <label>Radio de Influencia *</label>";
+                                    echo "<input type=\"number\" class=\"form-control\" name=\"radio\" placeholder=\"Completa el radio de influencia\"></div>";
+                                    echo "<div class=\"form-group\" id=\"archivo\"> <label>Archivo a importar</label>";
+                                    echo "<input type=\"file\" class=\"form-control\" name=\"archivo\" placeholder=\"Elija el archivo geojson de su sistema\" accept=\".geojson\"></div>";
+                                    echo "<div class=\"form-group\" id=\"detalle_zona\"> <label>Detalle</label>";
+                                    echo "<textarea style=\"height:80px;width:100%;padding-top:8px;padding-left:8px;font-size:10px;border: 0.5px solid\" type=\"text\" name=\"detalle_zona\"></textarea>";
+                                    echo "<p></p>";
+                                    echo "<input type=\"submit\" class=\"btn btn-secondary\" name=\"Importar\" value=\"Importar\"></input><p></p>";
+                                ?>
+                            </div>
+                        </div>
+                    </tr>
+                    </table>
                 </div>
             </div>
         </div>
