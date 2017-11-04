@@ -4,35 +4,40 @@ $(document).ready(function(){
 		method: "GET",
 		success: function(data) {
 			var datos = JSON.parse(data);
-			var localidad = [];
+			var estado = [];
 			var cantidad = [];
 			var maxValue = 0;
 			for(var i in datos) {
-				localidad.push(datos[i].localidad);
+				estado.push(datos[i].descripcion);
 				cantidad.push(datos[i].cantidad);
 				if (maxValue < parseInt(datos[i].cantidad)) {
 								maxValue = parseInt(datos[i].cantidad);
 				}
 			}
 			maxValue = maxValue + 2;
+			var fondos = [];
+			var bordes = [];
+			for(var j in datos) {
+				color = '#'+Math.floor(Math.random()*16777215).toString(16);
+				fondos[j] = color;
+				bordes[j] = "#ffffff";
+			}
 			var chartdata = {
-				labels: localidad,
+				labels: estado,
 				datasets : [
 					{
 						label: 'Cantidad de solicitudes',
-						borderColor: 'rgba(0, 34, 29, 1)',
-						hoverBorderColor: 'rgba(0, 34, 29, 1)',
-						pointBackgroundColor: 'rgba(8, 59, 51, 0.9)',
-						pointBorderColor: 'rgba(0, 34, 29, 1)',
+						backgroundColor: fondos,
+						borderColor: bordes,
 						data: cantidad
 					}
 				]
 			};
 
-			var ctx = $("#graficoLocalidad");
+			var ctx = $("#graficoEstados");
 
 			var barGraph = new Chart(ctx, {
-				type: 'line',
+				type: 'pie',
 				data: chartdata,
 				options: {
 						scales: {
@@ -56,7 +61,7 @@ $(document).ready(function(){
 						title: {
 							display: true,
 							fontFamily: 'Montserrat',
-							text: 'Cantidad de Solicitudes por Localidad de la Solicitud'
+							text: 'Cantidad de Solicitudes por Estado de la Solicitud'
 						}
 					}
 			});
@@ -164,7 +169,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoFecha" width="400" height="100"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoFecha" width="400" height="200"></canvas>');
 						
 						var ctx = $("#graficoFecha");
 
@@ -266,7 +271,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoMes" width="400" height="100"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoMes" width="400" height="200"></canvas>');
 						
 						var ctx = $("#graficoMes");
 
@@ -353,7 +358,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoDia" width="400" height="100"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoDia" width="400" height="200"></canvas>');
 						
 						var ctx = $("#graficoDia");
 
@@ -418,7 +423,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoHorario" width="400" height="100"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoHorario" width="400" height="200"></canvas>');
 						
 						var ctx = $("#graficoHorario");
 
@@ -483,7 +488,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoMarca" width="400" height="100"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoMarca" width="400" height="200"></canvas>');
 						
 						var ctx = $("#graficoMarca");
 
@@ -548,7 +553,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoModelo" width="400" height="100"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoModelo" width="400" height="200"></canvas>');
 						
 						var ctx = $("#graficoModelo");
 
@@ -613,7 +618,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoEstados" width="400" height="100"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoEstados" width="400" height="200"></canvas>');
 						
 						var ctx = $("#graficoEstados");
 
@@ -678,7 +683,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoMomentos" width="400" height="100"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoMomentos" width="400" height="200"></canvas>');
 						
 						var ctx = $("#graficoMomentos");
 
@@ -743,7 +748,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoProvincia" width="400" height="100"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoProvincia" width="400" height="200"></canvas>');
 						
 						var ctx = $("#graficoProvincia");
 
@@ -808,7 +813,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoLocalidad" width="400" height="100"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoLocalidad" width="400" height="200"></canvas>');
 						
 						var ctx = $("#graficoLocalidad");
 
@@ -873,7 +878,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoZonainteres" width="400" height="100"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoZonainteres" width="400" height="200"></canvas>');
 						
 						var ctx = $("#graficoZonainteres");
 
@@ -1088,4 +1093,44 @@ $(document).ready(function(){
 			}
 		});
 	});
+	
+	$("select[name='ejeX']").change(function() {
+		var opcionElegida = $("select[name='ejeX']").val();
+		switch(opcionElegida) {
+			case 'fecha':
+				$("option[value='line']").prop('selected', true);
+				break;
+			case 'mes':
+				$("option[value='bar']").prop('selected', true);
+				break;
+			case 'dia':
+				$("option[value='doughnut']").prop('selected', true);
+				break;
+			case 'horario':
+				$("option[value='radar']").prop('selected', true);
+				break;
+			case 'momento':
+				$("option[value='bar']").prop('selected', true);
+				break;
+			case 'marca':
+				$("option[value='pie']").prop('selected', true);
+				break;
+			case 'modelo':
+				$("option[value='doughnut']").prop('selected', true);
+				break;
+			case 'estado':
+				$("option[value='pie']").prop('selected', true);
+				break;
+			case 'provincia':
+				$("option[value='pie']").prop('selected', true);
+				break;
+			case 'localidad':
+				$("option[value='pie']").prop('selected', true);
+				break;
+			case 'zona_interes':
+				$("option[value='bar']").prop('selected', true);
+				break;
+		}
+	});
+	
 });

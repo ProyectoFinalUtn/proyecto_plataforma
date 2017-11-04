@@ -20,10 +20,10 @@ $(document).ready(function(){
 				datasets : [
 					{
 						label: 'Cantidad de VANT',
-						backgroundColor: 'rgba(8, 59, 51, 0.9)',
 						borderColor: 'rgba(0, 34, 29, 1)',
-						hoverBackgroundColor: 'rgba(8, 59, 51, 1)',
 						hoverBorderColor: 'rgba(0, 34, 29, 1)',
+						pointBackgroundColor: 'rgba(8, 59, 51, 0.9)',
+						pointBorderColor: 'rgba(0, 34, 29, 1)',
 						data: vant
 					}
 				]
@@ -32,7 +32,7 @@ $(document).ready(function(){
 			var ctx = $("#graficoEdad");
 
 			var barGraph = new Chart(ctx, {
-				type: 'bar',
+				type: 'line',
 				data: chartdata,
 				options: {
 						scales: {
@@ -169,7 +169,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoSe" width="400" height="100"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoSe" width="400" height="200"></canvas>');
 						
 						var ctx = $("#graficoSe");
 
@@ -234,7 +234,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoLoc" width="400" height="100"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoLoc" width="400" height="200"></canvas>');
 						
 						var ctx = $("#graficoLoc");
 
@@ -299,7 +299,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoProv" width="400" height="100"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoProv" width="400" height="200"></canvas>');
 						
 						var ctx = $("#graficoProv");
 
@@ -364,7 +364,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoZona" width="400" height="100"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoZona" width="400" height="200"></canvas>');
 						
 						var ctx = $("#graficoZona");
 
@@ -429,7 +429,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoEdad" width="400" height="100"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoEdad" width="400" height="200"></canvas>');
 						
 						var ctx = $("#graficoEdad");
 
@@ -548,11 +548,28 @@ $(document).ready(function(){
 	
 	$("select[name='ejeX']").change(function() {
 		var opcionElegida = $("select[name='ejeX']").val();
-		if (opcionElegida == 'zona_interes') {
-			$("option[value='cantidad']").prop('disabled', true);
-			$("option[value='vuelos']").prop('selected', true);
-		} else {
-			$("option[value='cantidad']").prop('disabled', false);
+		switch(opcionElegida) {
+			case 'zona_interes':
+				$("option[value='cantidad']").prop('disabled', true);
+				$("option[value='vuelos']").prop('selected', true);
+				$("option[value='bar']").prop('selected', true);
+				break;
+			case 'edad':
+				$("option[value='cantidad']").prop('disabled', false);
+				$("option[value='line']").prop('selected', true);
+				break;
+			case 'sexo':
+				$("option[value='cantidad']").prop('disabled', false);
+				$("option[value='pie']").prop('selected', true);
+				break;
+			case 'provincia':
+				$("option[value='cantidad']").prop('disabled', false);
+				$("option[value='pie']").prop('selected', true);
+				break;
+			case 'localidad':
+				$("option[value='cantidad']").prop('disabled', false);
+				$("option[value='pie']").prop('selected', true);
+				break;
 		}
 	});
 	

@@ -16,9 +16,9 @@ class Grafico_solicitudes extends MY_Controller
                 case 'GET':
                     $fecha_desde = '2017-01-01';
                     $fecha_hasta = '2018-01-01';
-                    $provincia = '3';
+                    $provincia = '0';
                     $localidad = '0';
-                    $listadoSolicitudes = $this->obtener_cantidad_por_localidad($fecha_desde, $fecha_hasta, $provincia, $localidad);
+                    $listadoSolicitudes = $this->obtener_cantidad_por_estado($fecha_desde, $fecha_hasta, $provincia, $localidad);
                     $data = array();
                     foreach ($listadoSolicitudes as $unaSolicitud) {
                         $data[] = $unaSolicitud;
