@@ -26,7 +26,7 @@
     </style>
     <body>
         <div class = "main">
-            <div id="breadcrumb" style="padding-left:8px;">G.O. Guide > Solicitudes de Excepción > Solicitud n°<?php echo $solicitud->idSolicitud; ?></div>
+            <div id="breadcrumb" style="padding-left:8px;"><a href="Panel">G.O. Guide</a> > <a href="Listar_solicitudes">Solicitudes de Excepción</a> > Solicitud n°<?php echo $solicitud->idSolicitud; ?></div>
             <div style="padding:16px;">
             <div class="container">
                 <table>

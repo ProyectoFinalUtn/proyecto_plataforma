@@ -19,7 +19,7 @@
     </style>
     <body>
         <div class = "main">
-            <div id="breadcrumb" style="padding-left:8px;">G.O. Guide > Información de Usuarios VANT > VANT</div>
+            <div id="breadcrumb" style="padding-left:8px;"><a href="Panel">G.O. Guide</a> > <a href="Informacion">Información de Usuarios VANT</a> > VANT</div>
             <div style="padding:16px;">
                 <h1 class="pb-3 text-secondary">VANT</h1>
                 <i>Información estadística sobre los VANT registrados por la aplicación</i>

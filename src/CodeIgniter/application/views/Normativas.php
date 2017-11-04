@@ -17,7 +17,7 @@
     </style>
     <body>
         <div class = "main">
-            <div id="breadcrumb" style="padding-left:8px;">G.O. Guide > Normativas</div>
+            <div id="breadcrumb" style="padding-left:8px;"><a href="Panel">G.O. Guide</a> > Normativas</div>
             <div style="padding:16px;">
                 <h1 class="pb-3 text-secondary">Normativas de VANT</h1>
                 <p>

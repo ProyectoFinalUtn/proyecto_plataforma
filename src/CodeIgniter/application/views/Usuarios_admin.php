@@ -17,7 +17,7 @@
     </style>
     <body>
         <div class = "main">
-            <div id="breadcrumb" style="padding-left:8px;">G.O. Guide > Usuarios</div>
+            <div id="breadcrumb" style="padding-left:8px;"><a href="Panel">G.O. Guide</a> > Usuarios</div>
             <div style="padding:16px;">
                 <h1 class="pb-3 text-secondary">Usuarios Administradores de Normativa</h1>
                 <p>

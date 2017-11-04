@@ -16,7 +16,7 @@
     </style>
     <body>
         <div class = "main">
-            <div id="breadcrumb" style="padding-left:8px;">G.O. Guide > Solicitudes de Excepción</div>
+            <div id="breadcrumb" style="padding-left:8px;"><a href="Panel">G.O. Guide</a> > Solicitudes de Excepción</div>
             <div style="padding:16px;">
                 <h1 class="pb-3 text-secondary">Solicitudes de excepción de usuarios de VANT</h1>
                 <div id="tabla-solicitudes" style="overflow-x:auto;">

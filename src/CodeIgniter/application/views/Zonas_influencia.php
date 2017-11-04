@@ -22,7 +22,7 @@
     </style>
     <body>
         <div class = "main">
-            <div id="breadcrumb" style="padding-left:8px;">G.O. Guide > Normativa > Zonas de Influencia > Nueva Zona de Influencia</div>
+            <div id="breadcrumb" style="padding-left:8px;"><a href="Panel">G.O. Guide</a> > Normativa > Zonas de Influencia > Nueva Zona de Influencia</div>
             <div style="padding:16px;">
                 <div class="container">
                     <table>
