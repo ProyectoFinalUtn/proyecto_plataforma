@@ -5,10 +5,9 @@
         <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap-4.0.0-beta.1.css" type="text/css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
         <link href="<?php echo base_url(); ?>assets/css/quill.snow.css" rel="stylesheet">
-        
+        <script src="<?php echo base_url(); ?>assets/js/bootbox.min.js"></script>
         <script src="<?php echo base_url(); ?>assets/js/quill.js" defer></script>
         <script src="<?php echo base_url(); ?>assets/js/nuevaNormativa.js" defer></script>
-
     </head>
     <style>
         h1,h2,h3,h4 { font-family: "Montserrat", sans-serif; }

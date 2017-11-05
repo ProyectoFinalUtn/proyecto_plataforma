@@ -1,4 +1,6 @@
 $(document).ready(function() {
+	
+	bootbox.setDefaults({ backdrop: false });
 
 	$("button[id='eliminar']").click(function() {
 		event.preventDefault();
@@ -6,19 +8,34 @@ $(document).ready(function() {
 		if ($("input:checked").length > 0) {
 			var fila = $("input:checked").closest("tr");
 			var USER = fila.find("td:eq(1)").text();
-			var rta = confirm("¿Confirma que desea dar de baja el usuario seleccionado <"+USER+">?")
-				if (rta) {
-					var ID = $("td").val();
-					var URL_POST = 'Eliminar_usuario';
-					var posting = $.post( URL_POST, { usuario: USER } );
-					posting.done(function() {
-						alert("Usuario <"+USER+"> dado de baja");
-						var URL = "Usuarios_admin";
-						$(location).attr('href', URL);
-					});
+			bootbox.confirm({
+				message: "¿Confirma que desea dar de baja el usuario seleccionado <"+USER+">?",
+				buttons: {
+					confirm: {
+						label: 'Si'
+					},
+					cancel: {
+						label: 'No'
+					}
+				},
+				callback: function (rta) {
+					if (rta) {
+						var ID = $("td").val();
+						var URL_POST = 'Eliminar_usuario';
+						var posting = $.post( URL_POST, { usuario: USER } );
+						posting.done(function() {
+							bootbox.alert("Usuario <"+USER+"> dado de baja",
+								function(){
+									var URL = "Usuarios_admin";
+									$(location).attr('href', URL);
+								});
+						});
+					}
 				}
+			});
 		} else {
-			alert('Por favor, seleccione el usuario que desea dar de baja');
+			bootbox.alert("Por favor, seleccione el usuario que desea dar de baja", function(){ /* callback */ });
 		}
 	});
+	
 });

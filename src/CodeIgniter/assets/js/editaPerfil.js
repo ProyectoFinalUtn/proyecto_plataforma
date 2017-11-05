@@ -1,4 +1,6 @@
 $(document).ready(function() {
+	
+	bootbox.setDefaults({ backdrop: false });
 
 	$("input:submit").click(function() {
 		event.preventDefault();
@@ -33,7 +35,7 @@ $(document).ready(function() {
 			var CONTRA = hex_md5($("input[name='password']").val());
 			var REPEAT = hex_md5($("input[name='repeatPassword']").val());
 			if(CONTRA != REPEAT) {
-				alert('Revise su contraseña, la misma no coincide con la repetición');
+				bootbox.alert("Revise su contraseña, la misma no coincide con la repetición", function(){ /* callback */ });
 			} else {
 				var MAIL = $("input[name='email']").val();
 				var OLD_MAIL = $("input[name='mailGuardado']").val();
@@ -42,9 +44,53 @@ $(document).ready(function() {
 					var posting = $.post( URL_POST, { email: MAIL, CheckMail: 1 } );
 					posting.done(function(data) {
 						if (data == 'true') {
-							alert('Ya existe un usuario registrado con ese correo electrónico. Elija otro distinto');
+							bootbox.alert("Ya existe un usuario registrado con ese correo electrónico. Elija otro distinto", function(){ /* callback */ });
 						} else {
-							var rta = confirm("¿Confirma los cambios en su perfil?")
+							bootbox.confirm({
+								message: "¿Confirma los cambios en su perfil?",
+								buttons: {
+									confirm: {
+										label: 'Si'
+									},
+									cancel: {
+										label: 'No'
+									}
+								},
+								callback: function (rta) {
+									if (rta) {
+										var ID = $("input[name='id_usuario']").val();
+										var PERSONA = $("input[name='id_persona']").val();
+										var NOMBRE = $("input[name='nombre']").val();
+										var APELLIDO = $("input[name='apellido']").val();
+										var DOCUMENTO = $("input[name='documento']").val();
+										var EMAIL = $("input[name='email']").val();
+										var PSWD = hex_md5($("input[name='password']").val());
+										var URL_POST = $("form").attr("action");
+										var posting = $.post( URL_POST, { id_usuario: ID, password: PSWD, id_persona: PERSONA, nombre: NOMBRE, apellido: APELLIDO, documento: DOCUMENTO, email: EMAIL, Guardar: 1 } );
+										posting.done(function() {
+											bootbox.alert("Cambios realizados con éxito",
+												function(){
+													var URL = "Usuarios_admin";
+													$(location).attr('href', URL);
+												});
+										});
+									}
+								}
+							});
+						}
+					});
+				} else {
+					bootbox.confirm({
+						message: "¿Confirma los cambios en su perfil?",
+						buttons: {
+							confirm: {
+								label: 'Si'
+							},
+							cancel: {
+								label: 'No'
+							}
+						},
+						callback: function (rta) {
 							if (rta) {
 								var ID = $("input[name='id_usuario']").val();
 								var PERSONA = $("input[name='id_persona']").val();
@@ -56,36 +102,19 @@ $(document).ready(function() {
 								var URL_POST = $("form").attr("action");
 								var posting = $.post( URL_POST, { id_usuario: ID, password: PSWD, id_persona: PERSONA, nombre: NOMBRE, apellido: APELLIDO, documento: DOCUMENTO, email: EMAIL, Guardar: 1 } );
 								posting.done(function() {
-									alert("Cambios realizados con éxito");
-									var URL = "Usuarios_admin";
-									$(location).attr('href', URL);
+									bootbox.alert("Cambios realizados con éxito",
+										function(){
+											var URL = "Usuarios_admin";
+											$(location).attr('href', URL);
+										});
 								});
 							}
 						}
 					});
-				} else {
-					var rta = confirm("¿Confirma los cambios en su perfil?")
-					if (rta) {
-						var ID = $("input[name='id_usuario']").val();
-						var PERSONA = $("input[name='id_persona']").val();
-						var NOMBRE = $("input[name='nombre']").val();
-						var APELLIDO = $("input[name='apellido']").val();
-						var DOCUMENTO = $("input[name='documento']").val();
-						var EMAIL = $("input[name='email']").val();
-						var PSWD = hex_md5($("input[name='password']").val());
-						var URL_POST = $("form").attr("action");
-						var posting = $.post( URL_POST, { id_usuario: ID, password: PSWD, id_persona: PERSONA, nombre: NOMBRE, apellido: APELLIDO, documento: DOCUMENTO, email: EMAIL, Guardar: 1 } );
-						posting.done(function() {
-							alert("Cambios realizados con éxito");
-							var URL = "Usuarios_admin";
-							$(location).attr('href', URL);
-						});
-					}
 				}
 			}
 			
 		}
-		
 	});
 
 });

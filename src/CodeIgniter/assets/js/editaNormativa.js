@@ -1,4 +1,5 @@
 $(document).ready(function() {
+	
 	var editor = new Quill('#editor', {
     modules: {
 		toolbar: '#toolbar'
@@ -7,6 +8,9 @@ $(document).ready(function() {
 	theme: 'snow'
 	});
 	editor.setContents(JSON.parse(editor.root.innerHTML.replace('</p>', '').replace('<p>', '')));
+	
+	bootbox.setDefaults({ backdrop: false });
+	
 	$("input:submit").click(function() {
 		event.preventDefault();
 		$("div.errorMsg").remove();
@@ -20,24 +24,38 @@ $(document).ready(function() {
 			ok = false;
 		}
 		if (ok) {
-			var rta = confirm("¿Confirma los cambios a la normativa?")
-			if (rta) {
-				var about = document.querySelector("input[name='contenido']");
-				about.value = JSON.stringify(editor.getContents());
-				var ID = $("input[name='id_normativa']").val();
-				var RESOLUCION = $("input[name='descripcion']").val();
-				var DESDE = $("input[name='fecha_desde']").val();
-				var HASTA = $("input[name='fecha_hasta']").val();
-				var CONTENT = about.value;
-				var CONTENT_HTML = editor.root.innerHTML;
-				var URL_POST = $("form").attr("action");
-				var posting = $.post( URL_POST, { id_normativa: ID, descripcion: RESOLUCION, fecha_desde: DESDE, fecha_hasta: HASTA, contenido: CONTENT, contenido_html: CONTENT_HTML, Guardar: 1 } );
-				posting.done(function() {
-					alert("Cambios realizados con éxito");
-					var URL = "Normativas";
-					$(location).attr('href', URL);
-				});
-			}
+			bootbox.confirm({
+				message: "¿Confirma los cambios a la normativa?",
+				buttons: {
+					confirm: {
+						label: 'Si'
+					},
+					cancel: {
+						label: 'No'
+					}
+				},
+				callback: function (rta) {			
+					if (rta) {
+						var about = document.querySelector("input[name='contenido']");
+						about.value = JSON.stringify(editor.getContents());
+						var ID = $("input[name='id_normativa']").val();
+						var RESOLUCION = $("input[name='descripcion']").val();
+						var DESDE = $("input[name='fecha_desde']").val();
+						var HASTA = $("input[name='fecha_hasta']").val();
+						var CONTENT = about.value;
+						var CONTENT_HTML = editor.root.innerHTML;
+						var URL_POST = $("form").attr("action");
+						var posting = $.post( URL_POST, { id_normativa: ID, descripcion: RESOLUCION, fecha_desde: DESDE, fecha_hasta: HASTA, contenido: CONTENT, contenido_html: CONTENT_HTML, Guardar: 1 } );
+						posting.done(function() {
+							bootbox.alert("Cambios realizados con éxito",
+								function(){
+									var URL = "Normativas";
+									$(location).attr('href', URL);
+								});
+						});
+					}
+				}
+			});
 		}
 	});
 
