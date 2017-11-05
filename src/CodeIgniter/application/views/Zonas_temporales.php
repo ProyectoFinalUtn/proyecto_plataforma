@@ -24,7 +24,7 @@
     </style>
     <body>
         <div class = "main">
-            <div id="breadcrumb" style="padding-left:8px;">G.O. Guide > Normativa > Zonas Restringidas Temporales</div>
+            <div id="breadcrumb" style="padding-left:8px;"><a href="Panel">G.O. Guide</a> > Normativa > Zonas Restringidas Temporales</div>
             <div style="padding:16px;">
                 <div class="container">
                     <div id="map" class="map"></div>

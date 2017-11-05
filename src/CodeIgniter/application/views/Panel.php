@@ -40,8 +40,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <div class="col-2 order-lg-2 col-2 text-center"><a href="zonas_influencia"><i class="d-block fa fa-map-o fa-3x"></i></a></div>
               <div class="col-10 text-lg-right text-left order-lg-1">
                 <h3 class="text-primary">Zonas de Influencia</h3>
-                <p>Definir las zonas no segregadas para
-                    <br>uso de VANT</p>
+                <p>Definir las zonas restringidas para
+                    <br>uso de VANT mediante importación</p>
               </div>
             </div>
             <div class="row my-5">
@@ -49,7 +49,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <div class="col-10 text-lg-right text-left order-lg-1">
                 <h3 class="text-primary">Zonas Temporales</h3>
                 <p>Definir zonas de influencia
-                  <br>para un período determinado</p>
+                  <br>para un período determinado de tiempo</p>
               </div>
             </div>
           </div>

@@ -20,7 +20,7 @@
     </style>
     <body>
         <div class = "main">
-            <div id="breadcrumb" style="padding-left:8px;">G.O. Guide > Perfil de Usuario</div>
+            <div id="breadcrumb" style="padding-left:8px;"><a href="Panel">G.O. Guide</a> > Perfil de Usuario</div>
             <div style="padding:16px;">
             <div class="container">
                 <table>

@@ -22,7 +22,7 @@
     </style>
     <body>
         <div class = "main">
-            <div id="breadcrumb" style="padding-left:8px;">G.O. Guide > Normativas > Editar Normativa</div>
+            <div id="breadcrumb" style="padding-left:8px;"><a href="Panel">G.O. Guide</a> > <a href="Normativas">Normativas</a> > Editar Normativa</div>
             <div style="padding:16px;">
             <div class="container">
                 <table>

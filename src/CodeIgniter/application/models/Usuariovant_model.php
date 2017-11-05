@@ -279,7 +279,7 @@
             $this->db->from('usuario_vant');
             $this->db->join('persona pers', 'usuario_vant.id_persona = pers.id_persona');
             $this->db->join('perfil perf', 'usuario_vant.id_perfil = perf.id_perfil');
-            $this->db->join('vant', 'vant.id_usuario_vant = usuario_vant.id_usuario', 'left outer ');
+            $this->db->join('vant', 'vant.id_usuario_vant = usuario_vant.id_usuario');
             $this->db->where($filtro);
             $this->db->group_by($by);
             $this->db->order_by('pers.edad', 'asc');
@@ -352,7 +352,7 @@
             $this->db->from('usuario_vant');
             $this->db->join('persona pers', 'usuario_vant.id_persona = pers.id_persona');
             $this->db->join('perfil perf', 'usuario_vant.id_perfil = perf.id_perfil');
-            $this->db->join('vant', 'vant.id_usuario_vant = usuario_vant.id_usuario', 'left outer ');
+            $this->db->join('vant', 'vant.id_usuario_vant = usuario_vant.id_usuario');
             $this->db->where($filtro);
             $this->db->group_by($by);
             $query = $this->db->get()->result_array();
@@ -424,7 +424,7 @@
             $this->db->from('usuario_vant');
             $this->db->join('persona pers', 'usuario_vant.id_persona = pers.id_persona');
             $this->db->join('perfil perf', 'usuario_vant.id_perfil = perf.id_perfil');
-            $this->db->join('vant', 'vant.id_usuario_vant = usuario_vant.id_usuario', 'left outer ');
+            $this->db->join('vant', 'vant.id_usuario_vant = usuario_vant.id_usuario');
             $this->db->join('localidad', 'localidad.id_localidad = pers.localidad');
             $this->db->where($filtro);
             $this->db->group_by($by);
@@ -495,7 +495,7 @@
             $this->db->from('usuario_vant');
             $this->db->join('persona pers', 'usuario_vant.id_persona = pers.id_persona');
             $this->db->join('perfil perf', 'usuario_vant.id_perfil = perf.id_perfil');
-            $this->db->join('vant', 'vant.id_usuario_vant = usuario_vant.id_usuario', 'left outer ');
+            $this->db->join('vant', 'vant.id_usuario_vant = usuario_vant.id_usuario');
             $this->db->join('provincia', 'provincia.id_provincia = pers.provincia');
             $this->db->where($filtro);
             $this->db->group_by($by);

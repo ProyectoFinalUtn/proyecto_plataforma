@@ -20,10 +20,10 @@ $(document).ready(function(){
 				datasets : [
 					{
 						label: 'Cantidad de VANT',
-						backgroundColor: 'rgba(8, 59, 51, 0.9)',
 						borderColor: 'rgba(0, 34, 29, 1)',
-						hoverBackgroundColor: 'rgba(8, 59, 51, 1)',
 						hoverBorderColor: 'rgba(0, 34, 29, 1)',
+						pointBackgroundColor: 'rgba(8, 59, 51, 0.9)',
+						pointBorderColor: 'rgba(0, 34, 29, 1)',
 						data: vant
 					}
 				]
@@ -32,7 +32,7 @@ $(document).ready(function(){
 			var ctx = $("#graficoPeso");
 
 			var barGraph = new Chart(ctx, {
-				type: 'bar',
+				type: 'line',
 				data: chartdata,
 				options: {
 						scales: {
@@ -165,7 +165,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoPeso" width="400" height="100"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoPeso" width="400" height="200"></canvas>');
 						
 						var ctx = $("#graficoPeso");
 
@@ -231,7 +231,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoMarca" width="400" height="100"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoMarca" width="400" height="200"></canvas>');
 						
 						var ctx = $("#graficoMarca");
 
@@ -297,7 +297,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoModelo" width="400" height="100"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoModelo" width="400" height="200"></canvas>');
 						
 						var ctx = $("#graficoModelo");
 
@@ -363,7 +363,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoFabricante" width="400" height="100"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoFabricante" width="400" height="200"></canvas>');
 						
 						var ctx = $("#graficoFabricante");
 
@@ -430,7 +430,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoOrigen" width="400" height="100"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoOrigen" width="400" height="200"></canvas>');
 						
 						var ctx = $("#graficoOrigen");
 
@@ -497,7 +497,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoAnio" width="400" height="100"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoAnio" width="400" height="200"></canvas>');
 						
 						var ctx = $("#graficoAnio");
 
@@ -564,7 +564,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoAltMax" width="400" height="100"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoAltMax" width="400" height="200"></canvas>');
 						
 						var ctx = $("#graficoAltMax");
 
@@ -631,7 +631,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoVelMax" width="400" height="100"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoVelMax" width="400" height="200"></canvas>');
 						
 						var ctx = $("#graficoVelMax");
 
@@ -698,7 +698,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoAlto" width="400" height="100"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoAlto" width="400" height="200"></canvas>');
 						
 						var ctx = $("#graficoAlto");
 
@@ -765,7 +765,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoAncho" width="400" height="100"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoAncho" width="400" height="200"></canvas>');
 						
 						var ctx = $("#graficoAncho");
 
@@ -832,7 +832,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoLargo" width="400" height="100"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoLargo" width="400" height="200"></canvas>');
 						
 						var ctx = $("#graficoLargo");
 
@@ -899,7 +899,7 @@ $(document).ready(function(){
 							]
 						};
 						
-						$('canvas').replaceWith('<canvas id="graficoColor" width="400" height="100"></canvas>');
+						$('canvas').replaceWith('<canvas id="graficoColor" width="400" height="200"></canvas>');
 						
 						var ctx = $("#graficoColor");
 
@@ -1058,6 +1058,48 @@ $(document).ready(function(){
 				console.log(data);
 			}
 		});
+	});
+	
+	$("select[name='ejeX']").change(function() {
+		var opcionElegida = $("select[name='ejeX']").val();
+		switch(opcionElegida) {
+			case 'peso':
+				$("option[value='line']").prop('selected', true);
+				break;
+			case 'marca':
+				$("option[value='pie']").prop('selected', true);
+				break;
+			case 'modelo':
+				$("option[value='doughnut']").prop('selected', true);
+				break;
+			case 'fabricante':
+				$("option[value='pie']").prop('selected', true);
+				break;
+			case 'lFab':
+				$("option[value='pie']").prop('selected', true);
+				break;
+			case 'anioFab':
+				$("option[value='bar']").prop('selected', true);
+				break;
+			case 'altMax':
+				$("option[value='radar']").prop('selected', true);
+				break;
+			case 'velMax':
+				$("option[value='radar']").prop('selected', true);
+				break;
+			case 'alto':
+				$("option[value='radar']").prop('selected', true);
+				break;
+			case 'ancho':
+				$("option[value='radar']").prop('selected', true);
+				break;
+			case 'largo':
+				$("option[value='radar']").prop('selected', true);
+				break;
+			case 'color':
+				$("option[value='doughnut']").prop('selected', true);
+				break;
+		}
 	});
 	
 });

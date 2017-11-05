@@ -15,7 +15,7 @@
     </style>
     <body>
         <div class = "main">
-            <div id="breadcrumb" style="padding-left:8px;">G.O. Guide > Información de Usuarios VANT</div>
+            <div id="breadcrumb" style="padding-left:8px;"><a href="Panel">G.O. Guide</a> > Información de Usuarios VANT</div>
             <div style="padding:16px;" style="text-align: center;">
                 <h1 class="pb-3 text-secondary">Información de Usuarios de VANT</h1>
                 <div class="row" style="padding:8px">
