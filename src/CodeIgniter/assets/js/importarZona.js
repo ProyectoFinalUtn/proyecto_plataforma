@@ -1,5 +1,5 @@
 $(document).ready(function() {
-
+	bootbox.setDefaults({ backdrop: false });
     $("input:submit").click(function() {
         event.preventDefault();
         $("div.errorMsg").remove();
@@ -51,7 +51,9 @@ $(document).ready(function() {
                             data: 'data=' + data,
                             url: URL_POST,
                             success: function(response) {
-                                //DO SOMETHING        			    
+                                if (response == '"true"') {
+									bootbox.alert("La capa fue importada con éxito");
+								}
                             }
                         });
                     }                    

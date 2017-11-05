@@ -336,6 +336,7 @@ function handleFeatureContexMenuEvent2(option, feature, ModelName, x, y) {
 }
 
 function eliminarArea(ft) {
+	bootbox.setDefaults({ backdrop: false });
     bootbox.confirm("¿Confirma que desea eliminar la Zona '" + ft.get('ModelName') + "' ?", function(result) {
         if (result) {            
             var zona = {
@@ -361,7 +362,7 @@ function abmZonaPrompt(ft) {
     var fecha_inicio = fechaActual();
     var fecha_fin = fechaActual();
     var guardada = false;
-
+	bootbox.setDefaults({ backdrop: false });
     if (feature.get('ID') == null) {
         //es un nuevo feature
         id = GetID();
