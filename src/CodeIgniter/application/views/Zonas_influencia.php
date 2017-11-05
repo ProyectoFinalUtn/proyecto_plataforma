@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/font-awesome.min.css" type="text/css">
         <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap-4.0.0-beta.1.css" type="text/css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+        <script src="<?php echo base_url(); ?>assets/js/bootbox.min.js"></script>
         
         <script src="<?php echo base_url(); ?>assets/js/importarZona.js" defer></script>
         
@@ -36,9 +37,9 @@
                                     echo "<div class=\"form-group\" id=\"nombre_zona\"> <label>Nombre de la Capa *</label>";
                                     echo "<input type=\"text\" class=\"form-control\" name=\"nombre_zona\" placeholder=\"Completa el nombre de la capa a importar\"></div>";
                                     echo "<div class=\"form-group\" id=\"radio_zona\"> <label>Radio de Influencia *</label>";
-                                    echo "<input type=\"number\" class=\"form-control\" name=\"radio\" placeholder=\"Completa el radio de influencia\"></div>";
+                                    echo "<input type=\"number\" class=\"form-control\" name=\"radio_zona\" placeholder=\"Completa el radio de influencia\"></div>";
                                     echo "<div class=\"form-group\" id=\"archivo\"> <label>Archivo a importar</label>";
-                                    echo "<input type=\"file\" class=\"form-control\" name=\"archivo\" placeholder=\"Elija el archivo geojson de su sistema\" accept=\".geojson\"></div>";
+                                    echo "<input type=\"file\" id=\"input_file\" class=\"form-control\" name=\"archivo\" placeholder=\"Elija el archivo geojson de su sistema\" accept=\".geojson\"></div>";
                                     echo "<div class=\"form-group\" id=\"detalle_zona\"> <label>Detalle</label>";
                                     echo "<textarea style=\"height:80px;width:100%;padding-top:8px;padding-left:8px;font-size:10px;border: 0.5px solid\" type=\"text\" name=\"detalle_zona\"></textarea>";
                                     echo "<p></p>";

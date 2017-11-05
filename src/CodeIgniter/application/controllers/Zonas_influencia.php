@@ -7,7 +7,7 @@ class Zonas_influencia extends MY_Controller
     public function __construct()
     {
         parent::__construct();
-        //$this->load->model('Zonas_influencia_model');
+        $this->load->model('Zonas_influencia_model');
         $this->load->library('Multi_menu');
     }
 
@@ -23,9 +23,10 @@ class Zonas_influencia extends MY_Controller
 	}
         
         
-        public function guardar_zona_influencia()
+    public function guardar_zona_influencia()
 	{
-            //$this->Zonas_influencia_model->guardar_zona($zona);
+            $zonas = json_decode($_POST['data'], true);            
+            $this->Zonas_influencia_model->guardar_zona($zonas);
 	}
 
 	public function eliminar_zona_influencia()
