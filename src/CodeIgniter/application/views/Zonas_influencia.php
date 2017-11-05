@@ -8,7 +8,6 @@
         <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap-4.0.0-beta.1.css" type="text/css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
         <script src="<?php echo base_url(); ?>assets/js/bootbox.min.js"></script>
-        
         <script src="<?php echo base_url(); ?>assets/js/importarZona.js" defer></script>
         
     </head>

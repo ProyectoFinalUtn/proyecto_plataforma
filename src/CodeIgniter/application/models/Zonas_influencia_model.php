@@ -24,7 +24,7 @@ class Zonas_influencia_model extends CI_Model {
                                 'radio' => $radio,
                                 'detalle' => $detalle);                
                 $str = "ID :".$id.";NOMBRE CAPA :".$nombre_capa.", RADIO :".$radio.",DETALLE :".$detalle.",GEOM : ".$geom."PROP:".$props; 
-                file_put_contents('C:\Users\winwin\Desktop\vardump.txt', $str);
+                //file_put_contents('C:\Users\winwin\Desktop\vardump.txt', $str);
                 $this->db->insert('zona_influencia', $dataInsert);                                        
             }
         }

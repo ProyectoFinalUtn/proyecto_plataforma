@@ -5,11 +5,11 @@
 CREATE TABLE public.zona_influencia
 (
     id bigint NOT NULL,
-    nombre_capa "char"[] NOT NULL,
+    nombre_capa text NOT NULL,
     geometria json NOT NULL,
     propiedades json NOT NULL,
     radio bigint NOT NULL,
-    detalle "char"[],
+    detalle text,
     CONSTRAINT zona_influencia_pkey PRIMARY KEY (id)
 )
 WITH (

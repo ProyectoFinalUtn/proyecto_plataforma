@@ -23,9 +23,9 @@ class Zonas_influencia extends MY_Controller
 	}
         
         
-    public function guardar_zona_influencia()
+        public function guardar_zona_influencia()
 	{
-            $zonas = json_decode($_POST['data'], true);            
+            $zonas = json_decode($_POST['data'], true);
             $this->Zonas_influencia_model->guardar_zona($zonas);
 	}
 
