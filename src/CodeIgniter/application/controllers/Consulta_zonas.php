@@ -42,9 +42,7 @@
         public function buscar_zonas_temporales_post()
         {
             $data = array();          
-            $data["filtro"] = $this->post("filtro");
-            $data["fecha_inicio"] = $this->post("fecha_inicio");
-            $data["fecha_fin"] = $this->post("fecha_fin");
+            $data = json_decode($this->post("data"), TRUE);
             $zonas = NULL;
             try{
                 $this->load->model('Zonas_temporales_model');                
