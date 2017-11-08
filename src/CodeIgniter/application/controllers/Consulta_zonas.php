@@ -15,6 +15,7 @@
             // Ensure you have created the 'limits' table and enabled 'limits' within application/config/rest.php
             $this->methods['en_zona_temporal_post']['limit'] = 500; // 500 requests per hour per user/key            
             $this->methods['buscar_zonas_temporales_post']['limit'] = 500; // 500 requests per hour per user/key            
+            $this->methods['en_zona_influencia_post']['limit'] = 500; // 500 requests per hour per user/key            
             $this->responseError = ['status' => FALSE, 'message' => ''];
             $this->responseOk = ['status' => TRUE, 'response' => NULL, 'message' => ''];
             //$this->inicializa_controller();
@@ -55,6 +56,24 @@
                 $this->response($this->responseError, REST_Controller::HTTP_BAD_REQUEST);
             }
         }        
+
+        public function en_zona_influencia_post()
+        {
+            $area = file_get_contents('php://input');
+            $area = json_decode($area, TRUE);                     
+            try{
+                $this->load->model('Zonas_influencia_model');                
+                $zonas = $this->Zonas_influencia_model->get_zona_influencia($area);
+                $this->set_respuesta($zonas);
+                $this->set_response($this->responseOk, REST_Controller::HTTP_OK);
+            }
+            catch(Exception $exception){
+                $this->set_mensaje_error($exception->getMessage());
+                $this->response($this->responseError, REST_Controller::HTTP_BAD_REQUEST);
+            }
+        }
+
+
 
         private function set_mensaje_error($mensaje)
         {

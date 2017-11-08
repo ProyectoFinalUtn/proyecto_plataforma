@@ -23,8 +23,6 @@ class Zonas_influencia_model extends CI_Model {
                                 'propiedades' => $props,
                                 'radio' => $radio,
                                 'detalle' => $detalle);                
-                $str = "ID :".$id.";NOMBRE CAPA :".$nombre_capa.", RADIO :".$radio.",DETALLE :".$detalle.",GEOM : ".$geom."PROP:".$props; 
-                //file_put_contents('C:\Users\winwin\Desktop\vardump.txt', $str);
                 $this->db->insert('zona_influencia', $dataInsert);                                        
             }
         }
@@ -33,6 +31,19 @@ class Zonas_influencia_model extends CI_Model {
         {
           //$id = strval($data["id"]);
           //$this->db->delete('zona_temporal', array('id' => $id));
+        }
+
+        public function get_zona_influencia($punto)
+        {
+            $columnas = 'id, nombre_capa, geometria, detalle, radio';
+            $this->db->select($columnas);
+            $this->db->from('zona_influencia');
+            $where = '( ST_DWithin( 
+                       ( ST_SetSRID(( ST_GeomFromGeoJSON (geometria::Text)),4326)),                  
+                       ( ST_SetSRID(ST_MakePoint('.strval($punto["long"]).','.strval($punto["lat"]).'),4326)),radio))';
+            $this->db->where($where);
+            $query = $this->db->get();            
+            return $query->result_array();
         }
 }
 ?>
