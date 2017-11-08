@@ -27,6 +27,15 @@ class Zonas_influencia_model extends CI_Model {
             }
         }
 
+        public function buscar_zonas()
+        {          
+          $columnas = 'nombre_capa, geometria, propiedades,detalle';
+          $this->db->select($columnas);
+          $this->db->from('zona_influencia');          
+          $query = $this->db->get();
+          return $query->result_array();
+        }
+
         public function eliminar_zona($data)
         {
           //$id = strval($data["id"]);

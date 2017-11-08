@@ -7,8 +7,15 @@
         <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/font-awesome.min.css" type="text/css">
         <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap-4.0.0-beta.1.css" type="text/css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/ol3/4.3.3/ol.js"></script>
+        <script src="//cdn.jsdelivr.net/openlayers.geocoder/latest/ol3-geocoder.js"></script>
         <script src="<?php echo base_url(); ?>assets/js/bootbox.min.js"></script>
         <script src="<?php echo base_url(); ?>assets/js/importarZona.js" defer></script>
+        <script src="//cdn.jsdelivr.net/openlayers.contextmenu/latest/ol3-contextmenu.js"></script>
+        <script src="<?php echo base_url(); ?>assets/js/olContextMenuInfluencia.js"></script>
+        <script src="<?php echo base_url(); ?>assets/js/utility.js"></script>
+        <script src="<?php echo base_url(); ?>assets/js/ol3-layerswitcher.js"></script>
+        
         
     </head>
     <style>
@@ -28,7 +35,11 @@
                     <table>
                     <tr>
                         <div class="row" style="border-collapse: collapse; width: 100%; border-spacing:0; box-shadow:0 4px 10px 0 rgba(0,0,0,0.2),0 4px 20px 0 rgba(0,0,0,0.19); padding:16px; ">
-                            <div class="col-md-6">
+                            <div class="col-md-9">
+                                <div id="map" class="map"></div>
+                                <script src="<?php echo base_url(); ?>assets/js/olInfluencia.js"></script>
+                            </div>                        
+                            <div class="col-md-3">
                                 <?php
                                     echo "<p></p>";
                                     echo "<h1>Nueva Zona de Influencia de VANT</h1>";

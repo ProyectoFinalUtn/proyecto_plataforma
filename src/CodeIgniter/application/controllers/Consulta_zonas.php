@@ -73,6 +73,21 @@
             }
         }
 
+        public function buscar_zonas_influencia_post()
+        {
+            $zonas = NULL;
+            try{
+                $this->load->model('Zonas_influencia_model');                
+                $zonas = $this->Zonas_influencia_model->buscar_zonas();
+                $this->set_respuesta($zonas);
+                $this->set_response($this->responseOk, REST_Controller::HTTP_OK);
+            }
+            catch(Exception $exception){
+                $this->set_mensaje_error($exception->getMessage());
+                $this->response($this->responseError, REST_Controller::HTTP_BAD_REQUEST);
+            }
+        }        
+
 
 
         private function set_mensaje_error($mensaje)
