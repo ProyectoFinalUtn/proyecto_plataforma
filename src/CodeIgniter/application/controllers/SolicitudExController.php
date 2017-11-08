@@ -153,8 +153,7 @@
             if($this->post("idUsuarioVant") && 
                $this->post("longitud") && $this->post("latitud") && 
                $this->post("radioVuelo") && $this->post("fecha") &&
-               $this->post("horaVueloDesde") && $this->post("horaVueloHasta") &&
-               $this->post("vants")){
+               $this->post("horaVueloDesde") && $this->post("horaVueloHasta")){
                return true;
             }
             return false;
