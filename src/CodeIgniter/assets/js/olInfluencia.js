@@ -227,6 +227,7 @@ function cargaZonas(data) {
     for (var i = 0; i < arrayLength; i++) {
         //data.response[i]; //un json con geometria y propiedades
         ft = "{\"type\":\"Feature\",\"geometry\":" + data.response[i].geometria + ",\"properties\":" + data.response[i].propiedades + "}";
+        console.log(ft);
         ft = format.readFeature(ft);        
         source.addFeature(ft);
         //Do something

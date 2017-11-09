@@ -29,7 +29,7 @@ class Zonas_influencia_model extends CI_Model {
 
         public function buscar_zonas()
         {          
-          $columnas = 'nombre_capa, geometria, propiedades,detalle';
+          $columnas = 'nombre_capa, ST_AsGeoJSON(ST_Transform(ST_SetSRID((ST_GeomFromGeoJSON (geometria::Text)),4326), 3857)) geometria, propiedades,detalle';
           $this->db->select($columnas);
           $this->db->from('zona_influencia');          
           $query = $this->db->get();
