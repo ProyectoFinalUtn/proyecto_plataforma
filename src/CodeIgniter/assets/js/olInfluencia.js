@@ -153,26 +153,25 @@ map.getViewport().addEventListener('contextmenu', function(e) {
     });
     console.log('length : ' + clkfeatures.length);
     var FeatureContextMenu = [{
-            text: 'Editar Area',
+            text: 'Eliminar Capa',
             callback: function(obj, map) {
-                handleFeatureContexMenuEvent2('EditarArea', feature, ModelName, mapX, mapY);
-            }
-        }, {
-            text: 'Eliminar Area',
-            callback: function(obj, map) {
-                handleFeatureContexMenuEvent2('EliminarArea', feature, ModelName, mapX, mapY);
+                handleFeatureContexMenuEvent2('EliminarCapa', feature, ModelName, mapX, mapY);
             }
         }];
     var SelectorContextMenu = [];
     if (clkfeatures.length > 1) {
         contextmenu.clear();        
         var arrayLength = clkfeatures.length;
-        for (var i = 0; i < arrayLength; i++) {
-            console.log(clkfeatures[i].get('ModelName'));
-            menuFt = {text:clkfeatures[i].get('ModelName'),
-                        items: FeatureContextMenu
-                     };
-            SelectorContextMenu.push(menuFt);
+        for (var i = 0; i < arrayLength; i++) {            
+            for (var j = 0; j < SelectorContextMenu.length; j++){
+                 // look for the entry with a matching `code` value
+                if (SelectorContextMenu[j].text != clkfeatures[i].get('ModelName')){
+                    menuFt = {text:clkfeatures[i].get('ModelName'),
+                      items: FeatureContextMenu
+                    };
+                    SelectorContextMenu.push(menuFt);
+                }
+            }
         }
         contextmenu.extend(SelectorContextMenu);
     } else if (clkfeatures.length == 1) {
@@ -227,8 +226,11 @@ function cargaZonas(data) {
     for (var i = 0; i < arrayLength; i++) {
         //data.response[i]; //un json con geometria y propiedades
         ft = "{\"type\":\"Feature\",\"geometry\":" + data.response[i].geometria + ",\"properties\":" + data.response[i].propiedades + "}";
-        console.log(ft);
-        ft = format.readFeature(ft);        
+        ft = format.readFeature(ft);
+        ft.setProperties({
+         'Display': data.response[i].nombre_capa,
+         'ModelName': data.response[i].nombre_capa
+        });        
         source.addFeature(ft);
         //Do something
     }
@@ -244,27 +246,26 @@ function getAreaLabel(feature) {
 
 function handleFeatureContexMenuEvent2(option, feature, ModelName, x, y) {
     contextmenu.clear();
-    if (option == 'EliminarArea') {
-        eliminarArea(feature);
-    } else if (option == 'EditarArea') {
-        abmZonaPrompt(feature);
+    if (option == 'EliminarCapa') {
+        eliminarCapa(feature);
     }
 }
 
-function eliminarArea(ft) {
+function eliminarCapa(ft) {
 	bootbox.setDefaults({ backdrop: false });
-    bootbox.confirm("¿Confirma que desea eliminar la Zona '" + ft.get('ModelName') + "' ?", function(result) {
+    bootbox.confirm("Desea eliminar todas las zonas de la capa '" + ft.get('Display') + "' ?", function(result) {
         if (result) {            
-            var zona = {
-                id: ft.get('ID')
+            var capa = {
+                nombre_capa: ft.get('Display')
             };
-            zona = JSON.stringify(zona);
+            capa = JSON.stringify(capa);
             $.ajax({
                 type: 'POST',
-                data: 'data=' + zona,
-                url: 'zonas_temporales/eliminar_zona_temporal'
-            });
-            source.removeFeature(ft);
+                data: 'data=' + capa,
+                url: 'zonas_influencia/eliminar_zona_influencia'
+            });            
+            clearDraw();
+            buscaZonas();        
         }
 
     })

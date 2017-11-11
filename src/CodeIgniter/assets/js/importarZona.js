@@ -53,6 +53,8 @@ $(document).ready(function() {
                             success: function(response) {
                                 if (response == '"true"') {
 									bootbox.alert("La capa fue importada con éxito");
+                                    clearDraw();
+                                    buscaZonas();
 								}
                             }
                         });

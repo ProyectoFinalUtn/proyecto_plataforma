@@ -14,11 +14,9 @@ class Zonas_influencia_model extends CI_Model {
             $detalle = $zonas["detalle_zona"];
             $features = json_decode( $zonas["archivo"], true );
             foreach ($features["features"] as $ft) {
-                $geom = json_encode($ft["geometry"]);
-                $id = $ft["properties"]["id"];
+                $geom = json_encode($ft["geometry"]);                
                 $props = json_encode($ft["properties"]);
-                $dataInsert = array('id' => $id,
-                                'nombre_capa'  => $nombre_capa,    
+                $dataInsert = array('nombre_capa' => $nombre_capa,    
                                 'geometria' => $geom,
                                 'propiedades' => $props,
                                 'radio' => $radio,
@@ -38,8 +36,8 @@ class Zonas_influencia_model extends CI_Model {
 
         public function eliminar_zona($data)
         {
-          //$id = strval($data["id"]);
-          //$this->db->delete('zona_temporal', array('id' => $id));
+          $nombre_capa = strval($data["nombre_capa"]);
+          $this->db->delete('zona_influencia', array('nombre_capa' => $nombre_capa));
         }
 
         public function get_zona_influencia($punto)
