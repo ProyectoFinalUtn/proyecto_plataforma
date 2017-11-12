@@ -42,7 +42,7 @@ class Zonas_influencia_model extends CI_Model {
 
         public function get_zona_influencia($punto)
         {
-            $columnas = 'id, nombre_capa, geometria, detalle';
+            /*$columnas = 'id, nombre_capa, geometria, detalle';
             $this->db->select($columnas);
             $this->db->from('zona_influencia');
             $where = '( ST_DWithin( 
@@ -50,20 +50,20 @@ class Zonas_influencia_model extends CI_Model {
                        ( ST_SetSRID(ST_MakePoint('.strval($punto["long"]).','.strval($punto["lat"]).'),4326)),radio +'.strval($punto["rad"]).'))';
             $this->db->where($where);
             $query = $this->db->get();            
-            return $query->result_array();
-        }
-}
-
- /*
-             $columnas = 'id, nombre_capa, ST_AsGeoJSON(ST_Buffer(ST_GeomFromGeoJSON (geometria::Text), 500)), detalle';
+            return $query->result_array();*/
+            $columnas = 'id, nombre_capa, 
+                        ST_AsGeoJSON(ST_Transform(ST_Buffer(ST_Transform(ST_SetSRID(ST_GeomFromGeoJSON (geometria::Text), 4326), 3857), radio), 4326)) geometria, 
+                        propiedades';
             $this->db->select($columnas);
             $this->db->from('zona_influencia');
-            $where = '( ST_DWithin( 
-                       ( ST_SetSRID(( ST_Buffer(ST_GeomFromGeoJSON (geometria::Text), 500),4326)),                  
-                       ( ST_SetSRID(ST_MakePoint('.strval($punto["long"]).','.strval($punto["lat"]).'),4326)),radio +'.strval($punto["rad"]).'))';
+            $where = "( ST_DWithin( 
+                        ( ST_SetSRID(( ST_Transform(ST_SetSRID(ST_GeomFromGeoJSON (geometria::Text), 4326), 3857)),3857)),                  
+                        ( ST_SetSRID(ST_Transform(ST_GeomFromText('POINT(".strval($punto["long"])." ".strval($punto["lat"]).")', 4326), 3857),3857)), 
+                            radio + ".strval($punto["rad"]).")) ";
             $this->db->where($where);
+            $this->db->limit(5);
             $query = $this->db->get();            
             return $query->result_array();
-         * 
-         */
+        }
+    }
 ?>

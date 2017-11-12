@@ -15,7 +15,8 @@
             // Ensure you have created the 'limits' table and enabled 'limits' within application/config/rest.php
             $this->methods['en_zona_temporal_post']['limit'] = 500; // 500 requests per hour per user/key            
             $this->methods['buscar_zonas_temporales_post']['limit'] = 500; // 500 requests per hour per user/key            
-            $this->methods['en_zona_influencia_post']['limit'] = 500; // 500 requests per hour per user/key            
+            $this->methods['en_zona_influencia_post']['limit'] = 500; // 500 requests per hour per user/key    
+            $this->methods['buscar_zonas_segregadas_post']['limit'] = 500; // 500 requests per hour per user/key    
             $this->responseError = ['status' => FALSE, 'message' => ''];
             $this->responseOk = ['status' => TRUE, 'response' => NULL, 'message' => ''];
             //$this->inicializa_controller();
@@ -88,7 +89,27 @@
             }
         }        
 
-
+        public function buscar_zonas_segregadas_post()
+        {
+            $area = file_get_contents('php://input');
+            $area = json_decode($area, TRUE);                     
+            try{  
+                $this->load->model('Zonas_influencia_model'); 
+                $zonas_influencia = $this->Zonas_influencia_model->get_zona_influencia($area);
+                $zonas_temporales = array();
+                if(count($zonas_influencia) == 0){
+                    $this->load->model('Zonas_temporales_model');   
+                    $zonas_temporales = $this->Zonas_temporales_model->get_zona_within_radius($area);
+                }
+                $zonas_segregadas = array("zonas_influencia"=> $zonas_influencia, "zonas_temporales"=> $zonas_temporales );
+                $this->set_respuesta($zonas_segregadas);
+                $this->set_response($this->responseOk, REST_Controller::HTTP_OK);
+            }
+            catch(Exception $exception){
+                $this->set_mensaje_error($exception->getMessage());
+                $this->response($this->responseError, REST_Controller::HTTP_BAD_REQUEST);
+            }
+        } 
 
         private function set_mensaje_error($mensaje)
         {
