@@ -7,6 +7,22 @@ var capas_influencia = [];
 var StandardContextItems = [];
 
 function setStandardContextItems () {
+
+    $.ajax({
+        type: 'POST',
+        username: "admin",
+        password: "1234",
+        url: 'Consulta_zonas/buscar_nombres_capas',      
+        success: function(response) { 
+            capas_influencia = [];
+            response = response.response;
+            var arrayLength = response.length;
+            for (var i = 0; i < arrayLength; i++) {            
+              capas_influencia.push(response[i].nombre_capa);
+            }
+        },          
+        async:false
+    });
     StandardContextItems = [
           {
               text: 'Centrar el mapa aquí',
@@ -34,26 +50,6 @@ function setStandardContextItems () {
           },
     ];
 }
-
-
-
-
-$.ajax({
-    type: 'POST',
-    username: "admin",
-    password: "1234",
-    url: 'Consulta_zonas/buscar_nombres_capas',      
-    success: function(response) {         
-      response = response.response;
-      var arrayLength = response.length;
-      for (var i = 0; i < arrayLength; i++) {            
-          capas_influencia.push(response[i].nombre_capa);
-      }
-    },          
-    async:false
-});
-
-
 
 var source = new ol.source.Vector({
     wrapX: false
