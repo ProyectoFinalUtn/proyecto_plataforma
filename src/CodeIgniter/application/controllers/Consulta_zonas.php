@@ -17,6 +17,7 @@
             $this->methods['buscar_zonas_temporales_post']['limit'] = 500; // 500 requests per hour per user/key            
             $this->methods['en_zona_influencia_post']['limit'] = 500; // 500 requests per hour per user/key    
             $this->methods['buscar_zonas_segregadas_post']['limit'] = 500; // 500 requests per hour per user/key    
+            $this->methods['buscar_nombres_capas_post']['limit'] = 500; // 500 requests per hour per user/key    
             $this->responseError = ['status' => FALSE, 'message' => ''];
             $this->responseOk = ['status' => TRUE, 'response' => NULL, 'message' => ''];
             //$this->inicializa_controller();
@@ -88,6 +89,24 @@
                 $this->response($this->responseError, REST_Controller::HTTP_BAD_REQUEST);
             }
         }        
+
+
+        public function buscar_nombres_capas_post()
+        {
+            $capas = NULL;
+            try{
+                $this->load->model('Zonas_influencia_model');                
+                $capas = $this->Zonas_influencia_model->buscar_nombres_capa();
+                $this->set_respuesta($capas);
+                $this->set_response($this->responseOk, REST_Controller::HTTP_OK);
+            }
+            catch(Exception $exception){
+                $this->set_mensaje_error($exception->getMessage());
+                $this->response($this->responseError, REST_Controller::HTTP_BAD_REQUEST);
+            }
+        }        
+
+
 
         public function buscar_zonas_segregadas_post()
         {

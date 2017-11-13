@@ -11,8 +11,7 @@
         <script src="//cdn.jsdelivr.net/openlayers.geocoder/latest/ol3-geocoder.js"></script>
         <script src="<?php echo base_url(); ?>assets/js/bootbox.min.js"></script>
         <script src="<?php echo base_url(); ?>assets/js/importarZona.js" defer></script>
-        <script src="//cdn.jsdelivr.net/openlayers.contextmenu/latest/ol3-contextmenu.js"></script>
-        <script src="<?php echo base_url(); ?>assets/js/olContextMenuInfluencia.js"></script>
+        <script src="//cdn.jsdelivr.net/openlayers.contextmenu/latest/ol3-contextmenu.js"></script>        
         <script src="<?php echo base_url(); ?>assets/js/utility.js"></script>
         <script src="<?php echo base_url(); ?>assets/js/ol3-layerswitcher.js"></script>
         

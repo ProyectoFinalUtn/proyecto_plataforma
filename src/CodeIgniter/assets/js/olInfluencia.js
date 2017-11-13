@@ -3,6 +3,58 @@ var map;
 var contextmenu;
 var centroXY;
 var poligonXY;
+var capas_influencia = [];
+var StandardContextItems = [];
+
+function setStandardContextItems () {
+    StandardContextItems = [
+          {
+              text: 'Centrar el mapa aquí',
+              classname: 'some-style-class', // add some CSS rules,
+              callback: center
+          },
+          '-', // this is a separator,
+          {
+            text: 'Mostrar Zonas',
+            classname: 'some-style-class', // you can add this icon with a CSS class
+            // instead of `icon` property (see next line)
+                callback: function (obj, map) {
+                    buscaZonas();
+                }
+           },
+          '-',
+          {
+                text: 'Limpiar',
+                classname: 'some-style-class', // you can add this icon with a CSS class
+                // instead of `icon` property (see next line)
+                
+                callback: function (obj, map) {
+                    clearDraw();
+                }
+          },
+    ];
+}
+
+
+
+
+$.ajax({
+    type: 'POST',
+    username: "admin",
+    password: "1234",
+    url: 'Consulta_zonas/buscar_nombres_capas',      
+    success: function(response) {         
+      response = response.response;
+      var arrayLength = response.length;
+      for (var i = 0; i < arrayLength; i++) {            
+          capas_influencia.push(response[i].nombre_capa);
+      }
+    },          
+    async:false
+});
+
+
+
 var source = new ol.source.Vector({
     wrapX: false
 });
@@ -142,6 +194,7 @@ map.getViewport().addEventListener('contextmenu', function(e) {
     var mapY = e.y - offset.top;
     var clkfeatures = [];
     var feature;
+    setStandardContextItems();
     map.forEachFeatureAtPixel([mapX, mapY], function(ft, layer) {
         if (typeof ft.get('ModelName') !== 'undefined') {
             ModelName = ft.get('ModelName');
@@ -269,4 +322,18 @@ function eliminarCapa(ft) {
         }
 
     })
+}
+
+
+function clearDraw() {    
+    if (source) {
+        source.clear();
+    }
+}
+
+function center(obj) {
+  view.animate({
+    duration: 700,    
+    center: obj.coordinate
+  });
 }

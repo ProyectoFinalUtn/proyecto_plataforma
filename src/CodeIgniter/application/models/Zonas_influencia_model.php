@@ -34,6 +34,16 @@ class Zonas_influencia_model extends CI_Model {
           return $query->result_array();
         }
 
+        public function buscar_nombres_capa()
+        {          
+          $columnas = 'nombre_capa';
+          $this->db->distinct();
+          $this->db->select($columnas);
+          $this->db->from('zona_influencia');          
+          $query = $this->db->get();
+          return $query->result_array();
+        }
+
         public function eliminar_zona($data)
         {
           $nombre_capa = strval($data["nombre_capa"]);

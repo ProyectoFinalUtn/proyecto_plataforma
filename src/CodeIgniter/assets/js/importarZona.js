@@ -1,4 +1,5 @@
 $(document).ready(function() {
+
 	bootbox.setDefaults({ backdrop: false });
     $("input:submit").click(function() {
         event.preventDefault();
