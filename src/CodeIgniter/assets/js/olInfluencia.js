@@ -18,8 +18,7 @@ function setStandardContextItems () {
             response = response.response;
             var arrayLength = response.length;
             for (var i = 0; i < arrayLength; i++) {            
-              capas_influencia.push(response[i].nombre_capa);
-              console.log(capas_influencia);              
+              capas_influencia.push(response[i].nombre_capa);              
             }
         },          
         async:false
@@ -35,11 +34,8 @@ function setStandardContextItems () {
     if ( capas > 0 ){
         items.push('-');            
         for (var i = 0; i < capas; i++) {
-            //menuFt = JSON.parse("{text:'"+capas_influencia[i]+"',classname: 'some-style-class'}");
-            var func = new Function("console.log('"+capas_influencia[i]+"');");
-            //var funcCode = eval("console.log('TEXTO TEST');");
+            var func = new Function("buscaZonas('"+capas_influencia[i]+"');");
             menuFt = {text: capas_influencia[i],callback: func };            
-            //menuFt = "{text:"+capas_influencia[i]+",callback: function ("+capas_influencia[i]+") {console.log("+capas_influencia[i]+");}}";
             items.push(menuFt);    
         }        
     }
@@ -275,9 +271,20 @@ var mousePositionControl = new ol.control.MousePosition({
 });
 map.addControl(mousePositionControl);
 function buscaZonas(value) {
-    source.clear();
+    
+    var zona;
+
+    if (value != null ) {
+        zona = {zona : value};
+    } else {
+        zona = {zona : ''};
+        source.clear();
+    }
+    zona = JSON.stringify(zona);
+    
     $.ajax({
         type: 'POST',
+        data: 'data=' + zona,
         username: "admin",
         password: "1234",
         url: 'Consulta_zonas/buscar_zonas_influencia',
@@ -291,7 +298,6 @@ function cargaZonas(data) {
     var arrayLength = data.response.length;
     var format = new ol.format.GeoJSON();
     for (var i = 0; i < arrayLength; i++) {
-        //data.response[i]; //un json con geometria y propiedades
         ft = "{\"type\":\"Feature\",\"geometry\":" + data.response[i].geometria + ",\"properties\":" + data.response[i].propiedades + "}";
         ft = format.readFeature(ft);
         ft.setProperties({

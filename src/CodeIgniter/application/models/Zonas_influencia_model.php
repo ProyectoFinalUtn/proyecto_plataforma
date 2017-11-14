@@ -25,10 +25,14 @@ class Zonas_influencia_model extends CI_Model {
             }
         }
 
-        public function buscar_zonas()
+        public function buscar_zonas($zonas)
         {          
           $columnas = 'nombre_capa, ST_AsGeoJSON(ST_Transform(ST_SetSRID((ST_GeomFromGeoJSON (geometria::Text)),4326), 3857)) geometria, propiedades,detalle';
           $this->db->select($columnas);
+
+          if ($zonas['zona'] != ''){
+            $this->db->where("nombre_capa ='".$zonas['zona']."'");
+          }
           $this->db->from('zona_influencia');          
           $query = $this->db->get();
           return $query->result_array();

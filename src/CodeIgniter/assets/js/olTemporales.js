@@ -166,30 +166,39 @@ map.getViewport().addEventListener('contextmenu', function(e) {
     });
     console.log('length : ' + clkfeatures.length);
     var FeatureContextMenu = [{
-            text: 'Editar Area',
-            callback: function(obj, map) {
-                handleFeatureContexMenuEvent2('EditarArea', feature, ModelName, mapX, mapY);
-            }
-        }, {
-            text: 'Eliminar Area',
-            callback: function(obj, map) {
-                handleFeatureContexMenuEvent2('EliminarArea', feature, ModelName, mapX, mapY);
-            }
-        }];
+        text: 'Editar Area',
+        callback: function(obj, map) {
+            handleFeatureContexMenuEvent2('EditarArea', feature, ModelName, mapX, mapY);
+        }
+    }, {
+        text: 'Eliminar Area',
+        callback: function(obj, map) {
+            handleFeatureContexMenuEvent2('EliminarArea', feature, ModelName, mapX, mapY);
+        }
+    }];
     var SelectorContextMenu = [];
     if (clkfeatures.length > 1) {
-        contextmenu.clear();        
+        contextmenu.clear();
         var arrayLength = clkfeatures.length;
         for (var i = 0; i < arrayLength; i++) {
-            console.log(clkfeatures[i].get('ModelName'));
-            menuFt = {text:clkfeatures[i].get('ModelName'),
-                        items: FeatureContextMenu
-                     };
+            ModelName = clkfeatures[i].get('ModelName');
+            var editar = new Function("handleFeatureContexMenuEvent2('EditarArea',null,'" + ModelName + "','" + mapX + "','" + mapY + "');");
+            var borrar = new Function("handleFeatureContexMenuEvent2('EliminarArea',null,'" + ModelName + "','" + mapX + "','" + mapY + "');");
+            menuFt = {
+                text: clkfeatures[i].get('ModelName'),
+                items: [{
+                    text: 'Editar Area',
+                    callback: editar
+                }, {
+                    text: 'Eliminar Area',
+                    callback: borrar
+                }]
+            };
             SelectorContextMenu.push(menuFt);
         }
         contextmenu.extend(SelectorContextMenu);
     } else if (clkfeatures.length == 1) {
-        contextmenu.clear();        
+        contextmenu.clear();
         contextmenu.extend(FeatureContextMenu);
     } else {
         contextmenu.clear();
@@ -258,7 +267,6 @@ function addInteraction(value) {
         }, this);
         draw.on('drawend', function(evt) {
             map.removeInteraction(draw);
-            //measureTooltipElement.className = 'tooltip tooltip-static';
             measureTooltip.setOffset([0, -7]);
             // unset sketch
             sketch = null;
@@ -275,7 +283,7 @@ function buscaZonas(value) {
     source.clear();
     var fechaInicio = fechaActual();
     var fechaFin = fechaActual();
-    var filtro;    
+    var filtro;
 
     switch (value) {
         case 'ACTIVAS':
@@ -287,7 +295,7 @@ function buscaZonas(value) {
         case 'TODAS':
             filtro = 'TODAS';
             break;
-    }    
+    }
     var param = {
         filtro: filtro,
         fecha_inicio: fechaInicio,
@@ -303,16 +311,15 @@ function buscaZonas(value) {
         success: function(response) {
             cargaZonas(response);
         }
-    });    
+    });
 }
 
-function cargaZonas(data) {    
+function cargaZonas(data) {
     var arrayLength = data.response.length;
     var format = new ol.format.GeoJSON();
     for (var i = 0; i < arrayLength; i++) {
-        //data.response[i]; //un json con geometria y propiedades
         ft = "{\"type\":\"Feature\",\"geometry\":" + data.response[i].geometria + ",\"properties\":" + data.response[i].propiedades + "}";
-        ft = format.readFeature(ft);        
+        ft = format.readFeature(ft);
         source.addFeature(ft);
         //Do something
     }
@@ -328,6 +335,20 @@ function getAreaLabel(feature) {
 
 function handleFeatureContexMenuEvent2(option, feature, ModelName, x, y) {
     contextmenu.clear();
+
+    if (feature == null) {
+        var features = source.getFeatures();
+
+        // Note we use 'getFeatures()' because with forEachFeature we
+        // can not modify feature's geometry or will get a
+        // 'cannot update extent while reading' error.
+        for (var i = 0; i < features.length; i++) {
+            if (features[i].get('ModelName') == ModelName) {
+                feature = features[i];
+
+            }
+        }
+    }
     if (option == 'EliminarArea') {
         eliminarArea(feature);
     } else if (option == 'EditarArea') {
@@ -336,9 +357,11 @@ function handleFeatureContexMenuEvent2(option, feature, ModelName, x, y) {
 }
 
 function eliminarArea(ft) {
-	bootbox.setDefaults({ backdrop: false });
+    bootbox.setDefaults({
+        backdrop: false
+    });
     bootbox.confirm("¿Confirma que desea eliminar la Zona '" + ft.get('ModelName') + "' ?", function(result) {
-        if (result) {            
+        if (result) {
             var zona = {
                 id: ft.get('ID')
             };
@@ -362,14 +385,16 @@ function abmZonaPrompt(ft) {
     var fecha_inicio = fechaActual();
     var fecha_fin = fechaActual();
     var guardada = false;
-	bootbox.setDefaults({ backdrop: false });
+    bootbox.setDefaults({
+        backdrop: false
+    });
     if (feature.get('ID') == null) {
         //es un nuevo feature
         id = GetID();
     } else {
         //es un feature existente
         id = feature.get('ID');
-        nombre = feature.get('ModelName');        
+        nombre = feature.get('ModelName');
         detalle = feature.get('detalle');
         fecha_inicio = feature.get('fecha_inicio');
         fecha_fin = feature.get('fecha_fin');
@@ -414,10 +439,10 @@ function abmZonaPrompt(ft) {
                             'detalle': mensage.find('textarea[name=detalle_zona]').val(),
                             'guardada': guardada
                         });
-                        
+
                         var format = new ol.format.GeoJSON();
 
-                        var geoJson = format.writeFeature(feature);                    
+                        var geoJson = format.writeFeature(feature);
 
                         var parsedGeoJson = JSON.parse(geoJson);
                         var geometria = parsedGeoJson.geometry;
@@ -449,11 +474,11 @@ function abmZonaPrompt(ft) {
             },
             cancelar: {
                 label: 'Cancelar',
-                callback: function (){
+                callback: function() {
                     //console.log(feature.get('guardada')!== null);
-                    if (feature.get('guardada')== null){
-                       source.removeFeature(feature);
-                       map.removeOverlay(measureTooltip);    
+                    if (feature.get('guardada') == null) {
+                        source.removeFeature(feature);
+                        map.removeOverlay(measureTooltip);
                     }
                 }
                 //className: 'btn-danger'

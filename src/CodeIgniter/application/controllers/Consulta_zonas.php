@@ -76,11 +76,13 @@
         }
 
         public function buscar_zonas_influencia_post()
-        {
+        {   
+            $data = array();          
+            $data = json_decode($this->post("data"), TRUE);
             $zonas = NULL;
             try{
                 $this->load->model('Zonas_influencia_model');                
-                $zonas = $this->Zonas_influencia_model->buscar_zonas();
+                $zonas = $this->Zonas_influencia_model->buscar_zonas($data);
                 $this->set_respuesta($zonas);
                 $this->set_response($this->responseOk, REST_Controller::HTTP_OK);
             }
