@@ -19,10 +19,30 @@ function setStandardContextItems () {
             var arrayLength = response.length;
             for (var i = 0; i < arrayLength; i++) {            
               capas_influencia.push(response[i].nombre_capa);
+              console.log(capas_influencia);              
             }
         },          
         async:false
     });
+    capas = capas_influencia.length;
+    items = [];
+    menuFt = {text:'Todas',                
+              callback: function (obj, map) {
+              buscaZonas();
+             }
+    };
+    items.push(menuFt);    
+    if ( capas > 0 ){
+        items.push('-');            
+        for (var i = 0; i < capas; i++) {
+            //menuFt = JSON.parse("{text:'"+capas_influencia[i]+"',classname: 'some-style-class'}");
+            var func = new Function("console.log('"+capas_influencia[i]+"');");
+            //var funcCode = eval("console.log('TEXTO TEST');");
+            menuFt = {text: capas_influencia[i],callback: func };            
+            //menuFt = "{text:"+capas_influencia[i]+",callback: function ("+capas_influencia[i]+") {console.log("+capas_influencia[i]+");}}";
+            items.push(menuFt);    
+        }        
+    }
     StandardContextItems = [
           {
               text: 'Centrar el mapa aquí',
@@ -34,9 +54,7 @@ function setStandardContextItems () {
             text: 'Mostrar Zonas',
             classname: 'some-style-class', // you can add this icon with a CSS class
             // instead of `icon` property (see next line)
-                callback: function (obj, map) {
-                    buscaZonas();
-                }
+            items : items
            },
           '-',
           {
@@ -206,7 +224,7 @@ map.getViewport().addEventListener('contextmenu', function(e) {
             callback: function(obj, map) {
                 handleFeatureContexMenuEvent2('EliminarCapa', feature, ModelName, mapX, mapY);
             }
-        }];
+    }];
     var SelectorContextMenu = [];
     if (clkfeatures.length > 1) {
         contextmenu.clear();        
