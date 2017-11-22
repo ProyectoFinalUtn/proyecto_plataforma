@@ -54,7 +54,7 @@
                                 $cookie_long = "sol_longitud";
                                 $cookie_long_value = $solicitud->longitud;
                                 setcookie($cookie_long, $cookie_long_value, time() + (86400), "/"); // 86400 = 1 day
-                                $estadosPosibles = array( 1 => "Pendiente", 2 => "Aprobada", 3 => "Rechazada", 4 => "Vencida" );
+                                $estadosPosibles = array( 1 => "Pendiente", 2 => "Aprobada", 3 => "Rechazada");
                                 echo "<p></p>";
                                 echo "<h1>Número de Solicitud: ".$solicitud->idSolicitud."</h1>";
                                 echo "<p>Solicitud de excepción generada por usuario de VANT</p>";
@@ -79,8 +79,9 @@
                                 echo "<input type=\"text\" class=\"form-control\" id=\"horario\" value=\"Desde las ".$solicitud->horaVueloDesde." Hasta las ".$solicitud->horaVueloHasta."\" disabled> </div>";
                                 echo "<div class=\"form-group\"> <label>Solicitud procesada por</label>";
                                 echo "<input type=\"text\" class=\"form-control\" id=\"usuarioProcesador\" placeholder=\"Solicitud aún no procesada\" value=\"".$solicitud->usuarioAprobador."\" disabled> </div>";
-                                echo "<div class=\"form-group\"> <label>Estado actual de la solicitud</label><br>";
-                                echo "<select name=\"estadoNuevo\" style=\"width:200px;height:20px;\">"."<option value=\"".$solicitud->idEstadoSolicitud."\">" .
+                                echo "<div class=\"form-group\"> <h3>Estado actual de la solicitud</h3>";
+                                echo "<div class=\"col-md-6\">";
+                                echo "<select name=\"estadoNuevo\" style=\"width:200px;height:60px;font-size:16px\">"."<option value=\"".$solicitud->idEstadoSolicitud."\">" .
                                 $solicitud->descripcionEstadoSolicitud."</option>";
                                 foreach ($estadosPosibles as $estado => $estadoPosible)
                                 {
@@ -91,10 +92,13 @@
                                         echo "</option>";
                                     }
                                 }
-                                echo "</select><br><p></p>";
+                                echo "</select>";
+                                echo "</div>";
                                 echo "<input type=\"hidden\" name=\"usuarioAprobador\" value=\"".$_SESSION['usuario']."\">";
                                 echo "<input type=\"hidden\" name=\"idSolicitud\" value=\"".$solicitud->idSolicitud."\">";
-                                echo "<input type=\"submit\" class=\"btn btn-secondary\" name=\"Procesar\" value=\"Procesar\"></input><p></p>";
+                                echo "<div class=\"col-md-6\">";
+                                echo "<input type=\"submit\" class=\"btn btn-secondary\" style=\"width:200px;height:60px;font-size:16px\" name=\"Procesar\" value=\"Procesar\"></input><p></p>";
+                                echo "</div>";
                                 echo "</form>";
                             ?>
                         </div>
