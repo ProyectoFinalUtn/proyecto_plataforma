@@ -94,6 +94,7 @@
             $this->db->from('solicitud sol');
             $this->db->join('estado_solicitud es', 'sol.id_estado_solicitud = es.id_estado_solicitud');
             $this->db->where('id_usuario_vant = ', $idUsuario);
+            $this->db->order_by('sol.id_solicitud', 'desc');
             $query = $this->db->get();
             return $query->result_array();
         }

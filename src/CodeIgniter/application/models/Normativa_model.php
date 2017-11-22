@@ -107,8 +107,7 @@
             $sql = 'id_normativa, descripcion, fecha_desde, fecha_hasta, contenido, contenido_html';
             $this->db->select($sql);
             $this->db->from('normativa');
-            $this->db->where('fecha_desde >= ', 'now()');
-            $this->db->where('fecha_hasta <= ', 'now()');
+            $this->db->where('fecha_hasta >= ', 'now()');
             $this->db->or_where('fecha_hasta', null);
             $query = $this->db->get();
             return $query->result_array();
